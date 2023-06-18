@@ -197,7 +197,7 @@ theme = "FeelIt"
 [params.about]
     enable = true
     param = true
-    paramTitle = "个人信息"
+    paramTitle = "Language"
     description = "Blog about FPGA, Linux, Embedded System, Bootloader, SoC and Timing System."
     [[params.about.status]]
       faIcon = "fas fa-building"
