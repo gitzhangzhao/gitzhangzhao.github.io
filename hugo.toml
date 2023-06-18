@@ -121,10 +121,10 @@ theme = "FeelIt"
   rss = 10
   [params.home.profile]
   enable = true
-  avatarURL = "https://raw.githubusercontent.com/gitzhangzhao/gitzhangzhao.github.io/main/avatar.png"
+  avatarURL = "https://raw.githubusercontent.com/gitzhangzhao/gitzhangzhao.github.io/main/avatar.jpg"
   social = true
   typeit = true
-  subtitle = "while (*s++ = *t++);"
+  subtitle = "So we beat on, boats against the current, borne back ceaselessly into the past."
   disclaimer = ""
   [params.home.posts]
   enable = true
@@ -224,7 +224,7 @@ theme = "FeelIt"
     enable = true
     param = true
     paramTitle = "个人信息"
-    description = "Blog about FPGA, Linux, Embedded System, BootLoader and SoC."
+    description = "Blog about FPGA, Linux, Embedded System, Bootloader, SoC and Timing System."
     [[params.about.status]]
       faIcon = "fas fa-building"
       title = "School"
