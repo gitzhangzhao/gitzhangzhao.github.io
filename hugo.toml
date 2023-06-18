@@ -91,7 +91,7 @@ theme = "FeelIt"
   rss = 10
   [params.home.profile]
   enable = true
-  avatarURL = "https://github.com/gitzhangzhao/gitzhangzhao.github.io/blob/main/avatar.jpg?raw=true"
+  avatarURL = "https://raw.githubusercontent.com/gitzhangzhao/gitzhangzhao.github.io/main/avatar.jpg"
   social = true
   typeit = true
   subtitle = "If it moves, compile it..."
