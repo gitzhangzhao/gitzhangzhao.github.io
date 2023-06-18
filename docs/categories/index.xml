@@ -1,7 +1,8 @@
 <rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
     <channel>
-        <title>Categories - Category - My New Hugo Site</title>
+        <title>Categories - 分类 - 张昭的Blog</title>
         <link>http://gitzhangzhao.github.io/categories/</link>
-        <description>Categories - Category - My New Hugo Site</description>
-        <generator>Hugo -- gohugo.io</generator><language>en</language><atom:link href="http://gitzhangzhao.github.io/categories/" rel="self" type="application/rss+xml" /></channel>
+        <description>Categories - 分类 - 张昭的Blog</description>
+        <generator>Hugo -- gohugo.io</generator><language>zh-cn</language><managingEditor>gitzhangzhao@gmail.com (张昭)</managingEditor>
+            <webMaster>gitzhangzhao@gmail.com (张昭)</webMaster><atom:link href="http://gitzhangzhao.github.io/categories/" rel="self" type="application/rss+xml" /></channel>
 </rss>

@@ -1,14 +1,15 @@
 <rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
     <channel>
-        <title>My New Hugo Site</title>
+        <title>张昭的Blog</title>
         <link>http://gitzhangzhao.github.io/</link>
-        <description>My New Hugo Site</description>
-        <generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Sun, 18 Jun 2023 08:44:45 &#43;0800</lastBuildDate>
+        <description>Welcome to Zhangzhao&#39;s blog.</description>
+        <generator>Hugo -- gohugo.io</generator><language>zh-cn</language><managingEditor>gitzhangzhao@gmail.com (张昭)</managingEditor>
+            <webMaster>gitzhangzhao@gmail.com (张昭)</webMaster><lastBuildDate>Sun, 18 Jun 2023 08:44:45 &#43;0800</lastBuildDate>
             <atom:link href="http://gitzhangzhao.github.io/index.xml" rel="self" type="application/rss+xml" />
         <item>
     <title>First_post</title>
     <link>http://gitzhangzhao.github.io/posts/first_post/</link>
-    <pubDate>Sun, 18 Jun 2023 08:44:45 &#43;0800</pubDate><guid>http://gitzhangzhao.github.io/posts/first_post/</guid>
+    <pubDate>Sun, 18 Jun 2023 08:44:45 &#43;0800</pubDate><author>gitzhangzhao@gmail.com (张昭)</author><guid>http://gitzhangzhao.github.io/posts/first_post/</guid>
     <description><![CDATA[]]></description>
 </item>
 </channel>
