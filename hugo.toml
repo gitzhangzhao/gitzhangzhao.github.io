@@ -91,7 +91,7 @@ theme = "FeelIt"
   rss = 10
   [params.home.profile]
   enable = true
-  avatarURL = "/avatar.jpg"
+  avatarURL = "/images/avatar.jpg"
   social = true
   typeit = true
   subtitle = "If it moves, compile it..."
