@@ -113,9 +113,6 @@ theme = "FeelIt"
       Trello = false
       Mix = false
 
-[params.page.comment]
-  enable = true
-
 [params.section]
   paginate = 20
   rss = 10
@@ -136,7 +133,7 @@ theme = "FeelIt"
 
 [params.social]
   GitHub = "gitzhangzhao"
-  Zhihu = "https://www.zhihu.com/people/zhang-zhao-48-71/answers"
+  Zhihu = "zhang-zhao-48-71"
   Googlescholar = "https://scholar.google.com/citations?user=ZHsYerEAAAAJ&hl=en"
   Email = "gitzhangzhao@gmail.com"
   RSS = true
