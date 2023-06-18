@@ -91,7 +91,7 @@ theme = "FeelIt"
   rss = 10
   [params.home.profile]
   enable = true
-  avatarURL = "https://octodex.github.com/images/nyantocat.gif"
+  avatarURL = "/avatar.jpg"
   social = true
   typeit = true
   subtitle = "If it moves, compile it..."
