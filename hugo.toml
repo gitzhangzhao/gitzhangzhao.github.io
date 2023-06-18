@@ -1,6 +1,5 @@
 baseURL = "http://gitzhangzhao.github.io/"
 defaultContentLanguage = "zh-cn"
-# language code
 languageCode = "zh-cn"
 title = "张昭的Blog"
 publishDir = 'docs'
@@ -48,7 +47,7 @@ theme = "FeelIt"
 [params.footer]
   enable = true
   custom = ''
-  hugo = true
+  hugo = false
   copyright = true
   author = true
   since = 2023
@@ -58,6 +57,42 @@ theme = "FeelIt"
   paginate = 25
   dateFormat = "01-02"
   rss = 20
+
+[params.about]
+    enable = true
+    param = true
+    paramTitle = "个人信息"
+    description = "Blog about FPGA, Linux, Embedded System, BootLoader and SoC."
+    [[params.about.status]]
+      faIcon = "fas fa-building"
+      title = "School"
+      desc = "BUPT & UCAS IHEP"
+    [[params.about.status]]
+      faIcon = "fas fa-briefcase fa-fw"
+      title = "Career"
+      desc = "Ph.D."
+    [[params.about.status]]
+      title = "Place"
+      faIcon = "fas fa-map-marker-alt"
+      desc = "Beijing"
+    [[params.about.parameter]]
+      language = "C"
+      level = "60"
+    [[params.about.parameter]]
+      language = "Verilog"
+      level = "40"
+    [[params.about.parameter]]
+      language = "VHDL"
+      level = "40"
+    [[params.about.parameter]]
+      language = "Rust"
+      level = "30"
+    [[params.about.parameter]]
+      language = "Python"
+      level = "30"
+    [[params.about.parameter]]
+      language = "R"
+      level = "30"
 
 [params.page]
     hiddenFromHomePage = false
@@ -83,6 +118,40 @@ theme = "FeelIt"
   copy = true
   maxShownLines = 10
 
+[params.page.share]
+      enable = true
+      Twitter = true
+      Facebook = true
+      Linkedin = false
+      Whatsapp = true
+      Pinterest = false
+      Tumblr = false
+      HackerNews = false
+      Reddit = false
+      VK = false
+      Buffer = false
+      Xing = false
+      Line = true
+      Instapaper = false
+      Pocket = false
+      Digg = false
+      Stumbleupon = false
+      Flipboard = false
+      Weibo = true
+      Renren = false
+      Myspace = true
+      Blogger = true
+      Baidu = false
+      Odnoklassniki = false
+      Evernote = true
+      Skype = false
+      Trello = false
+      Mix = false
+
+[params.page.comment]
+  enable = true
+
+
 [params.section]
   paginate = 20
   rss = 10
@@ -94,7 +163,7 @@ theme = "FeelIt"
   avatarURL = "https://raw.githubusercontent.com/gitzhangzhao/gitzhangzhao.github.io/main/avatar.jpg"
   social = true
   typeit = true
-  subtitle = "If it moves, compile it..."
+  subtitle = "return NULL;"
   disclaimer = ""
   [params.home.posts]
   enable = true
@@ -103,11 +172,13 @@ theme = "FeelIt"
 
 [params.social]
   GitHub = "gitzhangzhao"
+  Zhihu = "https://www.zhihu.com/people/zhang-zhao-48-71/answers"
+  Googlescholar = "https://scholar.google.com/citations?user=ZHsYerEAAAAJ&hl=en"
   Email = "gitzhangzhao@gmail.com"
   RSS = true
 
 [params.typeit]
-  speed = 100
+  speed = 200
   cursorSpeed = 1000
   cursorChar = "|"
   duration = -1
@@ -179,11 +250,25 @@ theme = "FeelIt"
     url = "/categories/"
     title = ""
     weight = 3
+  [[menu.main]]
+    identifier = "about"
+    pre = ""
+    post = ""
+    name = "关于"
+    url = "/about/"
+    title = ""
+    weight = 4
 
 # Markup related configuration in Hugo
 [markup]
   # Syntax Highlighting (https://gohugo.io/content-management/syntax-highlighting)
   [markup.highlight]
-    # false is a necessary configuration (https://github.com/khusika/FeelIt/issues/158)
+    codeFences = true
+    guessSyntax = true
+    lineNos = true
+    lineNumbersInTable = true
+    # false 是必要的设置
+    # (https://github.com/khusika/FeelIt/issues/158)
     noClasses = false
+
 
