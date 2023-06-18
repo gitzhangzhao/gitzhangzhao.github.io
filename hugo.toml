@@ -1,10 +1,12 @@
 baseURL = "http://gitzhangzhao.github.io/"
-# [en, zh-cn, fr, ...] determines default content language
-defaultContentLanguage = "en"
+defaultContentLanguage = "zh-cn"
 # language code
-languageCode = "en"
-title = "My New Hugo Site"
+languageCode = "zh-cn"
+title = "张昭的Blog"
 publishDir = 'docs'
+enableRobotsTXT = true
+enableEmoji = true
+enableGitInfo = true
 
 # Change the default theme to be use when building the site with Hugo
 theme = "FeelIt"
@@ -12,6 +14,142 @@ theme = "FeelIt"
 [params]
   # FeelIt theme version
   version = "1.0.X"
+  description = "Welcome to Zhangzhao's blog."
+
+[params.pwa]
+  enable = true
+  version = "0.0.1"
+
+[params.app]
+  title = "张昭的Blog"
+  noFavicon = false
+  themeColor = "#ffffff"
+  iconColor = "#5bbad5"
+  tileColor = "#da532c"
+
+[params.search]
+  enable = true
+  type = "algolia"
+  contentLength = 4000
+  placeholder = ""
+  maxResultLength = 10
+  snippetLength = 50
+  highlightTag = "em"
+  absoluteURL = false
+  [params.search.algolia]
+    index = ""
+    appId = ""
+    searchKey = ""
+
+[params.header]
+  desktopMode = "auto"
+  mobileMode = "auto"
+
+[params.footer]
+  enable = true
+  custom = ''
+  hugo = true
+  copyright = true
+  author = true
+  since = 2023
+  license = '<a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a>'
+
+[params.list]
+  paginate = 25
+  dateFormat = "01-02"
+  rss = 20
+
+[params.page]
+    hiddenFromHomePage = false
+    hiddenFromSearch = false
+    twemoji = false
+    lightgallery = false
+    ruby = true
+    fraction = true
+    fontawesome = true
+    linkToMarkdown = true
+    rssFullText = true
+
+[params.page.math]
+  enable = true
+  copyTex = true
+  mhchem = true
+
+[params.page.toc]
+  enable = true
+  auto = true
+
+[params.page.code]
+  copy = true
+  maxShownLines = 10
+
+[params.section]
+  paginate = 20
+  rss = 10
+
+[params.home]
+  rss = 10
+  [params.home.profile]
+  enable = true
+  avatarURL = "https://octodex.github.com/images/nyantocat.gif"
+  social = true
+  typeit = true
+  subtitle = "If it moves, compile it..."
+  disclaimer = ""
+  [params.home.posts]
+  enable = true
+  paginate = 10
+  defaultHiddenFromHomePage = false
+
+[params.social]
+  GitHub = "gitzhangzhao"
+  Email = "gitzhangzhao@gmail.com"
+  RSS = true
+
+[params.typeit]
+  speed = 100
+  cursorSpeed = 1000
+  cursorChar = "|"
+  duration = -1
+
+# 网站验证代码，用于 Google/Bing/Yandex/Pinterest/Baidu
+[params.verification]
+  google = ""
+  bing = ""
+  yandex = ""
+  pinterest = ""
+  baidu = ""
+
+[params.seo]
+  image = ""
+  thumbnailUrl = ""
+
+[params.analytics]
+  enable = true
+  [params.analytics.google]
+    id = ""
+    anonymizeIP = true
+  [params.analytics.fathom]
+    id = ""
+    server = ""
+
+[params.cookieconsent]
+  enable = false
+  [params.cookieconsent.content]
+    message = ""
+    dismiss = ""
+    link = ""
+
+[params.compatibility]
+  polyfill = true
+  objectFit = false
+
+# 作者配置
+[author]
+  name = "张昭"
+  email = "gitzhangzhao@gmail.com"
+  link = "https://github.com/gitzhangzhao"
+  
 
 [menu]
   [[menu.main]]
@@ -20,7 +158,7 @@ theme = "FeelIt"
     pre = ""
     # you can add extra information after the name (HTML format is supported), such as icons
     post = ""
-    name = "Posts"
+    name = "文章"
     url = "/posts/"
     # title will be shown when you hover on this menu link
     title = ""
@@ -29,7 +167,7 @@ theme = "FeelIt"
     identifier = "tags"
     pre = ""
     post = ""
-    name = "Tags"
+    name = "标签"
     url = "/tags/"
     title = ""
     weight = 2
@@ -37,7 +175,7 @@ theme = "FeelIt"
     identifier = "categories"
     pre = ""
     post = ""
-    name = "Categories"
+    name = "分类"
     url = "/categories/"
     title = ""
     weight = 3
