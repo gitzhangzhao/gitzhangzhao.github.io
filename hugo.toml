@@ -124,7 +124,7 @@ theme = "FeelIt"
   avatarURL = "https://raw.githubusercontent.com/gitzhangzhao/gitzhangzhao.github.io/main/avatar.jpg"
   social = true
   typeit = true
-  subtitle = "return NULL;"
+  subtitle = "while (*s++ = *t++);"
   disclaimer = ""
   [params.home.posts]
   enable = true
