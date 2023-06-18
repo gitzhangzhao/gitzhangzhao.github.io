@@ -1,5 +1,6 @@
 baseURL = "http://gitzhangzhao.github.io/"
 defaultContentLanguage = "zh-cn"
+defaultTheme = "auto"
 languageCode = "zh-cn"
 title = "张昭的Blog"
 publishDir = 'docs'
@@ -28,7 +29,7 @@ theme = "FeelIt"
 
 [params.search]
   enable = true
-  type = "algolia"
+  type = "lunr"
   contentLength = 4000
   placeholder = ""
   maxResultLength = 10
@@ -87,31 +88,6 @@ theme = "FeelIt"
       enable = true
       Twitter = true
       Facebook = true
-      Linkedin = false
-      Whatsapp = true
-      Pinterest = false
-      Tumblr = false
-      HackerNews = false
-      Reddit = false
-      VK = false
-      Buffer = false
-      Xing = false
-      Line = true
-      Instapaper = false
-      Pocket = false
-      Digg = false
-      Stumbleupon = false
-      Flipboard = false
-      Weibo = true
-      Renren = false
-      Myspace = true
-      Blogger = true
-      Baidu = false
-      Odnoklassniki = false
-      Evernote = true
-      Skype = false
-      Trello = false
-      Mix = false
 
 [params.section]
   paginate = 20
@@ -133,13 +109,11 @@ theme = "FeelIt"
 
 [params.social]
   GitHub = "gitzhangzhao"
-  Zhihu = "zhang-zhao-48-71"
-  Googlescholar = "https://scholar.google.com/citations?user=ZHsYerEAAAAJ&hl=en"
   Email = "gitzhangzhao@gmail.com"
   RSS = true
 
 [params.typeit]
-  speed = 150
+  speed = 100
   cursorSpeed = 1000
   cursorChar = "|"
   duration = -1
@@ -258,13 +232,13 @@ theme = "FeelIt"
 
 # Markup related configuration in Hugo
 [markup]
- [markup.highlight]
-   codeFences = true
-   guessSyntax = true
-   lineNos = true
-   lineNumbersInTable = true
-   noClasses = false
-   [markup.goldmark]
+  [markup.highlight]
+    codeFences = true
+    guessSyntax = true
+    lineNos = true
+    lineNumbersInTable = true
+    noClasses = false
+  [markup.goldmark]
      [markup.goldmark.extensions]
        definitionList = true
        footnote = true
@@ -281,3 +255,18 @@ theme = "FeelIt"
      startLevel = 1
      endLevel = 6
 
+[mediaTypes]
+  [mediaTypes."text/plain"]
+    suffixes = ["md"]
+
+[outputFormats.MarkDown]
+  mediaType = "text/plain"
+  isPlainText = true
+  isHTML = false
+
+[outputs]
+  home = ["HTML", "RSS", "JSON"]
+  page = ["HTML", "MarkDown"]
+  section = ["HTML", "RSS"]
+  taxonomy = ["HTML", "RSS"]
+  taxonomyTerm = ["HTML"]
