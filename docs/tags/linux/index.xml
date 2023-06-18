@@ -1,10 +1,10 @@
 <rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
     <channel>
-        <title>所有文章 - 张昭的Blog</title>
-        <link>http://gitzhangzhao.github.io/posts/</link>
-        <description>所有文章 | 张昭的Blog</description>
+        <title>Linux - 标签 - 张昭的Blog</title>
+        <link>http://gitzhangzhao.github.io/tags/linux/</link>
+        <description>Linux - 标签 - 张昭的Blog</description>
         <generator>Hugo -- gohugo.io</generator><language>zh-cn</language><managingEditor>gitzhangzhao@gmail.com (张昭)</managingEditor>
-            <webMaster>gitzhangzhao@gmail.com (张昭)</webMaster><lastBuildDate>Sun, 18 Jun 2023 23:54:08 &#43;0800</lastBuildDate><atom:link href="http://gitzhangzhao.github.io/posts/" rel="self" type="application/rss+xml" /><item>
+            <webMaster>gitzhangzhao@gmail.com (张昭)</webMaster><lastBuildDate>Sun, 18 Jun 2023 23:54:08 &#43;0800</lastBuildDate><atom:link href="http://gitzhangzhao.github.io/tags/linux/" rel="self" type="application/rss+xml" /><item>
     <title>Gentoo安装小记</title>
     <link>http://gitzhangzhao.github.io/posts/gentoo%E5%AE%89%E8%A3%85%E5%B0%8F%E8%AE%B0/</link>
     <pubDate>Sun, 18 Jun 2023 23:54:08 &#43;0800</pubDate><author>gitzhangzhao@gmail.com (张昭)</author><guid>http://gitzhangzhao.github.io/posts/gentoo%E5%AE%89%E8%A3%85%E5%B0%8F%E8%AE%B0/</guid>
@@ -193,12 +193,6 @@
 <h4 id="desktop-profiles">Desktop profiles？</h4>
 <p>Desktop profiles预设了很多USE，并包含了一些system依赖。对于KDE和GNOME用户，Desktop profiles中提供的增量可以省很多事。但是对于裸WM来说，没有必要为使用Desktop，默认的profiles或者systemd profiles就可以了。在最小化的基础上，安装软件时检查USE并逐步添加自己的全局USE</p>
 ]]></description>
-</item>
-<item>
-    <title>First_post</title>
-    <link>http://gitzhangzhao.github.io/posts/first_post/</link>
-    <pubDate>Sun, 18 Jun 2023 08:44:45 &#43;0800</pubDate><author>gitzhangzhao@gmail.com (张昭)</author><guid>http://gitzhangzhao.github.io/posts/first_post/</guid>
-    <description><![CDATA[]]></description>
 </item>
 </channel>
 </rss>

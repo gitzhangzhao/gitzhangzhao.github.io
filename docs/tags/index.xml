@@ -4,5 +4,17 @@
         <link>http://gitzhangzhao.github.io/tags/</link>
         <description>Tags - 标签 - 张昭的Blog</description>
         <generator>Hugo -- gohugo.io</generator><language>zh-cn</language><managingEditor>gitzhangzhao@gmail.com (张昭)</managingEditor>
-            <webMaster>gitzhangzhao@gmail.com (张昭)</webMaster><atom:link href="http://gitzhangzhao.github.io/tags/" rel="self" type="application/rss+xml" /></channel>
+            <webMaster>gitzhangzhao@gmail.com (张昭)</webMaster><lastBuildDate>Sun, 18 Jun 2023 23:54:08 &#43;0800</lastBuildDate><atom:link href="http://gitzhangzhao.github.io/tags/" rel="self" type="application/rss+xml" /><item>
+    <title>Gentoo</title>
+    <link>http://gitzhangzhao.github.io/tags/gentoo/</link>
+    <pubDate>Sun, 18 Jun 2023 23:54:08 &#43;0800</pubDate><author>gitzhangzhao@gmail.com (张昭)</author><guid>http://gitzhangzhao.github.io/tags/gentoo/</guid>
+    <description><![CDATA[]]></description>
+</item>
+<item>
+    <title>Linux</title>
+    <link>http://gitzhangzhao.github.io/tags/linux/</link>
+    <pubDate>Sun, 18 Jun 2023 23:54:08 &#43;0800</pubDate><author>gitzhangzhao@gmail.com (张昭)</author><guid>http://gitzhangzhao.github.io/tags/linux/</guid>
+    <description><![CDATA[]]></description>
+</item>
+</channel>
 </rss>
