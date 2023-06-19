@@ -1,4 +1,4 @@
-# Petalinux（一）： 安装使用及通过 linux 对 FPGA 的寄存器或者 RAM 进行读写
+# Petalinux(一)：安装使用
 
 
 课题需要可能要在 ZYNQ 上多次部署 Linux 并测试，普通的脚本安装方式太过繁琐，Xilinx 的 Petalinux 工具简化了很多流程。这里记录了一些主要步骤，由于实验室 Vivado 版本，所以选择的 Petalinux 版本也不是最新的

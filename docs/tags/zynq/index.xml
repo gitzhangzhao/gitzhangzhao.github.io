@@ -1,10 +1,10 @@
 <rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
     <channel>
-        <title>Petalinux - 标签 - 张昭的Blog</title>
-        <link>http://gitzhangzhao.github.io/tags/petalinux/</link>
-        <description>Petalinux - 标签 - 张昭的Blog</description>
+        <title>ZYNQ - 标签 - 张昭的Blog</title>
+        <link>http://gitzhangzhao.github.io/tags/zynq/</link>
+        <description>ZYNQ - 标签 - 张昭的Blog</description>
         <generator>Hugo -- gohugo.io</generator><language>zh-cn</language><managingEditor>gitzhangzhao@gmail.com (张昭)</managingEditor>
-            <webMaster>gitzhangzhao@gmail.com (张昭)</webMaster><lastBuildDate>Mon, 19 Jun 2023 11:48:55 &#43;0800</lastBuildDate><atom:link href="http://gitzhangzhao.github.io/tags/petalinux/" rel="self" type="application/rss+xml" /><item>
+            <webMaster>gitzhangzhao@gmail.com (张昭)</webMaster><lastBuildDate>Mon, 19 Jun 2023 11:48:55 &#43;0800</lastBuildDate><atom:link href="http://gitzhangzhao.github.io/tags/zynq/" rel="self" type="application/rss+xml" /><item>
     <title>Petalinux(二)：远程启动</title>
     <link>http://gitzhangzhao.github.io/posts/petalinux/petalinux_2/</link>
     <pubDate>Mon, 19 Jun 2023 11:48:55 &#43;0800</pubDate><author>gitzhangzhao@gmail.com (张昭)</author><guid>http://gitzhangzhao.github.io/posts/petalinux/petalinux_2/</guid>

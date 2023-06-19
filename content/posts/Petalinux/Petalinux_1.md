@@ -1,10 +1,9 @@
 ---
-title: "Petalinux（一）： 安装使用及通过 linux 对 FPGA 的寄存器或者 RAM 进行读写"
+title: "Petalinux(一)：安装使用"
 date: 2023-06-19T11:35:36+08:00
 draft: false
 math: true
-keywords: []
-tags: ["Petalinux", "Linux"]
+tags: ["Petalinux","ZYNQ", "NFS"]
 categories: ["Embedded System"]
 ---
 

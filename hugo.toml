@@ -83,7 +83,7 @@ theme = "FeelIt"
 
 [params.page.code]
   copy = true
-  maxShownLines = 10
+  maxShownLines = 20
 
 [params.page.share]
       enable = true
