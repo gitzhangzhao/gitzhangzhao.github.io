@@ -98,7 +98,6 @@ theme = "FeelIt"
   rss = 10
   [params.home.profile]
   enable = true
-  # avatarURL = "https://raw.githubusercontent.com/gitzhangzhao/gitzhangzhao.github.io/main/avatar.jpg"
   avatarURL = "/avatar.jpg"
   social = true
   typeit = true

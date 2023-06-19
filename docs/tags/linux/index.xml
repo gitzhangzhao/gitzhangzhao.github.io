@@ -4,10 +4,721 @@
         <link>http://gitzhangzhao.github.io/tags/linux/</link>
         <description>Linux - 标签 - 张昭的Blog</description>
         <generator>Hugo -- gohugo.io</generator><language>zh-cn</language><managingEditor>gitzhangzhao@gmail.com (张昭)</managingEditor>
-            <webMaster>gitzhangzhao@gmail.com (张昭)</webMaster><lastBuildDate>Sun, 18 Jun 2023 23:54:08 &#43;0800</lastBuildDate><atom:link href="http://gitzhangzhao.github.io/tags/linux/" rel="self" type="application/rss+xml" /><item>
+            <webMaster>gitzhangzhao@gmail.com (张昭)</webMaster><lastBuildDate>Mon, 19 Jun 2023 11:35:36 &#43;0800</lastBuildDate><atom:link href="http://gitzhangzhao.github.io/tags/linux/" rel="self" type="application/rss+xml" /><item>
+    <title>Petalinux（一）： 安装使用及通过 linux 对 FPGA 的寄存器或者 RAM 进行读写</title>
+    <link>http://gitzhangzhao.github.io/posts/petalinux/petalinux_1/</link>
+    <pubDate>Mon, 19 Jun 2023 11:35:36 &#43;0800</pubDate><author>gitzhangzhao@gmail.com (张昭)</author><guid>http://gitzhangzhao.github.io/posts/petalinux/petalinux_1/</guid>
+    <description><![CDATA[<p>课题需要可能要在 ZYNQ 上多次部署 Linux 并测试，普通的脚本安装方式太过繁琐，Xilinx 的 Petalinux 工具简化了很多流程。这里记录了一些主要步骤，由于实验室 Vivado 版本，所以选择的 Petalinux 版本也不是最新的</p>
+<blockquote>
+<p>2021.11</p>
+</blockquote>
+<h3 id="why-petalinux">why petalinux?</h3>
+<p>比分步编译更便捷的配置和编译源码</p>
+<ul>
+<li>
+<p>优势：petalinux 读取输入硬件配置，并根据硬件来自动的配置编译 u-boot，kernel，devicetree.</p>
+</li>
+<li>
+<p>缺点：软件对系统版本，依赖版本要求比较高，配置相对麻烦。如果不按照规定好的顺序执行命令会遇上较多未知 BUG</p>
+</li>
+<li>
+<p>目的：简化编译的过程，缩短时间并生成与硬件对应的正确的设备树文件</p>
+</li>
+</ul>
+<h3 id="petalinux-的安装">petalinux 的安装</h3>
+<p>petalinux 对操作系统版本和依赖版本要求很高，只能在官方文档指定的发行版安装。这里以 petalinux 2017.04 为例</p>
+<ul>
+<li>OS: ubuntu16.04(docker x86-64)</li>
+<li>Dependencies:</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo dpkg --add-architecture i386
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">sudo apt install libssl-dev flex bison chrpath socat autoconf libtool texinfo gcc-multilib libsdl1.2-dev libglib2.0-dev screen pax net-tools wget diffstat xterm gawk xvfb git make libncurse5-dev tftpd zlib1g libssl-dev gnupg tar unzip build-essential libtool-bin dialog cpio lsb-release zlib1g:i386 zlib1g-dev:i386 locales openjdk-8-jdk
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">sudo dpkg-reconfigure locales
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">export</span> <span class="nv">LANG</span><span class="o">=</span>en_US.UTF-8
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>由于 Petalinux 依赖发行版版本，推荐采用 Docker 环境安装。请查看 <a href="https://github.com/gitzhangzhao/petalinux_2017.04" target="_blank" rel="noopener noreffer">Petalinux 2017.04 Docker 环境</a></p>
+<h3 id="petalinux-的使用">petalinux 的使用</h3>
+<ol>
+<li>创建一个 ZYNQ 的工程模板：</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">petalinux-create --type project --template zynq --name petalinux
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="2">
+<li>读取分析硬件所使用的开发版型号来配置：</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">petalinux-config --get-hw-description /mnt/linux_base.sdk
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="3">
+<li>配置内核和根文件系统：</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">petalinux-config -c kernel
+</span></span><span class="line"><span class="cl">petalinux-config -c rootfs
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="4">
+<li>开始编译：</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">petalinux-build
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="5">
+<li>将编译好的工程打包输出：</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">petalinux-package --boot --fsbl ./images/linux/zynq_fsbl.elf --fpga --u-boot --force
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="6">
+<li>使用 qemu 虚拟化平台对产生的 BootLoader 和 linux 内核进行测试（可选）</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">petalinux-boot --qemu --prebuilt <span class="m">3</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="7">
+<li>将输出的文件移动到开发板启动，或者使用 tftp 方式远程启动：
+image.ub: linux 的内核镜像，并且打包了设备树文件 plnx_arm-system.dtb, 在内存中运行的文件系统 ramdisk.</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># image.ub
+</span></span><span class="line"><span class="cl">images {
+</span></span><span class="line"><span class="cl">                kernel@0 {
+</span></span><span class="line"><span class="cl">                        description = &#34;Linux Kernel&#34;;
+</span></span><span class="line"><span class="cl">                        data = /incbin/(&#34;zImage&#34;);
+</span></span><span class="line"><span class="cl">                        type = &#34;kernel&#34;;
+</span></span><span class="line"><span class="cl">                        arch = &#34;arm&#34;;
+</span></span><span class="line"><span class="cl">                        os = &#34;linux&#34;;
+</span></span><span class="line"><span class="cl">                        compression = &#34;none&#34;;
+</span></span><span class="line"><span class="cl">                        load = &lt;0x8000&gt;;
+</span></span><span class="line"><span class="cl">                        entry = &lt;0x8000&gt;;
+</span></span><span class="line"><span class="cl">                        hash@1 {
+</span></span><span class="line"><span class="cl">                                algo = &#34;sha1&#34;;
+</span></span><span class="line"><span class="cl">                        };
+</span></span><span class="line"><span class="cl">                };
+</span></span><span class="line"><span class="cl">                fdt@0 {
+</span></span><span class="line"><span class="cl">                        description = &#34;Flattened Device Tree blob&#34;;
+</span></span><span class="line"><span class="cl">                        data = /incbin/(&#34;plnx_arm-system.dtb&#34;);
+</span></span><span class="line"><span class="cl">                        type = &#34;flat_dt&#34;;
+</span></span><span class="line"><span class="cl">                        arch = &#34;arm&#34;;
+</span></span><span class="line"><span class="cl">                        compression = &#34;none&#34;;
+</span></span><span class="line"><span class="cl">                        hash@1 {
+</span></span><span class="line"><span class="cl">                                algo = &#34;sha1&#34;;
+</span></span><span class="line"><span class="cl">                        };
+</span></span><span class="line"><span class="cl">                };
+</span></span><span class="line"><span class="cl">                ramdisk@0 {
+</span></span><span class="line"><span class="cl">                        description = &#34;ramdisk&#34;;
+</span></span><span class="line"><span class="cl">                        data = /incbin/(&#34;petalinux-user-image-plnx_arm.cpio.gz&#34;);
+</span></span><span class="line"><span class="cl">                        type = &#34;ramdisk&#34;;
+</span></span><span class="line"><span class="cl">                        arch = &#34;arm&#34;;
+</span></span><span class="line"><span class="cl">                        os = &#34;linux&#34;;
+</span></span><span class="line"><span class="cl">                        compression = &#34;none&#34;;
+</span></span><span class="line"><span class="cl">                        hash@1 {
+</span></span><span class="line"><span class="cl">                                algo = &#34;sha1&#34;;
+</span></span><span class="line"><span class="cl">                        };
+</span></span><span class="line"><span class="cl">                };
+</span></span><span class="line"><span class="cl">        };
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="petalinux-产生设备树的分析">petalinux 产生设备树的分析</h3>
+<p>使用 petalinux 的优势：自动分析硬件并产生设备树，也可以添加需要的部分并手动编译。</p>
+<ul>
+<li>产生设备树的目录：</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="k">$(</span>project<span class="k">)</span>/components/plnx_workspace/device-tree/device-tree-generation/
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>设备树主要分两个部分：
+<ol>
+<li>ARM CPU 相关的设备包括处理器内存，系统总线等等，在 zynq-7000.dtsi 中。（dtsi:设备树中描述 SOC 级的信息，一般不需要修改；dts: 设备树的源文件，修改设备树的主要对象；dtb: 由 dts 文件编译生成的二进制文件，由内核在启动时候读取并解析）</li>
+<li>petalinux 根据硬件的配置来生成 pl.dtsi 文件，文件内包括在根节点下的 FPGA 部分的设备树。</li>
+<li>pl.dtsi 和 zynq-7000.dtsi 包含在 system-top.dts 内，手动添加的设备树也包含在内。</li>
+<li>plnx_arm-system.dts 是处理了包含关系后的文件，编译生成 plnx_arm-system.dtb.</li>
+</ol>
+</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">pl.dtsi  ---------|
+</span></span><span class="line"><span class="cl">pcw.dtsi ---------|----&gt; system-top.dts ----&gt; plnx_arm-system.dts -----(dtc)----&gt; plnx_arm-system.dtb
+</span></span><span class="line"><span class="cl">zynq-7000.dtsi ---|
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="实验产生-gpio-设备树文件使用-linux-内的-gpio-驱动程序用文件-io-方式驱动-led">实验：产生 GPIO 设备树文件，使用 Linux 内的 gpio 驱动程序，用文件 IO 方式驱动 led</h3>
+<p>系统描述：PS 和 PL 各有一个 led，通过 petalinux 产生一个完整 linux 系统，FPGA 端烧写一个 GPIO 控制器，输出 1 位信号到 R19 引脚，FPGA 的 R19 引脚连接了 pl 侧的 led 灯：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-tcl" data-lang="tcl"><span class="line"><span class="cl"><span class="nv">set_property</span> PACKAGE_PIN R19 <span class="k">[</span><span class="nv">get_ports</span> <span class="k">{</span><span class="nv">gpio_out</span><span class="k">}]</span> <span class="err">#</span> R19<span class="err">引脚连接板上的</span>led<span class="err">灯</span>
+</span></span><span class="line"><span class="cl"><span class="nv">set_property</span> IOSTANDARD LVCMOS33 <span class="k">[</span><span class="nv">get_ports</span> <span class="k">{</span><span class="nv">gpio_out</span><span class="k">}]</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>linux 内核包含了 gpio 的驱动，可以根据设备树信息来自动检测硬件</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">$ <span class="nb">cd</span> /sys/class/gpio <span class="o">&amp;&amp;</span> ls
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">export</span>  gpiochip906  gpiochip504  unexport
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 访问/sys/class/gpio/目录，gpio906和gpio504分别是PS端和PL端的gpio控制器, export是内核提供的文件用于导出gpio的操作接口。</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">$ <span class="nb">echo</span> <span class="m">906</span> &gt; <span class="nb">export</span>
+</span></span><span class="line"><span class="cl">$ <span class="nb">echo</span> <span class="m">504</span> &gt; <span class="nb">export</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 向export文件写入GPIO编号，就可以获得这个GPIO的操作接口。</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">$ ls
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">export</span> gpio906 gpiochip906 gpio504 gpiochip504 unexport
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 新产生了gpio906和gpio504目录，目录中就是操作接口。</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">$ <span class="nb">cd</span> gpio906 <span class="o">&amp;&amp;</span> ls
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">active_low  direction  power  uevent  device  edge  subsystem  value
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># direction控制gpio的方向，value为gpio的输入输出值。</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">$ <span class="nb">echo</span> out &gt; direction
+</span></span><span class="line"><span class="cl">$ <span class="nb">echo</span> <span class="m">1</span> &gt; value          <span class="c1"># led灯灭</span>
+</span></span><span class="line"><span class="cl">$ <span class="nb">echo</span> <span class="m">0</span> &gt; value          <span class="c1"># led灯亮</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 通过一般的IO操作value这个文件就可以控制灯的亮灭。</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>产生的 GPIO 设备树部分(FPGA 侧):</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">axi_gpio_0: gpio@41200000 {
+</span></span><span class="line"><span class="cl">			#gpio-cells = &lt;2&gt;;
+</span></span><span class="line"><span class="cl">			compatible = &#34;xlnx,xps-gpio-1.00.a&#34;;
+</span></span><span class="line"><span class="cl">			gpio-controller ;
+</span></span><span class="line"><span class="cl">			reg = &lt;0x41200000 0x10000&gt;;
+</span></span><span class="line"><span class="cl">			xlnx,all-inputs = &lt;0x0&gt;;
+</span></span><span class="line"><span class="cl">			xlnx,all-inputs-2 = &lt;0x0&gt;;
+</span></span><span class="line"><span class="cl">			xlnx,all-outputs = &lt;0x1&gt;;
+</span></span><span class="line"><span class="cl">			xlnx,all-outputs-2 = &lt;0x0&gt;;
+</span></span><span class="line"><span class="cl">			xlnx,dout-default = &lt;0x00000000&gt;;
+</span></span><span class="line"><span class="cl">			xlnx,dout-default-2 = &lt;0x00000000&gt;;
+</span></span><span class="line"><span class="cl">			xlnx,gpio-width = &lt;0x1&gt;;
+</span></span><span class="line"><span class="cl">			xlnx,gpio2-width = &lt;0x20&gt;;
+</span></span><span class="line"><span class="cl">			xlnx,interrupt-present = &lt;0x0&gt;;
+</span></span><span class="line"><span class="cl">			xlnx,is-dual = &lt;0x0&gt;;
+</span></span><span class="line"><span class="cl">			xlnx,tri-default = &lt;0xFFFFFFFF&gt;;
+</span></span><span class="line"><span class="cl">			xlnx,tri-default-2 = &lt;0xFFFFFFFF&gt;;
+</span></span><span class="line"><span class="cl">		};
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="实验直接将-fpga-寄存器信号输出到-r19-引脚通过-axi-lite-总线读写寄存器来控制-led">实验：直接将 FPGA 寄存器信号输出到 R19 引脚，通过 AXI-Lite 总线读写寄存器来控制 led</h3>
+<p>定义一个 32-bits 寄存器来接受总线信号，写入寄存器的值取一位输出到 led 灯</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-verilog" data-lang="verilog"><span class="line"><span class="cl"><span class="p">#</span> <span class="err">定义一个</span><span class="mh">32</span><span class="err">位寄存器</span>
+</span></span><span class="line"><span class="cl"><span class="kt">reg</span> <span class="p">[</span><span class="n">C_S_AXI_DATA_WIDTH</span><span class="o">-</span><span class="mh">1</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span>	<span class="n">slv_reg0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">#</span> <span class="err">将寄存器的第</span><span class="mh">0</span><span class="err">位连接到输出信号</span>
+</span></span><span class="line"><span class="cl"><span class="k">assign</span> <span class="n">test_out</span> <span class="o">=</span> <span class="n">slv_reg0</span><span class="p">[</span><span class="mh">0</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">#</span> <span class="err">将总线模块打包，在</span><span class="n">test</span><span class="err">中调用</span><span class="n">AXI</span><span class="err">总线，添加一个输出信号</span><span class="n">test_out</span>
+</span></span><span class="line"><span class="cl"><span class="n">myip_v1_0_S00_AXI</span> <span class="p">#</span> <span class="p">(</span>
+</span></span><span class="line"><span class="cl">		<span class="p">.</span><span class="n">C_S_AXI_DATA_WIDTH</span><span class="p">(</span><span class="n">C_S00_AXI_DATA_WIDTH</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">		<span class="p">.</span><span class="n">C_S_AXI_ADDR_WIDTH</span><span class="p">(</span><span class="n">C_S00_AXI_ADDR_WIDTH</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="p">)</span> <span class="n">myip_v1_0_S00_AXI_inst</span> <span class="p">(</span>
+</span></span><span class="line"><span class="cl">		<span class="p">.</span><span class="n">S_AXI_ACLK</span><span class="p">(</span><span class="n">s00_axi_aclk</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">		<span class="p">.</span><span class="n">S_AXI_ARESETN</span><span class="p">(</span><span class="n">s00_axi_aresetn</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">		<span class="p">.</span><span class="n">S_AXI_AWADDR</span><span class="p">(</span><span class="n">s00_axi_awaddr</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">		<span class="p">.</span><span class="n">S_AXI_AWPROT</span><span class="p">(</span><span class="n">s00_axi_awprot</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">		<span class="p">.</span><span class="n">S_AXI_AWVALID</span><span class="p">(</span><span class="n">s00_axi_awvalid</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">		<span class="p">.</span><span class="n">S_AXI_AWREADY</span><span class="p">(</span><span class="n">s00_axi_awready</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">		<span class="p">.</span><span class="n">S_AXI_WDATA</span><span class="p">(</span><span class="n">s00_axi_wdata</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">		<span class="p">.</span><span class="n">S_AXI_WSTRB</span><span class="p">(</span><span class="n">s00_axi_wstrb</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">		<span class="p">.</span><span class="n">S_AXI_WVALID</span><span class="p">(</span><span class="n">s00_axi_wvalid</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">		<span class="p">.</span><span class="n">S_AXI_WREADY</span><span class="p">(</span><span class="n">s00_axi_wready</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">		<span class="p">.</span><span class="n">S_AXI_BRESP</span><span class="p">(</span><span class="n">s00_axi_bresp</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">		<span class="p">.</span><span class="n">S_AXI_BVALID</span><span class="p">(</span><span class="n">s00_axi_bvalid</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">		<span class="p">.</span><span class="n">S_AXI_BREADY</span><span class="p">(</span><span class="n">s00_axi_bready</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">		<span class="p">.</span><span class="n">S_AXI_ARADDR</span><span class="p">(</span><span class="n">s00_axi_araddr</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">		<span class="p">.</span><span class="n">S_AXI_ARPROT</span><span class="p">(</span><span class="n">s00_axi_arprot</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">		<span class="p">.</span><span class="n">S_AXI_ARVALID</span><span class="p">(</span><span class="n">s00_axi_arvalid</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">		<span class="p">.</span><span class="n">S_AXI_ARREADY</span><span class="p">(</span><span class="n">s00_axi_arready</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">		<span class="p">.</span><span class="n">S_AXI_RDATA</span><span class="p">(</span><span class="n">s00_axi_rdata</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">		<span class="p">.</span><span class="n">S_AXI_RRESP</span><span class="p">(</span><span class="n">s00_axi_rresp</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">		<span class="p">.</span><span class="n">S_AXI_RVALID</span><span class="p">(</span><span class="n">s00_axi_rvalid</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">		<span class="p">.</span><span class="n">S_AXI_RREADY</span><span class="p">(</span><span class="n">s00_axi_rready</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">		<span class="p">.</span><span class="n">test_out</span><span class="p">(</span><span class="n">test_out</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">#</span> <span class="err">修改</span><span class="n">wrapper</span><span class="err">添加输出信号</span>
+</span></span><span class="line"><span class="cl"><span class="k">output</span> <span class="kt">wire</span> <span class="n">test_out</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">#</span> <span class="err">绑定输出信号到</span><span class="n">led</span><span class="err">灯相连的引脚</span>
+</span></span><span class="line"><span class="cl"><span class="n">set_property</span> <span class="n">PACKAGE_PIN</span> <span class="n">R19</span> <span class="p">[</span><span class="n">get_ports</span> <span class="p">{</span><span class="n">test_out</span><span class="p">}]</span>
+</span></span><span class="line"><span class="cl"><span class="n">set_property</span> <span class="n">IOSTANDARD</span> <span class="n">LVCMOS33</span> <span class="p">[</span><span class="n">get_ports</span> <span class="p">{</span><span class="n">test_out</span><span class="p">}]</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>petalinux 根据系统硬件设计添加了 AXI-Lite 总线对应的设备树部分</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># amba-axi总线的设备树部分
+</span></span><span class="line"><span class="cl">/ {
+</span></span><span class="line"><span class="cl">	amba_pl: amba_pl {
+</span></span><span class="line"><span class="cl">		#address-cells = &lt;1&gt;;
+</span></span><span class="line"><span class="cl">		#size-cells = &lt;1&gt;;
+</span></span><span class="line"><span class="cl">		compatible = &#34;simple-bus&#34;;
+</span></span><span class="line"><span class="cl">		ranges ;
+</span></span><span class="line"><span class="cl">		myip_v1_0_0: myip_v1_0@43c00000 {     # 寄存器的物理地址是0x43c00000
+</span></span><span class="line"><span class="cl">			compatible = &#34;xlnx,myip-v1-0-1.0&#34;;
+</span></span><span class="line"><span class="cl">			reg = &lt;0x43c00000 0x10000&gt;;
+</span></span><span class="line"><span class="cl">			xlnx,s00-axi-addr-width = &lt;0x4&gt;;
+</span></span><span class="line"><span class="cl">			xlnx,s00-axi-data-width = &lt;0x20&gt;;
+</span></span><span class="line"><span class="cl">		};
+</span></span><span class="line"><span class="cl">	};
+</span></span><span class="line"><span class="cl">};
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>寄存器的物理地址是 0x43c00000，对这个地址的第一个字节的 0 位写值就可以控制 led 灯的亮灭</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">$ busybox devmem 0x43c00000 <span class="m">8</span> 0x01         <span class="c1"># 灯灭</span>
+</span></span><span class="line"><span class="cl">$ busybox devmem 0x43c00000 <span class="m">8</span> 0x00         <span class="c1"># 灯亮</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><del>Q: 最小的寄存器组: 4 个(0x43c00000-0x43c0000f), 从 0x40000000-0x4fffffff 全部被映射到了最初的 16 个字节。</del>
+实际上被映射的物理内存区域有 1G，从地址 0x40000000-0x4fffffff</p>
+<h3 id="测试从-linux-端读写寄存器寄存器连接一个宽度-16bit深度-256-的-block-ram通过读写-3-个寄存器来实现对-block-ram-的指定地址的读写">测试：从 Linux 端读写寄存器，寄存器连接一个宽度 16bit，深度 256 的 Block RAM，通过读写 3 个寄存器来实现对 Block RAM 的指定地址的读写。</h3>
+<p>由一个 TOP 模块，来例化了一个 AXI-Lite 总线接口，这个总线接口定义了 60 个寄存器并且引出。还有一个 BlockRAM 模块，将 AXI 总线定义的三个寄存器输入到 RAM 的控制接口里，然后通过对总线读写来控制 RAM。</p>
+<p>AXI 总线模块：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-verilog" data-lang="verilog"><span class="line"><span class="cl"><span class="n">AXI_Lite</span> <span class="n">axi_lite</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">       <span class="p">(.</span><span class="n">register00</span><span class="p">(</span><span class="n">AXI_Lite_register00</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="p">.</span><span class="n">register01</span><span class="p">(</span><span class="n">AXI_Lite_register01</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="p">.</span><span class="n">register02</span><span class="p">(</span><span class="n">AXI_Lite_register02</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="p">.</span><span class="n">register03</span><span class="p">(</span><span class="n">AXI_Lite_register03</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="p">.</span><span class="n">register04</span><span class="p">(</span><span class="n">AXI_Lite_register04</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="p">.</span><span class="n">register05</span><span class="p">(</span><span class="n">AXI_Lite_register05</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="p">.</span><span class="n">register06</span><span class="p">(</span><span class="n">AXI_Lite_register06</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="p">.</span><span class="n">register07</span><span class="p">(</span><span class="n">AXI_Lite_register07</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="p">.</span><span class="n">register08</span><span class="p">(</span><span class="n">AXI_Lite_register08</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="p">.</span><span class="n">register09</span><span class="p">(</span><span class="n">AXI_Lite_register09</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="p">.</span><span class="n">register10</span><span class="p">(</span><span class="n">AXI_Lite_register10</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">		<span class="p">......</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>对 BlockRAM 的接口定义：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-verilog" data-lang="verilog"><span class="line"><span class="cl"><span class="n">bram_wrapper</span> <span class="n">mappingRAM</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="p">(</span>
+</span></span><span class="line"><span class="cl">        <span class="p">#</span> <span class="err">写地址：</span><span class="mh">0</span><span class="n">x000</span><span class="o">-</span><span class="mh">0</span><span class="n">x100</span><span class="p">(</span><span class="err">深度</span><span class="mh">256</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">.</span><span class="n">BRAM_PORTA_0_addr</span><span class="p">(</span><span class="n">AXI_Lite_register01</span><span class="p">[</span><span class="mh">7</span><span class="o">:</span><span class="mh">0</span><span class="p">]),</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="p">#</span> <span class="err">写时钟：</span><span class="n">FCLK_CLK0</span>
+</span></span><span class="line"><span class="cl">        <span class="p">.</span><span class="n">BRAM_PORTA_0_clk</span><span class="p">(</span><span class="n">s00_axi_aclk_0_1</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="p">#</span> <span class="err">写数据：</span><span class="mh">16</span><span class="n">bit</span><span class="err">数据</span>
+</span></span><span class="line"><span class="cl">        <span class="p">.</span><span class="n">BRAM_PORTA_0_din</span><span class="p">(</span><span class="n">AXI_Lite_register02</span><span class="p">[</span><span class="mh">15</span><span class="o">:</span><span class="mh">0</span><span class="p">]),</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="p">#</span> <span class="n">PORTA</span><span class="err">使能</span>
+</span></span><span class="line"><span class="cl">        <span class="p">.</span><span class="n">BRAM_PORTA_0_en</span><span class="p">(</span><span class="mh">1</span><span class="mb">&#39;b1</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="p">#</span> <span class="n">PORTA</span><span class="err">写使能</span>
+</span></span><span class="line"><span class="cl">        <span class="p">.</span><span class="n">BRAM_PORTA_0_we</span><span class="p">(</span><span class="mh">1</span><span class="mb">&#39;b1</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="p">#</span> <span class="n">PORTB</span><span class="err">读地址</span>
+</span></span><span class="line"><span class="cl">        <span class="p">.</span><span class="n">BRAM_PORTB_0_addr</span><span class="p">(</span><span class="n">AXI_Lite_register03</span><span class="p">[</span><span class="mh">7</span><span class="o">:</span><span class="mh">0</span><span class="p">]),</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="p">#</span> <span class="n">PORTB</span><span class="err">读时钟</span>
+</span></span><span class="line"><span class="cl">        <span class="p">.</span><span class="n">BRAM_PORTB_0_clk</span><span class="p">(</span><span class="n">s00_axi_aclk_0_1</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="p">#</span> <span class="n">PORTB</span><span class="err">读数据</span>
+</span></span><span class="line"><span class="cl">        <span class="p">.</span><span class="n">BRAM_PORTB_0_dout</span><span class="p">(</span><span class="n">w_ramout</span><span class="p">[</span><span class="mh">15</span><span class="o">:</span><span class="mh">0</span><span class="p">]),</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="p">#</span> <span class="n">PORTB</span><span class="err">读使能</span>
+</span></span><span class="line"><span class="cl">        <span class="p">.</span><span class="n">BRAM_PORTB_0_en</span><span class="p">(</span><span class="mh">1</span><span class="mb">&#39;b1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="p">);</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>ramout_0 -&gt; led(R19)</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># register
+</span></span><span class="line"><span class="cl">  ————————————————————                                       ————————————-
+</span></span><span class="line"><span class="cl">  | register01[7:0]  |  ————&gt; 写地址，输入到PORTA addr ——————&gt; |            |
+</span></span><span class="line"><span class="cl">  ————————————————————
+</span></span><span class="line"><span class="cl">  | register02[15:0] |  ————&gt; 写数据，输入到PORTA din  ——————&gt; |  256 x 16  |
+</span></span><span class="line"><span class="cl">  ————————————————————
+</span></span><span class="line"><span class="cl">  | register03[7:0]  |  ————&gt; 读地址，输入到PORTB addr ——————&gt; |            |
+</span></span><span class="line"><span class="cl">  ————————————————————                                       ————————————-
+</span></span><span class="line"><span class="cl">                                                                   |
+</span></span><span class="line"><span class="cl">                            ramout[0]       ——————————————         |
+</span></span><span class="line"><span class="cl">                  led  &lt;———————————————————| ramout[15:0] |—————————
+</span></span><span class="line"><span class="cl">                                            ——————————————
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>测试过程:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 初始状态：ram内全部清零，ramout[0] 输出为0，&#34;led灯亮&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 给RAM的写地址端口写入0x43c00004</span>
+</span></span><span class="line"><span class="cl">$ busybox devmem 0x43c00004 <span class="m">8</span> 0x55
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 给RAM的写数据端口写入16位数据0x0001</span>
+</span></span><span class="line"><span class="cl">$ busybox devmem 0x43c00008 <span class="m">16</span> 0x0001
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">此时RAM的0x55地址写入了数据 <span class="m">0000</span> <span class="m">0000</span> <span class="m">0000</span> <span class="m">0001</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 给0x43c0000c地址写入0x55，表示给RAM的读地址端口写0x55</span>
+</span></span><span class="line"><span class="cl">$ busybox devmem 0x43c0000c <span class="m">8</span> 0x55
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">此时ramout的第0位由0变成了1，<span class="s2">&#34;led灯灭&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 把0x55的数据重新写为0</span>
+</span></span><span class="line"><span class="cl">$ busybox devmem 0x43c00008 <span class="m">16</span> 0x0000
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="s2">&#34;led灯亮&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 或者改变读地址的值</span>
+</span></span><span class="line"><span class="cl">$ busybox devmem 0x43c0000c <span class="m">8</span> 0x56
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="s2">&#34;led灯亮&#34;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>上述实验证明数据写入 RAM 成功</p>
+]]></description>
+</item>
+<item>
     <title>Gentoo安装小记</title>
-    <link>http://gitzhangzhao.github.io/posts/gentoo%E5%AE%89%E8%A3%85%E5%B0%8F%E8%AE%B0/</link>
-    <pubDate>Sun, 18 Jun 2023 23:54:08 &#43;0800</pubDate><author>gitzhangzhao@gmail.com (张昭)</author><guid>http://gitzhangzhao.github.io/posts/gentoo%E5%AE%89%E8%A3%85%E5%B0%8F%E8%AE%B0/</guid>
+    <link>http://gitzhangzhao.github.io/posts/gentoo/gentoo%E5%AE%89%E8%A3%85%E5%B0%8F%E8%AE%B0/</link>
+    <pubDate>Sun, 18 Jun 2023 23:54:08 &#43;0800</pubDate><author>gitzhangzhao@gmail.com (张昭)</author><guid>http://gitzhangzhao.github.io/posts/gentoo/gentoo%E5%AE%89%E8%A3%85%E5%B0%8F%E8%AE%B0/</guid>
     <description><![CDATA[<h2 id="前言">前言</h2>
 <blockquote>
 <p>安装Gentoo并不复杂，很多人混淆了复杂和耗时。在安装的过程中，大部分的时间都在做别的事情。同时，Gentoo的安装步骤是清晰的，Handbook和各路神仙的总结实际上已经很全面了。因此，没有必要再做重复的劳动，一些个性化的关键点记录就足够了。</p>
@@ -22,34 +733,32 @@
 <p>Gentoo的安装大体上是规范的，但是针对不同用户的需求和理念，也有不一样的方式。或多或少的，存在一些坑</p>
 <p>我在安装过程主要参考的几个链接：</p>
 <ol>
-<li>
-<p>官方Handbook，这是最权威的手册，当问题不确定时，以Handbook为准
-<a href="https://wiki.gentoo.org/wiki/Handbook:AMD64/zh-cn" target="_blank" rel="noopener noreffer">Handbook</a></p>
-</li>
-<li>
-<p>一篇较为详细的安装笔记，属于经验丰富的老玩家心得了，很有参考价值
-<a href="https://zhuanlan.zhihu.com/p/122222365" target="_blank" rel="noopener noreffer">Gentoo安装流程分享(step by step)，第一篇之基本系统的安装</a></p>
-</li>
-<li>
-<p>OriPoin&rsquo;s blog，详细介绍了Gentoo的优化方式，但是没必要采用O3，会带来很多未知问题
-<a href="https://blog.oripoin.me/2022/04/emerge-your-world-the-lean-way/" target="_blank" rel="noopener noreffer">Emerge your world the lean way</a>
-<a href="https://blog.oripoin.me/2022/04/optimize-your-system-the-stupid-way/" target="_blank" rel="noopener noreffer">Optimize Your system the stupid way</a></p>
-</li>
-<li>
-<p>bitbili&rsquo;s blog，非常非常详细的介绍了Gentoo的安装和使用
-<a href="https://bitbili.net/gentoo-linux-installation-and-usage-tutorial.html" target="_blank" rel="noopener noreffer">Gentoo Linux 安装及使用指南</a></p>
-</li>
-<li>
-<p>Yangmame的安装教程
-<a href="https://blog.yangmame.org/Gentoo%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B.html" target="_blank" rel="noopener noreffer">Gentoo安装教程</a></p>
-</li>
-<li>
-<p>ayamir的知乎记录
-<a href="https://zhuanlan.zhihu.com/p/166652475" target="_blank" rel="noopener noreffer">2020-Gentoo双系统安装指北</a></p>
-</li>
-<li>
-<p>Google，Stack Overflow，gentoo wiki，arch wiki等</p>
-</li>
+<li>官方Handbook，这是最权威的手册，当问题不确定时，以Handbook为准</li>
+</ol>
+<p><a href="https://wiki.gentoo.org/wiki/Handbook:AMD64/zh-cn" target="_blank" rel="noopener noreffer">Handbook</a></p>
+<ol start="2">
+<li>一篇较为详细的安装笔记，属于经验丰富的老玩家心得了，很有参考价值</li>
+</ol>
+<p><a href="https://zhuanlan.zhihu.com/p/122222365" target="_blank" rel="noopener noreffer">Gentoo安装流程分享(step by step)，第一篇之基本系统的安装</a></p>
+<ol start="3">
+<li>OriPoin&rsquo;s blog，详细介绍了Gentoo的优化方式，但是没必要采用O3，会带来很多未知问题</li>
+</ol>
+<p><a href="https://blog.oripoin.me/2022/04/emerge-your-world-the-lean-way/" target="_blank" rel="noopener noreffer">Emerge your world the lean way</a></p>
+<p><a href="https://blog.oripoin.me/2022/04/optimize-your-system-the-stupid-way/" target="_blank" rel="noopener noreffer">Optimize Your system the stupid way</a></p>
+<ol start="4">
+<li>bitbili&rsquo;s blog，非常非常详细的介绍了Gentoo的安装和使用</li>
+</ol>
+<p><a href="https://bitbili.net/gentoo-linux-installation-and-usage-tutorial.html" target="_blank" rel="noopener noreffer">Gentoo Linux 安装及使用指南</a></p>
+<ol start="5">
+<li>Yangmame的安装教程</li>
+</ol>
+<p><a href="https://blog.yangmame.org/Gentoo%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B.html" target="_blank" rel="noopener noreffer">Gentoo安装教程</a></p>
+<ol start="6">
+<li>ayamir的知乎记录</li>
+</ol>
+<p><a href="https://zhuanlan.zhihu.com/p/166652475" target="_blank" rel="noopener noreffer">2020-Gentoo双系统安装指北</a></p>
+<ol start="6">
+<li>Google，Stack Overflow，gentoo wiki，arch wiki等</li>
 </ol>
 <h2 id="makeconf">make.conf</h2>
 <p>make.conf可以说是Gentoo的核心了，针对PC的配置、优化以及对系统的预期基本上都是在这个文件中定义的，首先列出我的：</p>

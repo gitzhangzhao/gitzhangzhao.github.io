@@ -1,21 +1,5 @@
----
-title: "Gentoo安装小记"
-author: "张昭"
-date: 2023-06-18T23:54:08+08:00
-draft: false
-tags : [
-    "Linux",
-    "Gentoo"
-]
+# Gentoo安装小记
 
-categories : [
-    "Linux"
-]
-
-keywords : [
-    "Gentoo"
-]
----
 
 ## 前言
 > 安装Gentoo并不复杂，很多人混淆了复杂和耗时。在安装的过程中，大部分的时间都在做别的事情。同时，Gentoo的安装步骤是清晰的，Handbook和各路神仙的总结实际上已经很全面了。因此，没有必要再做重复的劳动，一些个性化的关键点记录就足够了。
@@ -30,22 +14,29 @@ Gentoo的安装大体上是规范的，但是针对不同用户的需求和理�
 我在安装过程主要参考的几个链接：
 
 1. 官方Handbook，这是最权威的手册，当问题不确定时，以Handbook为准
+
 [Handbook](https://wiki.gentoo.org/wiki/Handbook:AMD64/zh-cn)
 
 2. 一篇较为详细的安装笔记，属于经验丰富的老玩家心得了，很有参考价值
+
 [Gentoo安装流程分享(step by step)，第一篇之基本系统的安装](https://zhuanlan.zhihu.com/p/122222365)
 
 3. OriPoin's blog，详细介绍了Gentoo的优化方式，但是没必要采用O3，会带来很多未知问题
+
 [Emerge your world the lean way](https://blog.oripoin.me/2022/04/emerge-your-world-the-lean-way/)
+
 [Optimize Your system the stupid way](https://blog.oripoin.me/2022/04/optimize-your-system-the-stupid-way/)
 
 4. bitbili's blog，非常非常详细的介绍了Gentoo的安装和使用
+
 [Gentoo Linux 安装及使用指南](https://bitbili.net/gentoo-linux-installation-and-usage-tutorial.html)
 
 5. Yangmame的安装教程
+
 [Gentoo安装教程](https://blog.yangmame.org/Gentoo%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B.html)
 
 6. ayamir的知乎记录
+
 [2020-Gentoo双系统安装指北](https://zhuanlan.zhihu.com/p/166652475)
 
 6. Google，Stack Overflow，gentoo wiki，arch wiki等
@@ -125,4 +116,5 @@ Gentoo目前用systemd-utils替代了原本的eudev，所以解决办法有：
 
 #### Desktop profiles？
 Desktop profiles预设了很多USE，并包含了一些system依赖。对于KDE和GNOME用户，Desktop profiles中提供的增量可以省很多事。但是对于裸WM来说，没有必要为使用Desktop，默认的profiles或者systemd profiles就可以了。在最小化的基础上，安装软件时检查USE并逐步添加自己的全局USE
+
 

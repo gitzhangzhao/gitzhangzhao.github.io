@@ -1,16 +1,134 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
-    <channel>
-        <title>张昭的Blog</title>
-        <link>http://gitzhangzhao.github.io/</link>
-        <description>Welcome to Zhangzhao&#39;s blog.</description>
-        <generator>Hugo -- gohugo.io</generator><language>zh-cn</language><managingEditor>gitzhangzhao@gmail.com (张昭)</managingEditor>
-            <webMaster>gitzhangzhao@gmail.com (张昭)</webMaster><lastBuildDate>Mon, 19 Jun 2023 11:35:36 &#43;0800</lastBuildDate>
-            <atom:link href="http://gitzhangzhao.github.io/index.xml" rel="self" type="application/rss+xml" />
-        <item>
-    <title>Petalinux（一）： 安装使用及通过 linux 对 FPGA 的寄存器或者 RAM 进行读写</title>
-    <link>http://gitzhangzhao.github.io/posts/petalinux/petalinux_1/</link>
-    <pubDate>Mon, 19 Jun 2023 11:35:36 &#43;0800</pubDate><author>gitzhangzhao@gmail.com (张昭)</author><guid>http://gitzhangzhao.github.io/posts/petalinux/petalinux_1/</guid>
-    <description><![CDATA[<p>课题需要可能要在 ZYNQ 上多次部署 Linux 并测试，普通的脚本安装方式太过繁琐，Xilinx 的 Petalinux 工具简化了很多流程。这里记录了一些主要步骤，由于实验室 Vivado 版本，所以选择的 Petalinux 版本也不是最新的</p>
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>Petalinux（一）： 安装使用及通过 linux 对 FPGA 的寄存器或者 RAM 进行读写 - 张昭的Blog</title><meta name="description" content="Welcome to Zhangzhao&#39;s blog."><meta property="og:title" content="Petalinux（一）： 安装使用及通过 linux 对 FPGA 的寄存器或者 RAM 进行读写" />
+<meta property="og:description" content="课题需要可能要在 ZYNQ 上多次部署 Linux 并测试，普通的脚本安装方式太过繁琐，Xilinx 的 Petalinux 工具简化了很多流程。这里记录了一些主要步骤，由于实验室 Vivado 版" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://gitzhangzhao.github.io/posts/petalinux/petalinux_1/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2023-06-19T11:35:36+08:00" />
+<meta property="article:modified_time" content="2023-06-19T11:35:36+08:00" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Petalinux（一）： 安装使用及通过 linux 对 FPGA 的寄存器或者 RAM 进行读写"/>
+<meta name="twitter:description" content="课题需要可能要在 ZYNQ 上多次部署 Linux 并测试，普通的脚本安装方式太过繁琐，Xilinx 的 Petalinux 工具简化了很多流程。这里记录了一些主要步骤，由于实验室 Vivado 版"/>
+<meta name="application-name" content="张昭的Blog">
+<meta name="apple-mobile-web-app-title" content="张昭的Blog"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="http://gitzhangzhao.github.io/posts/petalinux/petalinux_1/" /><link rel="prev" href="http://gitzhangzhao.github.io/posts/gentoo/gentoo%E5%AE%89%E8%A3%85%E5%B0%8F%E8%AE%B0/" /><link rel="stylesheet" href="/css/page.min.css"><link rel="stylesheet" href="/css/home.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Petalinux（一）： 安装使用及通过 linux 对 FPGA 的寄存器或者 RAM 进行读写",
+        "inLanguage": "zh-cn",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "http:\/\/gitzhangzhao.github.io\/posts\/petalinux\/petalinux_1\/"
+        },"genre": "posts","keywords": "Petalinux, Linux","wordcount":  2974 ,
+        "url": "http:\/\/gitzhangzhao.github.io\/posts\/petalinux\/petalinux_1\/","datePublished": "2023-06-19T11:35:36+08:00","dateModified": "2023-06-19T11:35:36+08:00","publisher": {
+            "@type": "Organization",
+            "name": "张昭"},"author": {
+                "@type": "Person",
+                "name": "张昭"
+            },"description": ""
+    }
+    </script></head><body data-header-desktop="auto" data-header-mobile="auto"><script>(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : '' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="张昭的Blog">张昭的Blog</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> 文章 </a><a class="menu-item" href="/tags/"> 标签 </a><a class="menu-item" href="/categories/"> 分类 </a><a class="menu-item" href="/about/"> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="#" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="#" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="#" onclick="return false;" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="张昭的Blog">张昭的Blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="#" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="#" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="#" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="">文章</a><a class="menu-item" href="/tags/" title="">标签</a><a class="menu-item" href="/categories/" title="">分类</a><a class="menu-item" href="/about/" title="">关于</a><div class="menu-item"><a href="#" onclick="return false;" class="theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div></div>
+    </div>
+</header><div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single" data-toc="enable"><div class="single-card" ><h2 class="single-title animated flipInX">Petalinux（一）： 安装使用及通过 linux 对 FPGA 的寄存器或者 RAM 进行读写</h2><div class="post-meta">
+                <div class="post-meta-line"><span class="post-author"><a href="https://github.com/gitzhangzhao" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle fa-fw"></i>张昭</a></span>&nbsp;<span class="post-category">出版于  <a href="/categories/embedded-system/"><i class="far fa-folder fa-fw"></i>Embedded System</a></span></div>
+                <div class="post-meta-line"><span><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2023-06-19">2023-06-19</time></span>&nbsp;<span><i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 2974 字</span>&nbsp;
+                    <span><i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 6 分钟</span>&nbsp;</div>
+            </div>
+            
+            <hr><div class="details toc" id="toc-static"  data-kept="">
+                    <div class="details-summary toc-title">
+                        <span>目录</span>
+                        <span><i class="details-icon fas fa-angle-right"></i></span>
+                    </div>
+                    <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#why-petalinux">why petalinux?</a></li>
+            <li><a href="#petalinux-的安装">petalinux 的安装</a></li>
+            <li><a href="#petalinux-的使用">petalinux 的使用</a></li>
+            <li><a href="#petalinux-产生设备树的分析">petalinux 产生设备树的分析</a></li>
+            <li><a href="#实验产生-gpio-设备树文件使用-linux-内的-gpio-驱动程序用文件-io-方式驱动-led">实验：产生 GPIO 设备树文件，使用 Linux 内的 gpio 驱动程序，用文件 IO 方式驱动 led</a></li>
+            <li><a href="#实验直接将-fpga-寄存器信号输出到-r19-引脚通过-axi-lite-总线读写寄存器来控制-led">实验：直接将 FPGA 寄存器信号输出到 R19 引脚，通过 AXI-Lite 总线读写寄存器来控制 led</a></li>
+            <li><a href="#测试从-linux-端读写寄存器寄存器连接一个宽度-16bit深度-256-的-block-ram通过读写-3-个寄存器来实现对-block-ram-的指定地址的读写">测试：从 Linux 端读写寄存器，寄存器连接一个宽度 16bit，深度 256 的 Block RAM，通过读写 3 个寄存器来实现对 Block RAM 的指定地址的读写。</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+                </div><div class="content" id="content"><p>课题需要可能要在 ZYNQ 上多次部署 Linux 并测试，普通的脚本安装方式太过繁琐，Xilinx 的 Petalinux 工具简化了很多流程。这里记录了一些主要步骤，由于实验室 Vivado 版本，所以选择的 Petalinux 版本也不是最新的</p>
 <blockquote>
 <p>2021.11</p>
 </blockquote>
@@ -715,201 +833,39 @@ image.ub: linux 的内核镜像，并且打包了设备树文件 plnx_arm-system
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>上述实验证明数据写入 RAM 成功</p>
-]]></description>
-</item>
-<item>
-    <title>Gentoo安装小记</title>
-    <link>http://gitzhangzhao.github.io/posts/gentoo/gentoo%E5%AE%89%E8%A3%85%E5%B0%8F%E8%AE%B0/</link>
-    <pubDate>Sun, 18 Jun 2023 23:54:08 &#43;0800</pubDate><author>gitzhangzhao@gmail.com (张昭)</author><guid>http://gitzhangzhao.github.io/posts/gentoo/gentoo%E5%AE%89%E8%A3%85%E5%B0%8F%E8%AE%B0/</guid>
-    <description><![CDATA[<h2 id="前言">前言</h2>
-<blockquote>
-<p>安装Gentoo并不复杂，很多人混淆了复杂和耗时。在安装的过程中，大部分的时间都在做别的事情。同时，Gentoo的安装步骤是清晰的，Handbook和各路神仙的总结实际上已经很全面了。因此，没有必要再做重复的劳动，一些个性化的关键点记录就足够了。</p>
-</blockquote>
-<blockquote>
-<p>为了使系统保持Suckless，尽量避免用不到的功能，我还是继续沿用裸wm的方式。简而言之：gentoo + openrc + i3wm + polybar + nvim。我的目标是尽量在一天内完成系统的整体安装，再用一周时间进行小修小补。而在流程化的步骤下，一天内的实际安装时间在1小时左右，而其余时间都在做其他事情。</p>
-</blockquote>
-<blockquote>
-<p>此外，对于小新pro这种散热垃圾的Laptop，一个带风扇的散热架是必要的。否则，<code>emerge -e @world</code> 是真的会卡死（哭）。</p>
-</blockquote>
-<h2 id="安装步骤">安装步骤</h2>
-<p>Gentoo的安装大体上是规范的，但是针对不同用户的需求和理念，也有不一样的方式。或多或少的，存在一些坑</p>
-<p>我在安装过程主要参考的几个链接：</p>
-<ol>
-<li>官方Handbook，这是最权威的手册，当问题不确定时，以Handbook为准</li>
-</ol>
-<p><a href="https://wiki.gentoo.org/wiki/Handbook:AMD64/zh-cn" target="_blank" rel="noopener noreffer">Handbook</a></p>
-<ol start="2">
-<li>一篇较为详细的安装笔记，属于经验丰富的老玩家心得了，很有参考价值</li>
-</ol>
-<p><a href="https://zhuanlan.zhihu.com/p/122222365" target="_blank" rel="noopener noreffer">Gentoo安装流程分享(step by step)，第一篇之基本系统的安装</a></p>
-<ol start="3">
-<li>OriPoin&rsquo;s blog，详细介绍了Gentoo的优化方式，但是没必要采用O3，会带来很多未知问题</li>
-</ol>
-<p><a href="https://blog.oripoin.me/2022/04/emerge-your-world-the-lean-way/" target="_blank" rel="noopener noreffer">Emerge your world the lean way</a></p>
-<p><a href="https://blog.oripoin.me/2022/04/optimize-your-system-the-stupid-way/" target="_blank" rel="noopener noreffer">Optimize Your system the stupid way</a></p>
-<ol start="4">
-<li>bitbili&rsquo;s blog，非常非常详细的介绍了Gentoo的安装和使用</li>
-</ol>
-<p><a href="https://bitbili.net/gentoo-linux-installation-and-usage-tutorial.html" target="_blank" rel="noopener noreffer">Gentoo Linux 安装及使用指南</a></p>
-<ol start="5">
-<li>Yangmame的安装教程</li>
-</ol>
-<p><a href="https://blog.yangmame.org/Gentoo%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B.html" target="_blank" rel="noopener noreffer">Gentoo安装教程</a></p>
-<ol start="6">
-<li>ayamir的知乎记录</li>
-</ol>
-<p><a href="https://zhuanlan.zhihu.com/p/166652475" target="_blank" rel="noopener noreffer">2020-Gentoo双系统安装指北</a></p>
-<ol start="6">
-<li>Google，Stack Overflow，gentoo wiki，arch wiki等</li>
-</ol>
-<h2 id="makeconf">make.conf</h2>
-<p>make.conf可以说是Gentoo的核心了，针对PC的配置、优化以及对系统的预期基本上都是在这个文件中定义的，首先列出我的：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span><span class="lnt">19
-</span><span class="lnt">20
-</span><span class="lnt">21
-</span><span class="lnt">22
-</span><span class="lnt">23
-</span><span class="lnt">24
-</span><span class="lnt">25
-</span><span class="lnt">26
-</span><span class="lnt">27
-</span><span class="lnt">28
-</span><span class="lnt">29
-</span><span class="lnt">30
-</span><span class="lnt">31
-</span><span class="lnt">32
-</span><span class="lnt">33
-</span><span class="lnt">34
-</span><span class="lnt">35
-</span><span class="lnt">36
-</span><span class="lnt">37
-</span><span class="lnt">38
-</span><span class="lnt">39
-</span><span class="lnt">40
-</span><span class="lnt">41
-</span><span class="lnt">42
-</span><span class="lnt">43
-</span><span class="lnt">44
-</span><span class="lnt">45
-</span><span class="lnt">46
-</span><span class="lnt">47
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"> # These settings were set by the catalyst build script that automatically
-</span></span><span class="line"><span class="cl"> # built this stage.
-</span></span><span class="line"><span class="cl"> # Please consult /usr/share/portage/config/make.conf.example for a more
-</span></span><span class="line"><span class="cl"> # detailed example.
-</span></span><span class="line"><span class="cl"> COMMON_FLAGS=&#34;-march=native -O2 -pipe&#34;
-</span></span><span class="line"><span class="cl"> CFLAGS=&#34;${COMMON_FLAGS}&#34;
-</span></span><span class="line"><span class="cl"> CXXFLAGS=&#34;${COMMON_FLAGS}&#34;
-</span></span><span class="line"><span class="cl"> FCFLAGS=&#34;${COMMON_FLAGS}&#34;
-</span></span><span class="line"><span class="cl"> FFLAGS=&#34;${COMMON_FLAGS}&#34;
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"> USE=&#34;X elogind mount cjk i3wm mpd network pulseaudio ipc opengl dbus -gnome -kde&#34;
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"> MAKEOPTS=&#34;-j6&#34;
-</span></span><span class="line"><span class="cl"> LC_MESSAGES=C
-</span></span><span class="line"><span class="cl"> EMERGE_DEFAULT_OPTS=&#34;--ask --verbose --load-average --newuse --with-bdeps=y --keep-going --deep&#34;
-</span></span><span class="line"><span class="cl"> CPU_FLAGS_X86=&#34;aes avx avx2 f16c fma3 mmx mmxext pclmul popcnt rdrand sse sse2 sse3 sse4_1 sse4_2 ssse3&#34;
-</span></span><span class="line"><span class="cl"> AUTO_CLEAN=&#34;yes&#34;
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"> PORTDIR=&#34;/var/db/repos/gentoo&#34;
-</span></span><span class="line"><span class="cl"> DISTDIR=&#34;/var/cache/distfiles&#34;
-</span></span><span class="line"><span class="cl"> PKGDIR=&#34;/var/chache/binpkgs&#34;
-</span></span><span class="line"><span class="cl"> PORTAGE_TMPDIR=&#34;/tmp&#34;
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"> PORTAGE_COMPRESS=&#34;zstd&#34;
-</span></span><span class="line"><span class="cl"> BINPKG_COMPRESS=&#34;zstd&#34;
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"> ACCEPT_LICENSE=&#34;*&#34;
-</span></span><span class="line"><span class="cl"> ACCEPT_KEYWORDS=&#34;~amd64&#34;
-</span></span><span class="line"><span class="cl"> GRUB_PLATFORMS=&#34;efi-64&#34;
-</span></span><span class="line"><span class="cl"> VIDEO_CARDS=&#34;nouveau&#34;
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"> GENTOO_MIRRORS=&#34;https://mirrors.tuna.tsinghua.edu.cn/gentoo&#34;
-</span></span><span class="line"><span class="cl"> MICROCODE_SIGNATURES=&#34;-S&#34;
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"> # NOTE: This stage was built with the bindist Use flag enabled
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"> # This sets the language of build output to English.
-</span></span><span class="line"><span class="cl"> # Please keep this setting intact when reporting bugs.
-</span></span><span class="line"><span class="cl"> LC_MESSAGES=C.utf8
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"> # ccache
-</span></span><span class="line"><span class="cl"> FEATURES=&#34;ccache -test&#34;
-</span></span><span class="line"><span class="cl"> CCACHE_DIR=&#34;/var/cache/ccache&#34;
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"> # aria2
-</span></span><span class="line"><span class="cl"> FETCHCOMMAND=&#34;/usr/bin/aria2c -d \${DISTDIR} -o \${FILE} --allow-overwrite=true --max-tries=5 --max-file-not-found=2 --max-concurrent-downloads=5 --connect-timeout=5 --timeout=5 --split=5 --min-split-size=2M --lowest-speed-limit=20K --max-connection-per-server=9 --uri-selector=feedback \${URI}&#34;
-</span></span><span class="line"><span class="cl"> RESUMECOMMAND=&#34;${FETCHCOMMAND}&#34;
-</span></span></code></pre></td></tr></table>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info"><div class="post-info-tag"><span><a href="/tags/petalinux/">Petalinux</a>
+                </span><span><a href="/tags/linux/">Linux</a>
+                </span></div><div class="post-info-line"><div class="post-info-mod">
+                <span>更新于 2023-06-19</span>
+            </div><div class="post-info-mod"><span>
+                            <a class="link-to-markdown" href="/posts/petalinux/petalinux_1/index.md" target="_blank">阅读原始文档</a>
+                        </span></div>
+        </div><div class="post-info-share">
+            <span><a href="#" onclick="return false;" title="分享到 Twitter" data-sharer="twitter" data-url="http://gitzhangzhao.github.io/posts/petalinux/petalinux_1/" data-title="Petalinux（一）： 安装使用及通过 linux 对 FPGA 的寄存器或者 RAM 进行读写" data-hashtags="Petalinux,Linux"><i class="fab fa-twitter fa-fw"></i></a><a href="#" onclick="return false;" title="分享到 Facebook" data-sharer="facebook" data-url="http://gitzhangzhao.github.io/posts/petalinux/petalinux_1/" data-hashtag="Petalinux"><i class="fab fa-facebook-square fa-fw"></i></a></span>
+        </div></div><div class="post-nav"><a href="/posts/gentoo/gentoo%E5%AE%89%E8%A3%85%E5%B0%8F%E8%AE%B0/" class="prev" rel="prev" title="Gentoo安装小记"><i class="fas fa-angle-left fa-fw"></i>Previous Post</a></div></div>
+</div></article></div>
+            </main>
+            <footer class="footer"><div class="footer-container"><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2023</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="https://github.com/gitzhangzhao">张昭</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
 </div>
-</div><h2 id="问题列举">问题列举</h2>
-<ul>
-<li>Gentoo默认是复杂密码，为了便于日常使用，改为简单密码：
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">/etc/security/passwdqc.conf
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">min=8,8,8,8,8
-</span></span><span class="line"><span class="cl">max=40
-</span></span><span class="line"><span class="cl">passphrase=0
-</span></span><span class="line"><span class="cl">match=4
-</span></span><span class="line"><span class="cl">similar=permit
-</span></span><span class="line"><span class="cl">random=24
-</span></span><span class="line"><span class="cl">enforce=none
-</span></span><span class="line"><span class="cl">retry=3
-</span></span></code></pre></td></tr></table>
-</div>
-</div>或者全局USE -pam，我还没有尝试</li>
-</ul>
-<h4 id="eudev还是systemd-utils">eudev还是systemd-utils？</h4>
-<p>Gentoo目前用systemd-utils替代了原本的eudev，所以解决办法有：</p>
-<ol>
-<li>使用systemd-utils管理设备，不要再安装eudev，这是最简单的。官方的原话是：<code>in general, you should not worry about installing anything *udev manually by yourself and you should imho not have anything like that in your world file.</code></li>
-<li>如果你痛恨和systemd有关的一切，可以为systemd-utils包-udev USE，然后应该就可以安装eudev了。需要注意的是，eudev不应该被加入到world file中。此外还有一些其他的USE也会影响，总之这很麻烦。建议还是不要折腾了，systemd-utils只是从systemd中分离出来的组件而已，它包含了udev</li>
-</ol>
-<h4 id="desktop-profiles">Desktop profiles？</h4>
-<p>Desktop profiles预设了很多USE，并包含了一些system依赖。对于KDE和GNOME用户，Desktop profiles中提供的增量可以省很多事。但是对于裸WM来说，没有必要为使用Desktop，默认的profiles或者systemd profiles就可以了。在最小化的基础上，安装软件时检查USE并逐步添加自己的全局USE</p>
-]]></description>
-</item>
-<item>
-    <title>First_post</title>
-    <link>http://gitzhangzhao.github.io/posts/first_post/</link>
-    <pubDate>Sun, 18 Jun 2023 08:44:45 &#43;0800</pubDate><author>gitzhangzhao@gmail.com (张昭)</author><guid>http://gitzhangzhao.github.io/posts/first_post/</guid>
-    <description><![CDATA[]]></description>
-</item>
-</channel>
-</rss>
+<script>
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker
+        .register('/sw.min.js?version=0.0.1', { scope: '/' })
+        .then(() => {
+            console.info('张昭的Blog\u00A0Service Worker Registered');
+        }, err => console.error('张昭的Blog\u00A0Service Worker registration failed: ', err));
+
+    navigator.serviceWorker
+        .ready
+        .then(() => {
+            console.info('张昭的Blog\u00A0Service Worker Ready');
+        });
+}
+</script>
+</footer>
+        </div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-chevron-up fa-fw"></i>
+            </a></div><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><link rel="stylesheet" href="/lib/katex/katex.min.css"><link rel="stylesheet" href="/lib/katex/copy-tex.min.css"><script src="https://polyfill.io/v3/polyfill.min.js?features=Array.prototype.fill%2CArray.prototype.find%2CArray.from%2CIntersectionObserver%2CMath.sign%2CObject.assign%2CPromise%2CObject.entries%2Chtml5shiv%2CObject.values%2Cfetch%2CElement.prototype.after"></script><script src="/lib/autocomplete/autocomplete.min.js"></script><script src="/lib/lunr/lunr.min.js"></script><script src="/lib/lunr/lunr.stemmer.support.min.js"></script><script src="/lib/lunr/lunr.zh.min.js"></script><script src="/lib/lazysizes/lazysizes.min.js"></script><script src="/lib/clipboard/clipboard.min.js"></script><script src="/lib/sharer/sharer.min.js"></script><script src="/lib/katex/katex.min.js"></script><script src="/lib/katex/auto-render.min.js"></script><script src="/lib/katex/copy-tex.min.js"></script><script src="/lib/katex/mhchem.min.js"></script><script>window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":10},"comment":{},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"highlightTag":"em","lunrIndexURL":"/index.json","lunrLanguageCode":"zh","lunrSegmentitURL":"/lib/lunr/lunr.segmentit.js","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"lunr"}};</script><script src="/js/theme.min.js"></script></body></html>
