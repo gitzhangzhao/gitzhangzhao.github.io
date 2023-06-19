@@ -3,13 +3,13 @@
         <title>张昭的Blog</title>
         <link>http://gitzhangzhao.github.io/</link>
         <description>Welcome to Zhangzhao&#39;s blog.</description>
-        <generator>Hugo -- gohugo.io</generator><language>zh-cn</language><managingEditor>gitzhangzhao@gmail.com (张昭)</managingEditor>
-            <webMaster>gitzhangzhao@gmail.com (张昭)</webMaster><lastBuildDate>Mon, 19 Jun 2023 11:48:55 &#43;0800</lastBuildDate>
+        <generator>Hugo -- gohugo.io</generator><language>zh-cn</language><managingEditor>gitzhangzhao@gmail.com (blogger)</managingEditor>
+            <webMaster>gitzhangzhao@gmail.com (blogger)</webMaster><lastBuildDate>Mon, 19 Jun 2023 11:48:55 &#43;0800</lastBuildDate>
             <atom:link href="http://gitzhangzhao.github.io/index.xml" rel="self" type="application/rss+xml" />
         <item>
     <title>Petalinux(二)：远程启动</title>
     <link>http://gitzhangzhao.github.io/posts/petalinux/petalinux_2/</link>
-    <pubDate>Mon, 19 Jun 2023 11:48:55 &#43;0800</pubDate><author>gitzhangzhao@gmail.com (张昭)</author><guid>http://gitzhangzhao.github.io/posts/petalinux/petalinux_2/</guid>
+    <pubDate>Mon, 19 Jun 2023 11:48:55 &#43;0800</pubDate><author>gitzhangzhao@gmail.com (blogger)</author><guid>http://gitzhangzhao.github.io/posts/petalinux/petalinux_2/</guid>
     <description><![CDATA[<p>对于 Linux 远程启动是很普遍的，在 Petalinux 上配置远程启动很简单，并且 Petalinux 会自动配置 U-Boot 变量并增加内核启动参数</p>
 <blockquote>
 <p>2022.05</p>
@@ -282,7 +282,7 @@
 <item>
     <title>Petalinux(一)：安装使用</title>
     <link>http://gitzhangzhao.github.io/posts/petalinux/petalinux_1/</link>
-    <pubDate>Mon, 19 Jun 2023 11:35:36 &#43;0800</pubDate><author>gitzhangzhao@gmail.com (张昭)</author><guid>http://gitzhangzhao.github.io/posts/petalinux/petalinux_1/</guid>
+    <pubDate>Mon, 19 Jun 2023 11:35:36 &#43;0800</pubDate><author>gitzhangzhao@gmail.com (blogger)</author><guid>http://gitzhangzhao.github.io/posts/petalinux/petalinux_1/</guid>
     <description><![CDATA[<p>课题需要可能要在 ZYNQ 上多次部署 Linux 并测试，普通的脚本安装方式太过繁琐，Xilinx 的 Petalinux 工具简化了很多流程。这里记录了一些主要步骤，由于实验室 Vivado 版本，所以选择的 Petalinux 版本也不是最新的</p>
 <blockquote>
 <p>2021.11</p>
@@ -993,7 +993,7 @@ image.ub: linux 的内核镜像，并且打包了设备树文件 plnx_arm-system
 <item>
     <title>Gentoo安装小记</title>
     <link>http://gitzhangzhao.github.io/posts/gentoo/gentoo%E5%AE%89%E8%A3%85%E5%B0%8F%E8%AE%B0/</link>
-    <pubDate>Sun, 18 Jun 2023 23:54:08 &#43;0800</pubDate><author>gitzhangzhao@gmail.com (张昭)</author><guid>http://gitzhangzhao.github.io/posts/gentoo/gentoo%E5%AE%89%E8%A3%85%E5%B0%8F%E8%AE%B0/</guid>
+    <pubDate>Sun, 18 Jun 2023 23:54:08 &#43;0800</pubDate><author>gitzhangzhao@gmail.com (blogger)</author><guid>http://gitzhangzhao.github.io/posts/gentoo/gentoo%E5%AE%89%E8%A3%85%E5%B0%8F%E8%AE%B0/</guid>
     <description><![CDATA[<h2 id="前言">前言</h2>
 <blockquote>
 <p>安装Gentoo并不复杂，很多人混淆了复杂和耗时。在安装的过程中，大部分的时间都在做别的事情。同时，Gentoo的安装步骤是清晰的，Handbook和各路神仙的总结实际上已经很全面了。因此，没有必要再做重复的劳动，一些个性化的关键点记录就足够了。</p>
@@ -1181,7 +1181,7 @@ image.ub: linux 的内核镜像，并且打包了设备树文件 plnx_arm-system
 <item>
     <title>First_post</title>
     <link>http://gitzhangzhao.github.io/posts/first_post/</link>
-    <pubDate>Sun, 18 Jun 2023 08:44:45 &#43;0800</pubDate><author>gitzhangzhao@gmail.com (张昭)</author><guid>http://gitzhangzhao.github.io/posts/first_post/</guid>
+    <pubDate>Sun, 18 Jun 2023 08:44:45 &#43;0800</pubDate><author>gitzhangzhao@gmail.com (blogger)</author><guid>http://gitzhangzhao.github.io/posts/first_post/</guid>
     <description><![CDATA[]]></description>
 </item>
 </channel>
