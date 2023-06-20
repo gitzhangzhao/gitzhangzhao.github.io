@@ -3,10 +3,12 @@ title: "Petalinux(一)：安装使用"
 date: 2023-06-19T11:35:36+08:00
 draft: false
 math: true
-tags: ["Petalinux","ZYNQ", "NFS"]
+tags: ["Petalinux", "ZYNQ", "NFS"]
 categories: ["Embedded System"]
+summary: "Embedded Linux development on ZYNQ made easy with Petalinux"
 ---
-***申明: 本文严禁任何组织或个人在CSDN上进行转载，其他平台转载需经作者授权。***
+
+**_申明: 本文严禁任何组织或个人在 CSDN 上进行转载，其他平台转载需经作者授权。_**
 
 > 课题需要可能要在 ZYNQ 上多次部署 Linux 并测试，普通的脚本安装方式太过繁琐，Xilinx 的 Petalinux 工具简化了很多流程。这里记录了一些主要步骤，由于实验室 Vivado 版本，所以选择的 Petalinux 版本也不是最新的
 
@@ -27,7 +29,6 @@ petalinux 对操作系统版本和依赖版本要求很高，只能在官方文�
 - OS: ubuntu16.04(docker x86-64)
 - Dependencies:
 
-
 ```bash
 sudo dpkg --add-architecture i386
 
@@ -37,6 +38,7 @@ sudo dpkg-reconfigure locales
 
 export LANG=en_US.UTF-8
 ```
+
 由于 Petalinux 依赖发行版版本，推荐采用 Docker 环境安装。请查看 [Petalinux 2017.04 Docker 环境][1]
 
 ### petalinux 的使用
@@ -405,5 +407,4 @@ $ busybox devmem 0x43c0000c 8 0x56
 
 上述实验证明数据写入 RAM 成功
 
-
-  [1]: https://github.com/gitzhangzhao/petalinux_2017.04
+[1]: https://github.com/gitzhangzhao/petalinux_2017.04

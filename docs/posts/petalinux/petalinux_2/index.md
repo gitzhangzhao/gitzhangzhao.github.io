@@ -1,6 +1,7 @@
 # Petalinux(二)：远程启动
 
-***申明: 本文严禁任何组织或个人在CSDN上进行转载，其他平台转载需经作者授权。***
+
+**_申明: 本文严禁任何组织或个人在 CSDN 上进行转载，其他平台转载需经作者授权。_**
 
 > 对于 Linux 远程启动是很普遍的，在 Petalinux 上配置远程启动很简单，并且 Petalinux 会自动配置 U-Boot 变量并增加内核启动参数
 
@@ -147,18 +148,18 @@ zynq> bootz 10000000 - 10080000
 
 #### 在挂载 nfs 时遇到问题：内核启动报错
 
-  ```bash
-  VFS: Unable to mount root fs via NFS, trying floppy.
-  VFS: Cannot open root device "nfs" or unknown-block(2,0): error -6
-  ```
+```bash
+VFS: Unable to mount root fs via NFS, trying floppy.
+VFS: Cannot open root device "nfs" or unknown-block(2,0): error -6
+```
 
 #### 不能成功挂载的原因
 
 1. 防火墙问题
 
-  ```bash
-  $ ufw disable
-  ```
+```bash
+$ ufw disable
+```
 
 2. 由于 nfs 版本不支持
 
@@ -174,17 +175,15 @@ zynq> bootz 10000000 - 10080000
 
 2. 在 nfs server 端的配置中打开对 nfs v2、nfs v3 和 nfs v4 的支持
 
-  ```bash
-  $ echo 'RPCNFSDOPTS="--nfs-version 2,3,4 --debug --syslog"' >> /etc/default/nfs-kernel-server
-  $ systmectl restart nfs-server.service
-  ```
+```bash
+$ echo 'RPCNFSDOPTS="--nfs-version 2,3,4 --debug --syslog"' >> /etc/default/nfs-kernel-server
+$ systmectl restart nfs-server.service
+```
 
-
-  [1]: https://pic.imgdb.cn/item/648845061ddac507cc672cbf.png
-  [2]: https://pic.imgdb.cn/item/6488459c1ddac507cc6b7b93.png
-  [3]: https://pic.imgdb.cn/item/648845c01ddac507cc6c988d.png
-  [4]: https://pic.imgdb.cn/item/648845c01ddac507cc6c988d.png
-  [5]: https://pic.imgdb.cn/item/648845e31ddac507cc6d7334.png
-  [6]: https://pic.imgdb.cn/item/648845e31ddac507cc6d7334.png
-
+[1]: https://pic.imgdb.cn/item/648845061ddac507cc672cbf.png
+[2]: https://pic.imgdb.cn/item/6488459c1ddac507cc6b7b93.png
+[3]: https://pic.imgdb.cn/item/648845c01ddac507cc6c988d.png
+[4]: https://pic.imgdb.cn/item/648845c01ddac507cc6c988d.png
+[5]: https://pic.imgdb.cn/item/648845e31ddac507cc6d7334.png
+[6]: https://pic.imgdb.cn/item/648845e31ddac507cc6d7334.png
 
