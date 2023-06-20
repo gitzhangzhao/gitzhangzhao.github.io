@@ -6,10 +6,9 @@ math: true
 tags: ["Petalinux","ZYNQ", "NFS"]
 categories: ["Embedded System"]
 ---
+**申明: "本文严禁任何组织和个人在CSDN上进行转载，其他平台转载需经作者授权。"**
 
-课题需要可能要在 ZYNQ 上多次部署 Linux 并测试，普通的脚本安装方式太过繁琐，Xilinx 的 Petalinux 工具简化了很多流程。这里记录了一些主要步骤，由于实验室 Vivado 版本，所以选择的 Petalinux 版本也不是最新的
-
-> 2021.11
+> 课题需要可能要在 ZYNQ 上多次部署 Linux 并测试，普通的脚本安装方式太过繁琐，Xilinx 的 Petalinux 工具简化了很多流程。这里记录了一些主要步骤，由于实验室 Vivado 版本，所以选择的 Petalinux 版本也不是最新的
 
 ### why petalinux?
 

@@ -8,7 +8,8 @@
     <title>Gentoo安装小记</title>
     <link>http://gitzhangzhao.github.io/posts/gentoo/gentoo%E5%AE%89%E8%A3%85%E5%B0%8F%E8%AE%B0/</link>
     <pubDate>Sun, 18 Jun 2023 23:54:08 &#43;0800</pubDate><author>gitzhangzhao@gmail.com (blogger)</author><guid>http://gitzhangzhao.github.io/posts/gentoo/gentoo%E5%AE%89%E8%A3%85%E5%B0%8F%E8%AE%B0/</guid>
-    <description><![CDATA[<h3 id="前言">前言</h3>
+    <description><![CDATA[<p><strong>申明: &ldquo;本文严禁任何组织和个人在CSDN上进行转载，其他平台转载需经作者授权。&rdquo;</strong></p>
+<h3 id="前言">前言</h3>
 <blockquote>
 <p>安装Gentoo并不复杂，很多人混淆了复杂和耗时。在安装的过程中，大部分的时间都在做别的事情。同时，Gentoo的安装步骤是清晰的，Handbook和各路神仙的总结实际上已经很全面了。因此，没有必要再做重复的劳动，一些个性化的关键点记录就足够了。</p>
 </blockquote>
