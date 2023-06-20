@@ -1,14 +1,14 @@
 # Gentoo安装小记
 
 
-## 前言
+### 前言
 > 安装Gentoo并不复杂，很多人混淆了复杂和耗时。在安装的过程中，大部分的时间都在做别的事情。同时，Gentoo的安装步骤是清晰的，Handbook和各路神仙的总结实际上已经很全面了。因此，没有必要再做重复的劳动，一些个性化的关键点记录就足够了。
 
 > 为了使系统保持Suckless，尽量避免用不到的功能，我还是继续沿用裸wm的方式。简而言之：gentoo + openrc + i3wm + polybar + nvim。我的目标是尽量在一天内完成系统的整体安装，再用一周时间进行小修小补。而在流程化的步骤下，一天内的实际安装时间在1小时左右，而其余时间都在做其他事情。
 
 > 此外，对于小新pro这种散热垃圾的Laptop，一个带风扇的散热架是必要的。否则，`emerge -e @world` 是真的会卡死（哭）。
 
-## 安装步骤
+### 安装步骤
 Gentoo的安装大体上是规范的，但是针对不同用户的需求和理念，也有不一样的方式。或多或少的，存在一些坑
 
 我在安装过程主要参考的几个链接：
@@ -41,7 +41,7 @@ Gentoo的安装大体上是规范的，但是针对不同用户的需求和理�
 
 6. Google，Stack Overflow，gentoo wiki，arch wiki等
 
-## make.conf
+### make.conf
 make.conf可以说是Gentoo的核心了，针对PC的配置、优化以及对系统的预期基本上都是在这个文件中定义的，首先列出我的：
 ```make.conf
  # These settings were set by the catalyst build script that automatically
@@ -93,7 +93,7 @@ make.conf可以说是Gentoo的核心了，针对PC的配置、优化以及对系
  RESUMECOMMAND="${FETCHCOMMAND}"
 ```
 
-## 问题列举
+### 问题列举
 - Gentoo默认是复杂密码，为了便于日常使用，改为简单密码：
   ```passwdqc.conf
   /etc/security/passwdqc.conf

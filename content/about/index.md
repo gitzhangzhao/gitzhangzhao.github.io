@@ -1,5 +1,5 @@
 ---
-title: "概况"
+title: ""
 draft: false
 
 lightgallery: true

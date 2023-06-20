@@ -1,6 +1,7 @@
 ---
 title: "{{ replace .Name "-" " " | title }}"
 date: {{ .Date }}
+description: "本文严禁在 **CSDN** 上进行转载。未经作者授权，任何组织或个人不得擅自转载。"
 draft: false
 math: true
 tags: [""]

@@ -11,13 +11,13 @@ categories: ["Embedded System"]
 
 > 2022.05
 
-## 1. 目标
+### 1. 目标
 
 - 内核文件通过 tftp 从 host 下载并启动，挂载的根文件系统为网络文件系统（nfs）
 
 - 基本过程：BOOT.BIN 文件包括了硬件 bit 流、FSBL 和 U-Boot，这个文件放在板卡的 tf 卡或者 QSPI Flash 中，用于启动 Linux 内核。Linux 内核和设备树文件 image.ub 放在 host 上的 tftpboot 目录，U-Boot 通过 tftp 下载内核镜像到内存中，并启动内核。内核启动后，挂载 host 上的 nfs 文件系统作为根文件系统
 
-## 2. 组成：FSBL、U-Boot、kernel 和根文件系统
+### 2. 组成：FSBL、U-Boot、kernel 和根文件系统
 
 1. **FSBL：** 第二阶段引导文件，由 vivado 提供源码，用于在第一阶段引导代码（固定在芯片内的 rom 里）结束后，初始化一些 ZYNQ 常用的外设，由于是外部代码，可以根据需要自行修改
 2. **U-Boot：** 第二阶段引导结束后将跳转执行 U-Boot，fsbl 没有远程拷贝的功能，所以 U-Boot 必须放置在板卡的可启动 ROM 内，主要为 TF 卡和 QSPI FLASH；U-Boot 具有板卡上大部分设备的驱动程序，可以配置网络，下载镜像并拷贝进内存中，最后跳转到内核的启动点
@@ -25,7 +25,7 @@ categories: ["Embedded System"]
 4. **Kernel：** 内核镜像，有 uImage、zImage 等不同形式，具有不同的压缩方式与格式。U-Boot 支持各种形式的内核镜像，内核可以在本地部署也可以通过 tftp 或者 nfs 协议从 host 下载内核镜像，内核启动后初始化硬件并挂载根文件系统
 5. **根文件系统：** 内核可以挂载本地 eMMC、TF 卡和远程 host 中的文件系统
 
-## 3. BOOT 所需文件的来源
+### 3. BOOT 所需文件的来源
 
 1. **FSBL：** 由 VIVADO SDK 工具提供，使用 make 编译
 2. **U-Boot：** 由官方发布源码，Xilinx 添加一些独有驱动，在 Github Xilinx 代码仓库维护，使用 make 编译
@@ -72,7 +72,7 @@ zynq> bootz 10000000 - 10080000
 
 - 由于手动编译设备树和内核文件分离，而挂载文件系统部分相似，后续挂载 nfs 见下一章节介绍
 
-## 5. 使用 petalinux 工具生成可远程启动镜像
+### 5. 使用 petalinux 工具生成可远程启动镜像
 
 在执行 petalinux-config 命令需要修改的部分
 
@@ -105,9 +105,9 @@ zynq> bootz 10000000 - 10080000
 
 - 这里和之前手动编译生成启动镜像不同，没有下载设备树文件 system.dtb，原因是使用 petalinux 打包的内核镜像 image.ub 中是包含了设备树文件的。因为 image.ub 文件是通过 mkimage 命令制作的，是将内核镜像 zImage 和设备树 system.dtb 打包到一起
 
-## 6. 配置 U-Boot 启动 petalinux 编译的内核
+### 6. 配置 U-Boot 启动 petalinux 编译的内核
 
-### 基本步骤
+#### 基本步骤
 
 - 基本步骤和手动编译启动内核一致，在远程 host 上需要具有 nfs 服务器，配置好 nfs 目录，并将根文件系统解压进该目录
 
@@ -125,7 +125,7 @@ zynq> bootz 10000000 - 10080000
    zynq> run netboot
   ```
 
-### 配置默认启动命令
+#### 配置默认启动命令
 
 - 设置 U-Boot 默认命令，U-Boot 启动后会先配置网络，网络配置完成后就会进入倒计时，倒计时结束执行 bootcmd 中的命令，如果想自动 boot，只需要
 
@@ -135,11 +135,11 @@ zynq> bootz 10000000 - 10080000
   zynq> saveenv
   ```
 
-### 配置内核参数环境变量
+#### 配置内核参数环境变量
 
 - 在设备树文件中有一个 chosen 字段，里面设置了内核参数变量 bootargs，U-Boot 中如果不手动配置这个变量，使用的是设备树文件中的内核参数，但是 U-Boot 中的 bootargs 环境变量具有最高优先级
 
-## 挂载 nfs 文件系统
+### 挂载 nfs 文件系统
 
 - 决定根文件系统的方式主要是内核的启动参数，配置从 nfs 挂载，bootargs 应该被设置为
 
@@ -152,7 +152,7 @@ zynq> bootz 10000000 - 10080000
 
 - 内核启动后会自动挂载 nfs 文件系统，如果挂载成功，内核就会启动完成
 
-### 在挂载 nfs 时遇到问题：内核启动报错
+#### 在挂载 nfs 时遇到问题：内核启动报错
 
   ```bash
   VFS: Unable to mount root fs via NFS, trying floppy.

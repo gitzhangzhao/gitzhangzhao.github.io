@@ -8,7 +8,7 @@
     <title>Gentoo安装小记</title>
     <link>http://gitzhangzhao.github.io/posts/gentoo/gentoo%E5%AE%89%E8%A3%85%E5%B0%8F%E8%AE%B0/</link>
     <pubDate>Sun, 18 Jun 2023 23:54:08 &#43;0800</pubDate><author>gitzhangzhao@gmail.com (blogger)</author><guid>http://gitzhangzhao.github.io/posts/gentoo/gentoo%E5%AE%89%E8%A3%85%E5%B0%8F%E8%AE%B0/</guid>
-    <description><![CDATA[<h2 id="前言">前言</h2>
+    <description><![CDATA[<h3 id="前言">前言</h3>
 <blockquote>
 <p>安装Gentoo并不复杂，很多人混淆了复杂和耗时。在安装的过程中，大部分的时间都在做别的事情。同时，Gentoo的安装步骤是清晰的，Handbook和各路神仙的总结实际上已经很全面了。因此，没有必要再做重复的劳动，一些个性化的关键点记录就足够了。</p>
 </blockquote>
@@ -18,7 +18,7 @@
 <blockquote>
 <p>此外，对于小新pro这种散热垃圾的Laptop，一个带风扇的散热架是必要的。否则，<code>emerge -e @world</code> 是真的会卡死（哭）。</p>
 </blockquote>
-<h2 id="安装步骤">安装步骤</h2>
+<h3 id="安装步骤">安装步骤</h3>
 <p>Gentoo的安装大体上是规范的，但是针对不同用户的需求和理念，也有不一样的方式。或多或少的，存在一些坑</p>
 <p>我在安装过程主要参考的几个链接：</p>
 <ol>
@@ -49,7 +49,7 @@
 <ol start="6">
 <li>Google，Stack Overflow，gentoo wiki，arch wiki等</li>
 </ol>
-<h2 id="makeconf">make.conf</h2>
+<h3 id="makeconf">make.conf</h3>
 <p>make.conf可以说是Gentoo的核心了，针对PC的配置、优化以及对系统的预期基本上都是在这个文件中定义的，首先列出我的：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -151,7 +151,7 @@
 </span></span><span class="line"><span class="cl"> RESUMECOMMAND=&#34;${FETCHCOMMAND}&#34;
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h2 id="问题列举">问题列举</h2>
+</div><h3 id="问题列举">问题列举</h3>
 <ul>
 <li>Gentoo默认是复杂密码，为了便于日常使用，改为简单密码：
 <div class="highlight"><div class="chroma">
