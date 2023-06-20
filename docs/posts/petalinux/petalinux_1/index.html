@@ -5,14 +5,14 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="robots" content="noodp" />
         <title>Petalinux(一)：安装使用 - 张昭的Blog</title><meta name="description" content="Welcome to Zhangzhao&#39;s blog."><meta property="og:title" content="Petalinux(一)：安装使用" />
-<meta property="og:description" content="申明: &ldquo;本文严禁任何组织和个人在CSDN上进行转载，其他平台转载需经作者授权。&rdquo; 课题需要可能要在 ZYNQ 上多次部署 Linux 并测试" />
+<meta property="og:description" content="申明: 本文严禁任何组织或个人在CSDN上进行转载，其他平台转载需经作者授权。 课题需要可能要在 ZYNQ 上多次部署 Linux 并测试，普通的脚本安装方式太过繁琐" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="http://gitzhangzhao.github.io/posts/petalinux/petalinux_1/" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2023-06-19T11:35:36+08:00" />
-<meta property="article:modified_time" content="2023-06-19T11:55:27+08:00" />
+<meta property="article:modified_time" content="2023-06-20T10:59:16+08:00" />
 <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Petalinux(一)：安装使用"/>
-<meta name="twitter:description" content="申明: &ldquo;本文严禁任何组织和个人在CSDN上进行转载，其他平台转载需经作者授权。&rdquo; 课题需要可能要在 ZYNQ 上多次部署 Linux 并测试"/>
+<meta name="twitter:description" content="申明: 本文严禁任何组织或个人在CSDN上进行转载，其他平台转载需经作者授权。 课题需要可能要在 ZYNQ 上多次部署 Linux 并测试，普通的脚本安装方式太过繁琐"/>
 <meta name="application-name" content="张昭的Blog">
 <meta name="apple-mobile-web-app-title" content="张昭的Blog"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -25,8 +25,8 @@
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "http:\/\/gitzhangzhao.github.io\/posts\/petalinux\/petalinux_1\/"
-        },"genre": "posts","keywords": "Petalinux, ZYNQ, NFS","wordcount":  3025 ,
-        "url": "http:\/\/gitzhangzhao.github.io\/posts\/petalinux\/petalinux_1\/","datePublished": "2023-06-19T11:35:36+08:00","dateModified": "2023-06-19T11:55:27+08:00","publisher": {
+        },"genre": "posts","keywords": "Petalinux, ZYNQ, NFS","wordcount":  3011 ,
+        "url": "http:\/\/gitzhangzhao.github.io\/posts\/petalinux\/petalinux_1\/","datePublished": "2023-06-19T11:35:36+08:00","dateModified": "2023-06-20T10:59:16+08:00","publisher": {
             "@type": "Organization",
             "name": "blogger"},"author": {
                 "@type": "Person",
@@ -100,7 +100,7 @@
             <div class="toc-content" id="toc-content-auto"></div>
         </div><article class="page single" data-toc="enable"><div class="single-card" ><h2 class="single-title animated flipInX">Petalinux(一)：安装使用</h2><div class="post-meta">
                 <div class="post-meta-line"><span class="post-author"><a href="https://github.com/gitzhangzhao" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle fa-fw"></i>blogger</a></span>&nbsp;<span class="post-category">出版于  <a href="/categories/embedded-system/"><i class="far fa-folder fa-fw"></i>Embedded System</a></span></div>
-                <div class="post-meta-line"><span><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2023-06-19">2023-06-19</time></span>&nbsp;<span><i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 3025 字</span>&nbsp;
+                <div class="post-meta-line"><span><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2023-06-19">2023-06-19</time></span>&nbsp;<span><i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 3011 字</span>&nbsp;
                     <span><i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 7 分钟</span>&nbsp;</div>
             </div>
             
@@ -128,7 +128,7 @@
     </li>
   </ul>
 </nav></div>
-                </div><div class="content" id="content"><p><strong>申明: &ldquo;本文严禁任何组织和个人在CSDN上进行转载，其他平台转载需经作者授权。&rdquo;</strong></p>
+                </div><div class="content" id="content"><p><em><strong>申明: 本文严禁任何组织或个人在CSDN上进行转载，其他平台转载需经作者授权。</strong></em></p>
 <blockquote>
 <p>课题需要可能要在 ZYNQ 上多次部署 Linux 并测试，普通的脚本安装方式太过繁琐，Xilinx 的 Petalinux 工具简化了很多流程。这里记录了一些主要步骤，由于实验室 Vivado 版本，所以选择的 Petalinux 版本也不是最新的</p>
 </blockquote>
@@ -838,7 +838,7 @@ image.ub: linux 的内核镜像，并且打包了设备树文件 plnx_arm-system
                 </span><span><a href="/tags/zynq/">ZYNQ</a>
                 </span><span><a href="/tags/nfs/">NFS</a>
                 </span></div><div class="post-info-line"><div class="post-info-mod">
-                <span>更新于 2023-06-19</span>
+                <span>更新于 2023-06-20</span>
             </div><div class="post-info-mod"><span>
                             <a class="link-to-markdown" href="/posts/petalinux/petalinux_1/index.md" target="_blank">阅读原始文档</a>
                         </span></div>
