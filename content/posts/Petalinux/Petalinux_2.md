@@ -5,7 +5,7 @@ draft: false
 math: true
 tags: ["Petalinux", "ZYNQ", "NFS"]
 categories: ["Embedded System"]
-summary: "With Petalinux, remote booting of embedded Linux systems becomes a breeze"
+summary: "With Petalinux, remote booting of embedded Linux systems on ZYNQ becomes a breeze"
 ---
 
 **_申明: 本文严禁任何组织或个人在 CSDN 上进行转载，其他平台转载需经作者授权。_**

@@ -152,10 +152,10 @@ theme = "FeelIt"
   objectFit = false
 
 # 作者配置
-#[author]
-#  name = "blogger"
-#  email = "gitzhangzhao@gmail.com"
-#  link = "https://github.com/gitzhangzhao"
+[author]
+  name = "张昭"
+  email = "gitzhangzhao@gmail.com"
+  link = "https://github.com/gitzhangzhao"
   
 
 [menu]

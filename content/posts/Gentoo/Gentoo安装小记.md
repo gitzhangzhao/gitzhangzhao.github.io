@@ -4,7 +4,7 @@ date: 2023-06-18T23:54:08+08:00
 draft: false
 tags: ["Linux", "Gentoo"]
 categories: ["Linux"]
-summary: "KISS and Suckless"
+summary: "本文记录了 Gentoo Linux 的安装过程，只有基本的 xserver 和 wm, KISS and Suckless"
 ---
 
 **_申明: 本文严禁任何组织或个人在 CSDN 上进行转载，其他平台转载需经作者授权。_**

@@ -3,10 +3,11 @@
         <title>Gentoo - 标签 - 张昭的Blog</title>
         <link>http://gitzhangzhao.github.io/tags/gentoo/</link>
         <description>Gentoo - 标签 - 张昭的Blog</description>
-        <generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Sun, 18 Jun 2023 23:54:08 &#43;0800</lastBuildDate><atom:link href="http://gitzhangzhao.github.io/tags/gentoo/" rel="self" type="application/rss+xml" /><item>
+        <generator>Hugo -- gohugo.io</generator><language>zh-cn</language><managingEditor>gitzhangzhao@gmail.com (张昭)</managingEditor>
+            <webMaster>gitzhangzhao@gmail.com (张昭)</webMaster><lastBuildDate>Sun, 18 Jun 2023 23:54:08 &#43;0800</lastBuildDate><atom:link href="http://gitzhangzhao.github.io/tags/gentoo/" rel="self" type="application/rss+xml" /><item>
     <title>Gentoo 安装小记</title>
     <link>http://gitzhangzhao.github.io/posts/gentoo/gentoo%E5%AE%89%E8%A3%85%E5%B0%8F%E8%AE%B0/</link>
-    <pubDate>Sun, 18 Jun 2023 23:54:08 &#43;0800</pubDate><guid>http://gitzhangzhao.github.io/posts/gentoo/gentoo%E5%AE%89%E8%A3%85%E5%B0%8F%E8%AE%B0/</guid>
+    <pubDate>Sun, 18 Jun 2023 23:54:08 &#43;0800</pubDate><author>gitzhangzhao@gmail.com (张昭)</author><guid>http://gitzhangzhao.github.io/posts/gentoo/gentoo%E5%AE%89%E8%A3%85%E5%B0%8F%E8%AE%B0/</guid>
     <description><![CDATA[<p><strong><em>申明: 本文严禁任何组织或个人在 CSDN 上进行转载，其他平台转载需经作者授权。</em></strong></p>
 <h3 id="前言">前言</h3>
 <blockquote>
