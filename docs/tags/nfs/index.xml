@@ -3,11 +3,10 @@
         <title>NFS - 标签 - 张昭的Blog</title>
         <link>http://gitzhangzhao.github.io/tags/nfs/</link>
         <description>NFS - 标签 - 张昭的Blog</description>
-        <generator>Hugo -- gohugo.io</generator><language>zh-cn</language><managingEditor>gitzhangzhao@gmail.com (blogger)</managingEditor>
-            <webMaster>gitzhangzhao@gmail.com (blogger)</webMaster><lastBuildDate>Mon, 19 Jun 2023 11:48:55 &#43;0800</lastBuildDate><atom:link href="http://gitzhangzhao.github.io/tags/nfs/" rel="self" type="application/rss+xml" /><item>
+        <generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Mon, 19 Jun 2023 11:48:55 &#43;0800</lastBuildDate><atom:link href="http://gitzhangzhao.github.io/tags/nfs/" rel="self" type="application/rss+xml" /><item>
     <title>Petalinux(二)：远程启动</title>
     <link>http://gitzhangzhao.github.io/posts/petalinux/petalinux_2/</link>
-    <pubDate>Mon, 19 Jun 2023 11:48:55 &#43;0800</pubDate><author>gitzhangzhao@gmail.com (blogger)</author><guid>http://gitzhangzhao.github.io/posts/petalinux/petalinux_2/</guid>
+    <pubDate>Mon, 19 Jun 2023 11:48:55 &#43;0800</pubDate><guid>http://gitzhangzhao.github.io/posts/petalinux/petalinux_2/</guid>
     <description><![CDATA[<p><em><strong>申明: 本文严禁任何组织或个人在CSDN上进行转载，其他平台转载需经作者授权。</strong></em></p>
 <blockquote>
 <p>对于 Linux 远程启动是很普遍的，在 Petalinux 上配置远程启动很简单，并且 Petalinux 会自动配置 U-Boot 变量并增加内核启动参数</p>
@@ -280,7 +279,7 @@
 <item>
     <title>Petalinux(一)：安装使用</title>
     <link>http://gitzhangzhao.github.io/posts/petalinux/petalinux_1/</link>
-    <pubDate>Mon, 19 Jun 2023 11:35:36 &#43;0800</pubDate><author>gitzhangzhao@gmail.com (blogger)</author><guid>http://gitzhangzhao.github.io/posts/petalinux/petalinux_1/</guid>
+    <pubDate>Mon, 19 Jun 2023 11:35:36 &#43;0800</pubDate><guid>http://gitzhangzhao.github.io/posts/petalinux/petalinux_1/</guid>
     <description><![CDATA[<p><em><strong>申明: 本文严禁任何组织或个人在CSDN上进行转载，其他平台转载需经作者授权。</strong></em></p>
 <blockquote>
 <p>课题需要可能要在 ZYNQ 上多次部署 Linux 并测试，普通的脚本安装方式太过繁琐，Xilinx 的 Petalinux 工具简化了很多流程。这里记录了一些主要步骤，由于实验室 Vivado 版本，所以选择的 Petalinux 版本也不是最新的</p>

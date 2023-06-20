@@ -3,17 +3,16 @@
         <title>Categories - 分类 - 张昭的Blog</title>
         <link>http://gitzhangzhao.github.io/categories/</link>
         <description>Categories - 分类 - 张昭的Blog</description>
-        <generator>Hugo -- gohugo.io</generator><language>zh-cn</language><managingEditor>gitzhangzhao@gmail.com (blogger)</managingEditor>
-            <webMaster>gitzhangzhao@gmail.com (blogger)</webMaster><lastBuildDate>Mon, 19 Jun 2023 11:48:55 &#43;0800</lastBuildDate><atom:link href="http://gitzhangzhao.github.io/categories/" rel="self" type="application/rss+xml" /><item>
+        <generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Mon, 19 Jun 2023 11:48:55 &#43;0800</lastBuildDate><atom:link href="http://gitzhangzhao.github.io/categories/" rel="self" type="application/rss+xml" /><item>
     <title>Embedded System</title>
     <link>http://gitzhangzhao.github.io/categories/embedded-system/</link>
-    <pubDate>Mon, 19 Jun 2023 11:48:55 &#43;0800</pubDate><author>gitzhangzhao@gmail.com (blogger)</author><guid>http://gitzhangzhao.github.io/categories/embedded-system/</guid>
+    <pubDate>Mon, 19 Jun 2023 11:48:55 &#43;0800</pubDate><guid>http://gitzhangzhao.github.io/categories/embedded-system/</guid>
     <description><![CDATA[]]></description>
 </item>
 <item>
     <title>Linux</title>
     <link>http://gitzhangzhao.github.io/categories/linux/</link>
-    <pubDate>Sun, 18 Jun 2023 23:54:08 &#43;0800</pubDate><author>gitzhangzhao@gmail.com (blogger)</author><guid>http://gitzhangzhao.github.io/categories/linux/</guid>
+    <pubDate>Sun, 18 Jun 2023 23:54:08 &#43;0800</pubDate><guid>http://gitzhangzhao.github.io/categories/linux/</guid>
     <description><![CDATA[]]></description>
 </item>
 </channel>

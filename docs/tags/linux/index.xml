@@ -3,55 +3,54 @@
         <title>Linux - 标签 - 张昭的Blog</title>
         <link>http://gitzhangzhao.github.io/tags/linux/</link>
         <description>Linux - 标签 - 张昭的Blog</description>
-        <generator>Hugo -- gohugo.io</generator><language>zh-cn</language><managingEditor>gitzhangzhao@gmail.com (blogger)</managingEditor>
-            <webMaster>gitzhangzhao@gmail.com (blogger)</webMaster><lastBuildDate>Sun, 18 Jun 2023 23:54:08 &#43;0800</lastBuildDate><atom:link href="http://gitzhangzhao.github.io/tags/linux/" rel="self" type="application/rss+xml" /><item>
-    <title>Gentoo安装小记</title>
+        <generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Sun, 18 Jun 2023 23:54:08 &#43;0800</lastBuildDate><atom:link href="http://gitzhangzhao.github.io/tags/linux/" rel="self" type="application/rss+xml" /><item>
+    <title>Gentoo 安装小记</title>
     <link>http://gitzhangzhao.github.io/posts/gentoo/gentoo%E5%AE%89%E8%A3%85%E5%B0%8F%E8%AE%B0/</link>
-    <pubDate>Sun, 18 Jun 2023 23:54:08 &#43;0800</pubDate><author>gitzhangzhao@gmail.com (blogger)</author><guid>http://gitzhangzhao.github.io/posts/gentoo/gentoo%E5%AE%89%E8%A3%85%E5%B0%8F%E8%AE%B0/</guid>
-    <description><![CDATA[<p><em><strong>申明: 本文严禁任何组织或个人在CSDN上进行转载，其他平台转载需经作者授权。</strong></em></p>
+    <pubDate>Sun, 18 Jun 2023 23:54:08 &#43;0800</pubDate><guid>http://gitzhangzhao.github.io/posts/gentoo/gentoo%E5%AE%89%E8%A3%85%E5%B0%8F%E8%AE%B0/</guid>
+    <description><![CDATA[<p><strong><em>申明: 本文严禁任何组织或个人在 CSDN 上进行转载，其他平台转载需经作者授权。</em></strong></p>
 <h3 id="前言">前言</h3>
 <blockquote>
-<p>安装Gentoo并不复杂，很多人混淆了复杂和耗时。在安装的过程中，大部分的时间都在做别的事情。同时，Gentoo的安装步骤是清晰的，Handbook和各路神仙的总结实际上已经很全面了。因此，没有必要再做重复的劳动，一些个性化的关键点记录就足够了。</p>
+<p>安装 Gentoo 并不复杂，很多人混淆了复杂和耗时。在安装的过程中，大部分的时间都在做别的事情。同时，Gentoo 的安装步骤是清晰的，Handbook 和各路神仙的总结实际上已经很全面了。因此，没有必要再做重复的劳动，一些个性化的关键点记录就足够了。</p>
 </blockquote>
 <blockquote>
-<p>为了使系统保持suckless，尽量避免用不到的功能，我还是继续沿用裸wm的方式。简而言之：gentoo + openrc + i3wm + polybar + nvim。我的目标是尽量在一天内完成系统的整体安装，再用一周时间进行小修小补。而在流程化的步骤下，一天内的实际安装时间在1小时左右，而其余时间都在做其他事情。</p>
+<p>为了使系统保持 Suckless，尽量避免用不到的功能，我还是继续沿用裸 wm 的方式。简而言之：gentoo + openrc + i3wm + polybar + nvim。我的目标是尽量在一天内完成系统的整体安装，再用一周时间进行小修小补。而在流程化的步骤下，一天内的实际安装时间在 1 小时左右，而其余时间都在做其他事情。</p>
 </blockquote>
 <blockquote>
-<p>此外，对于小新pro这种散热垃圾的Laptop，一个带风扇的散热架是必要的。否则，<code>emerge -e @world</code> 是真的会卡死（哭）。</p>
+<p>此外，对于小新 Pro 这种散热垃圾的 Laptop，一个带风扇的散热架是必要的。否则，<code>emerge -e @world</code> 是真的会卡死（哭）。</p>
 </blockquote>
 <h3 id="安装步骤">安装步骤</h3>
-<p>Gentoo的安装大体上是规范的，但是针对不同用户的需求和理念，也有不一样的方式。或多或少的，存在一些坑</p>
+<p>Gentoo 的安装大体上是规范的，但是针对不同用户的需求和理念，也有不一样的方式。或多或少的，存在一些坑</p>
 <p>我在安装过程主要参考的几个链接：</p>
 <ol>
-<li>官方Handbook，这是最权威的手册，当问题不确定时，以Handbook为准</li>
+<li>官方 Handbook，这是最权威的手册，当问题不确定时，以 Handbook 为准</li>
 </ol>
 <p><a href="https://wiki.gentoo.org/wiki/Handbook:AMD64/zh-cn" target="_blank" rel="noopener noreffer">Handbook</a></p>
 <ol start="2">
 <li>一篇较为详细的安装笔记，属于经验丰富的老玩家心得了，很有参考价值</li>
 </ol>
-<p><a href="https://zhuanlan.zhihu.com/p/122222365" target="_blank" rel="noopener noreffer">Gentoo安装流程分享(step by step)，第一篇之基本系统的安装</a></p>
+<p><a href="https://zhuanlan.zhihu.com/p/122222365" target="_blank" rel="noopener noreffer">Gentoo 安装流程分享(step by step)，第一篇之基本系统的安装</a></p>
 <ol start="3">
-<li>OriPoin&rsquo;s blog，详细介绍了Gentoo的优化方式，但是没必要采用O3，会带来很多未知问题</li>
+<li>OriPoin&rsquo;s blog，详细介绍了 Gentoo 的优化方式，但是没必要采用 O3，会带来很多未知问题</li>
 </ol>
 <p><a href="https://blog.oripoin.me/2022/04/emerge-your-world-the-lean-way/" target="_blank" rel="noopener noreffer">Emerge your world the lean way</a></p>
 <p><a href="https://blog.oripoin.me/2022/04/optimize-your-system-the-stupid-way/" target="_blank" rel="noopener noreffer">Optimize Your system the stupid way</a></p>
 <ol start="4">
-<li>bitbili&rsquo;s blog，非常非常详细的介绍了Gentoo的安装和使用</li>
+<li>bitbili&rsquo;s blog，非常非常详细的介绍了 Gentoo 的安装和使用</li>
 </ol>
 <p><a href="https://bitbili.net/gentoo-linux-installation-and-usage-tutorial.html" target="_blank" rel="noopener noreffer">Gentoo Linux 安装及使用指南</a></p>
 <ol start="5">
-<li>Yangmame的安装教程</li>
+<li>Yangmame 的安装教程</li>
 </ol>
-<p><a href="https://blog.yangmame.org/Gentoo%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B.html" target="_blank" rel="noopener noreffer">Gentoo安装教程</a></p>
+<p><a href="https://blog.yangmame.org/Gentoo%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B.html" target="_blank" rel="noopener noreffer">Gentoo 安装教程</a></p>
 <ol start="6">
-<li>ayamir的知乎记录</li>
+<li>ayamir 的知乎记录</li>
 </ol>
-<p><a href="https://zhuanlan.zhihu.com/p/166652475" target="_blank" rel="noopener noreffer">2020-Gentoo双系统安装指北</a></p>
+<p><a href="https://zhuanlan.zhihu.com/p/166652475" target="_blank" rel="noopener noreffer">2020-Gentoo 双系统安装指北</a></p>
 <ol start="6">
-<li>Google，Stack Overflow，gentoo wiki，arch wiki等</li>
+<li>Google，Stack Overflow，gentoo wiki，arch wiki 等</li>
 </ol>
 <h3 id="makeconf">make.conf</h3>
-<p>make.conf可以说是Gentoo的核心了，针对PC的配置、优化以及对系统的预期基本上都是在这个文件中定义的，首先列出我的：</p>
+<p>make.conf 可以说是 Gentoo 的核心了，针对 PC 的配置、优化以及对系统的预期基本上都是在这个文件中定义的，首先列出我的：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -154,7 +153,8 @@
 </div>
 </div><h3 id="问题列举">问题列举</h3>
 <ul>
-<li>Gentoo默认是复杂密码，为了便于日常使用，改为简单密码：
+<li>
+<p>Gentoo 默认是复杂密码，为了便于日常使用，改为简单密码：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -181,16 +181,17 @@
 </span></span><span class="line"><span class="cl">retry=3
 </span></span></code></pre></td></tr></table>
 </div>
-</div>或者全局USE -pam，我还没有尝试</li>
+</div><p>或者全局 USE -pam，我还没有尝试</p>
+</li>
 </ul>
-<h4 id="eudev还是systemd-utils">eudev还是systemd-utils？</h4>
-<p>Gentoo目前用systemd-utils替代了原本的eudev，所以解决办法有：</p>
+<h4 id="eudev-还是-systemd-utils">eudev 还是 systemd-utils？</h4>
+<p>Gentoo 目前用 systemd-utils 替代了原本的 eudev，所以解决办法有：</p>
 <ol>
-<li>使用systemd-utils管理设备，不要再安装eudev，这是最简单的。官方的原话是：<code>in general, you should not worry about installing anything *udev manually by yourself and you should imho not have anything like that in your world file.</code></li>
-<li>如果你痛恨和systemd有关的一切，可以为systemd-utils包-udev USE，然后应该就可以安装eudev了。需要注意的是，eudev不应该被加入到world file中。此外还有一些其他的USE也会影响，总之这很麻烦。建议还是不要折腾了，systemd-utils只是从systemd中分离出来的组件而已，它包含了udev</li>
+<li>使用 systemd-utils 管理设备，不要再安装 eudev，这是最简单的。官方的原话是：<code>in general, you should not worry about installing anything *udev manually by yourself and you should imho not have anything like that in your world file.</code></li>
+<li>如果你痛恨和 systemd 有关的一切，可以为 systemd-utils 包-udev USE，然后应该就可以安装 eudev 了。需要注意的是，eudev 不应该被加入到 world file 中。此外还有一些其他的 USE 也会影响，总之这很麻烦。建议还是不要折腾了，systemd-utils 只是从 systemd 中分离出来的组件而已，它包含了 udev</li>
 </ol>
 <h4 id="desktop-profiles">Desktop profiles？</h4>
-<p>Desktop profiles预设了很多USE，并包含了一些system依赖。对于KDE和GNOME用户，Desktop profiles中提供的增量可以省很多事。但是对于裸WM来说，没有必要为使用Desktop，默认的profiles或者systemd profiles就可以了。在最小化的基础上，安装软件时检查USE并逐步添加自己的全局USE</p>
+<p>Desktop profiles 预设了很多 USE，并包含了一些 system 依赖。对于 KDE 和 GNOME 用户，Desktop profiles 中提供的增量可以省很多事。但是对于裸 WM 来说，没有必要为使用 Desktop，默认的 profiles 或者 systemd profiles 就可以了。在最小化的基础上，安装软件时检查 USE 并逐步添加自己的全局 USE</p>
 ]]></description>
 </item>
 </channel>

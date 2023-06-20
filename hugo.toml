@@ -51,7 +51,7 @@ theme = "FeelIt"
   custom = ''
   hugo = false
   copyright = true
-  author = true
+  author = false
   since = 2023
   license = '<a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a>'
 
@@ -152,10 +152,10 @@ theme = "FeelIt"
   objectFit = false
 
 # 作者配置
-[author]
-  name = "blogger"
-  email = "gitzhangzhao@gmail.com"
-  link = "https://github.com/gitzhangzhao"
+#[author]
+#  name = "blogger"
+#  email = "gitzhangzhao@gmail.com"
+#  link = "https://github.com/gitzhangzhao"
   
 
 [menu]
