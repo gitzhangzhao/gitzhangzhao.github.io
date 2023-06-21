@@ -25,7 +25,7 @@
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "http:\/\/gitzhangzhao.github.io\/posts\/gentoo\/gentoo%E5%AE%89%E8%A3%85%E5%B0%8F%E8%AE%B0\/"
-        },"genre": "posts","keywords": "Linux, Gentoo","wordcount":  1617 ,
+        },"genre": "posts","keywords": "Linux, Gentoo","wordcount":  1626 ,
         "url": "http:\/\/gitzhangzhao.github.io\/posts\/gentoo\/gentoo%E5%AE%89%E8%A3%85%E5%B0%8F%E8%AE%B0\/","datePublished": "2023-06-18T23:54:08+08:00","dateModified": "2023-06-18T23:54:08+08:00","publisher": {
             "@type": "Organization",
             "name": "张昭"},"author": {
@@ -100,7 +100,7 @@
             <div class="toc-content" id="toc-content-auto"></div>
         </div><article class="page single" data-toc="enable"><div class="single-card" ><h2 class="single-title animated flipInX">Gentoo 安装小记</h2><div class="post-meta">
                 <div class="post-meta-line"><span class="post-author"><a href="https://github.com/gitzhangzhao" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle fa-fw"></i>张昭</a></span>&nbsp;<span class="post-category">出版于  <a href="/categories/linux/"><i class="far fa-folder fa-fw"></i>Linux</a></span></div>
-                <div class="post-meta-line"><span><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2023-06-18">2023-06-18</time></span>&nbsp;<span><i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 1617 字</span>&nbsp;
+                <div class="post-meta-line"><span><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2023-06-18">2023-06-18</time></span>&nbsp;<span><i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 1626 字</span>&nbsp;
                     <span><i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 4 分钟</span>&nbsp;</div>
             </div>
             
@@ -120,6 +120,7 @@
             <li><a href="#makeconf">make.conf</a></li>
             <li><a href="#问题列举">问题列举</a>
               <ul>
+                <li><a href="#复杂密码换简单密码">复杂密码换简单密码</a></li>
                 <li><a href="#eudev-还是-systemd-utils">eudev 还是 systemd-utils？</a></li>
                 <li><a href="#desktop-profiles">Desktop profiles？</a></li>
                 <li><a href="#tmp-挂载">/tmp 挂载</a></li>
@@ -292,6 +293,7 @@
 这种时候首先应该去 Gentoo Package 查找对应包是否有 Bug 记录，以及解决方法
 这里主要列举的是我在安装过程中遇到的问题，以及解决方法</p>
 </blockquote>
+<h4 id="复杂密码换简单密码">复杂密码换简单密码</h4>
 <ul>
 <li>
 <p>Gentoo 默认是复杂密码，为了便于日常使用，改为简单密码：</p>
