@@ -25,34 +25,36 @@ Gentoo 的安装大体上是规范的，但是针对不同用户的需求和理�
 
 1. 官方 Handbook，这是最权威的手册，当问题不确定时，以 Handbook 为准
 
-[Handbook](https://wiki.gentoo.org/wiki/Handbook:AMD64/zh-cn)
+   [Handbook](https://wiki.gentoo.org/wiki/Handbook:AMD64/zh-cn)
 
 2. 一篇较为详细的安装笔记，属于经验丰富的老玩家心得了，很有参考价值
 
-[Gentoo 安装流程分享(step by step)，第一篇之基本系统的安装](https://zhuanlan.zhihu.com/p/122222365)
+   [Gentoo 安装流程分享(step by step)，第一篇之基本系统的安装](https://zhuanlan.zhihu.com/p/122222365)
 
 3. OriPoin's blog，详细介绍了 Gentoo 的优化方式，但是没必要采用 O3，会带来很多未知问题
 
-[Emerge your world the lean way](https://blog.oripoin.me/2022/04/emerge-your-world-the-lean-way/)
+   [Emerge your world the lean way](https://blog.oripoin.me/2022/04/emerge-your-world-the-lean-way/)
 
-[Optimize Your system the stupid way](https://blog.oripoin.me/2022/04/optimize-your-system-the-stupid-way/)
+   [Optimize Your system the stupid way](https://blog.oripoin.me/2022/04/optimize-your-system-the-stupid-way/)
 
 4. bitbili's blog，非常非常详细的介绍了 Gentoo 的安装和使用
 
-[Gentoo Linux 安装及使用指南](https://bitbili.net/gentoo-linux-installation-and-usage-tutorial.html)
+   [Gentoo Linux 安装及使用指南](https://bitbili.net/gentoo-linux-installation-and-usage-tutorial.html)
 
 5. Yangmame 的博客（比较早期）
 
-[Gentoo 安装教程](https://blog.yangmame.org/Gentoo%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B.html)
+   [Gentoo 安装教程](https://blog.yangmame.org/Gentoo%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B.html)
 
 6. ayamir 的知乎记录（参考了 2 和 5）
 
-[2020-Gentoo 双系统安装指北](https://zhuanlan.zhihu.com/p/166652475)
+   [2020-Gentoo 双系统安装指北](https://zhuanlan.zhihu.com/p/166652475)
 
 7. GTrush 的博客
+
    [新手 Gentoo 折腾记录 1](gtrush.com)
 
 8. Jioushan 的博客
+
    [不完整的 Gentoo 安装](blog.jsmsr.com)
 
 9. Google，Stack Overflow，gentoo wiki，arch wiki 等
