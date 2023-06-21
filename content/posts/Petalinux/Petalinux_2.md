@@ -8,7 +8,7 @@ categories: ["Embedded System"]
 summary: "With Petalinux, remote booting of embedded Linux systems on ZYNQ becomes a breeze"
 ---
 
-**_申明: 本文严禁任何组织或个人在 CSDN 上进行转载，其他平台转载需经作者授权。_**
+**_申明: 本文严禁任何组织或个人在 CSDN 上进行转载，其他平台转载需经作者授权_**
 
 > 对于 Linux 远程启动是很普遍的，在 Petalinux 上配置远程启动很简单，并且 Petalinux 会自动配置 U-Boot 变量并增加内核启动参数
 

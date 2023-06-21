@@ -4,10 +4,10 @@ date: 2023-06-18T23:54:08+08:00
 draft: false
 tags: ["Linux", "Gentoo"]
 categories: ["Linux"]
-summary: "本文记录了 Gentoo Linux 的安装过程，只有基本的 xserver 和 wm, KISS and Suckless"
+summary: "Gentoo Linux 安装过程记录，总结前人成果，KISS and Suckless"
 ---
 
-**_申明: 本文严禁任何组织或个人在 CSDN 上进行转载，其他平台转载需经作者授权。_**
+**_申明: 本文严禁任何组织或个人在 CSDN 上进行转载，其他平台转载需经作者授权_**
 
 ### 前言
 
@@ -41,15 +41,21 @@ Gentoo 的安装大体上是规范的，但是针对不同用户的需求和理�
 
 [Gentoo Linux 安装及使用指南](https://bitbili.net/gentoo-linux-installation-and-usage-tutorial.html)
 
-5. Yangmame 的安装教程
+5. Yangmame 的博客（比较早期）
 
 [Gentoo 安装教程](https://blog.yangmame.org/Gentoo%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B.html)
 
-6. ayamir 的知乎记录
+6. ayamir 的知乎记录（参考了 2 和 5）
 
 [2020-Gentoo 双系统安装指北](https://zhuanlan.zhihu.com/p/166652475)
 
-6. Google，Stack Overflow，gentoo wiki，arch wiki 等
+7. GTrush 的博客
+   [新手 Gentoo 折腾记录 1](gtrush.com)
+
+8. Jioushan 的博客
+   [不完整的 Gentoo 安装](blog.jsmsr.com)
+
+9. Google，Stack Overflow，gentoo wiki，arch wiki 等
 
 ### make.conf
 
@@ -107,6 +113,10 @@ make.conf 可以说是 Gentoo 的核心了，针对 PC 的配置、优化以及�
 
 ### 问题列举
 
+> 安装 Gentoo 是相对容易的，但是往往会遇上很多奇怪的问题。比如常见的循环依赖，某个程序编译失败...
+> 这种时候首先应该去 Gentoo Package 查找对应包是否有 Bug 记录，以及解决方法
+> 这里主要列举的是我在安装过程中遇到的问题，以及解决方法
+
 - Gentoo 默认是复杂密码，为了便于日常使用，改为简单密码：
 
   ```passwdqc.conf
@@ -134,3 +144,21 @@ Gentoo 目前用 systemd-utils 替代了原本的 eudev，所以解决办法有�
 #### Desktop profiles？
 
 Desktop profiles 预设了很多 USE，并包含了一些 system 依赖。对于 KDE 和 GNOME 用户，Desktop profiles 中提供的增量可以省很多事。但是对于裸 WM 来说，没有必要为使用 Desktop，默认的 profiles 或者 systemd profiles 就可以了。在最小化的基础上，安装软件时检查 USE 并逐步添加自己的全局 USE
+
+#### /tmp 挂载
+
+有时候 fstab 中会忘记挂载/tmp，这样/tmp 目录在磁盘中，在 portage 运行时主要以/tmp 作为暂存目录，可能会反复读写 SSD 降低寿命。将/tmp 挂载到内存中，毕竟内存更加皮实耐用
+
+```fstab
+# size 的大小一般为内存大小的一半
+tmpfs /tmp tmpfs rw,nosuid,noatime,nodev,size=16G,mode=1777 0 0
+```
+
+#### 循环依赖问题
+
+是在安装 polybar 的时候遇到了这个问题，其他人反应 vim 也有这个循环依赖。貌似不是个别人遇到的问题
+如下报错信息:
+
+```
+
+```
