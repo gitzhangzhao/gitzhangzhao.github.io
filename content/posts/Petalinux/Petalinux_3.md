@@ -1,0 +1,17 @@
+---
+title: "Petalinux(三)：完全使用手册"
+date: 2023-07-01T15:52:02+08:00
+draft: false
+math: true
+tags: ["Petalinux", "ZYNQ"]
+categories: ["Embedded EVR"]
+summary: ""
+---
+
+**_申明: 本文严禁任何组织或个人在 CSDN 上进行转载,其他平台转载需经作者授权_**
+
+> 之前的两篇文章介绍了 Petalinux 的安装和远程启动，这篇文章重点介绍 Petalinux 的使用
+
+> 前提条件：一台可以联网的服务器，并且已经安装好 Vivado 软件
+
+> 本使用手册以 Embedded EVR 为例子，详细介绍从 FPGA 代码的综合、布局布线、生成 bit 流，到使用 Petalinux 创建工程、配置、编译和部署的过程解决
