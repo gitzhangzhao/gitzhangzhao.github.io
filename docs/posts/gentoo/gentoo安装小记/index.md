@@ -45,11 +45,11 @@ Gentoo 的安装大体上是规范的，但是针对不同用户的需求和理�
 
 7. GTrush 的博客
 
-   [新手 Gentoo 折腾记录 1](gtrush.com)
+   [新手 Gentoo 折腾记录 1](https://gtrush.com)
 
 8. Jioushan 的博客
 
-   [不完整的 Gentoo 安装](blog.jsmsr.com)
+   [不完整的 Gentoo 安装](https://blog.jsmsr.com)
 
 9. Google，Stack Overflow，gentoo wiki，arch wiki 等
 
@@ -155,9 +155,42 @@ tmpfs /tmp tmpfs rw,nosuid,noatime,nodev,size=16G,mode=1777 0 0
 #### 循环依赖问题
 
 是在安装 polybar 的时候遇到了这个问题，其他人反应 vim 也有这个循环依赖。貌似不是个别人遇到的问题
+
+循环依赖问题：循环依赖可以是多个，比如：A 依赖 B，B 依赖 C，而 C 又依赖 A。而在此过程中，A 的 USE 会对 B 造成影响，而 B 又对 C 造成影响，这种影响可以是+或者- USE。但是 C 又依赖了 A，与 A 的新 USE 冲突
+
 如下报错信息:
 
+```info
+ * Error: circular dependencies:
+​
+(media-libs/libsndfile-1.2.0:0/0::gentoo, ebuild scheduled for merge) depends on
+ (media-sound/mpg123-1.31.3:0/0::gentoo, ebuild scheduled for merge) (buildtime_slot_op)
+  (media-sound/pulseaudio-16.1:0/0::gentoo, ebuild scheduled for merge) (buildtime)
+   (media-libs/libpulse-16.1-r2:0/0::gentoo, ebuild scheduled for merge) (buildtime)
+    (media-libs/libsndfile-1.2.0:0/0::gentoo, ebuild scheduled for merge) (buildtime)
+​
+It might be possible to break this cycle
+by applying any of the following changes:
+- media-libs/libsndfile-1.2.0 (Change USE: +minimal)
+- media-sound/mpg123-1.31.3 (Change USE: -pulseaudio)
+​
+Note that this change can be reverted, once the package has been installed.
+​
+Note that the dependency graph contains a lot of cycles.
+Several changes might be required to resolve all cycles.
+Temporarily changing some use flag for all packages might be the better option.
 ```
 
+解决方法：
+
+```bash
+# 首先打破循环依赖，-1(oneshot) 避免把包写入 world 文件
+USE="-pulseaudio" emerge -1 media-sound/mpg123
+
+# 安装 polybar，Global USE 定义了 pulseaudio
+emerge polybar
+
+# 成功安装后，再恢复以前的状态
+USE="pulseaudio" emerge -1 media-sound/mpg123
 ```
 

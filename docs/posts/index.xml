@@ -4,7 +4,23 @@
         <link>http://gitzhangzhao.github.io/posts/</link>
         <description>所有文章 | 张昭的Blog</description>
         <generator>Hugo -- gohugo.io</generator><language>zh-cn</language><managingEditor>gitzhangzhao@gmail.com (张昭)</managingEditor>
-            <webMaster>gitzhangzhao@gmail.com (张昭)</webMaster><lastBuildDate>Mon, 19 Jun 2023 11:48:55 &#43;0800</lastBuildDate><atom:link href="http://gitzhangzhao.github.io/posts/" rel="self" type="application/rss+xml" /><item>
+            <webMaster>gitzhangzhao@gmail.com (张昭)</webMaster><lastBuildDate>Sat, 01 Jul 2023 15:52:02 &#43;0800</lastBuildDate><atom:link href="http://gitzhangzhao.github.io/posts/" rel="self" type="application/rss+xml" /><item>
+    <title>Petalinux(三)：完全使用手册</title>
+    <link>http://gitzhangzhao.github.io/posts/petalinux/petalinux_3/</link>
+    <pubDate>Sat, 01 Jul 2023 15:52:02 &#43;0800</pubDate><author>gitzhangzhao@gmail.com (张昭)</author><guid>http://gitzhangzhao.github.io/posts/petalinux/petalinux_3/</guid>
+    <description><![CDATA[<p><strong><em>申明: 本文严禁任何组织或个人在 CSDN 上进行转载,其他平台转载需经作者授权</em></strong></p>
+<blockquote>
+<p>之前的两篇文章介绍了 Petalinux 的安装和远程启动，这篇文章重点介绍 Petalinux 的使用</p>
+</blockquote>
+<blockquote>
+<p>前提条件：一台可以联网的服务器，并且已经安装好 Vivado 软件</p>
+</blockquote>
+<blockquote>
+<p>本使用手册以 Embedded EVR 为例子，详细介绍从 FPGA 代码的综合、布局布线、生成 bit 流，到使用 Petalinux 创建工程、配置、编译和部署的过程解决</p>
+</blockquote>
+]]></description>
+</item>
+<item>
     <title>Petalinux(二)：远程启动</title>
     <link>http://gitzhangzhao.github.io/posts/petalinux/petalinux_2/</link>
     <pubDate>Mon, 19 Jun 2023 11:48:55 &#43;0800</pubDate><author>gitzhangzhao@gmail.com (张昭)</author><guid>http://gitzhangzhao.github.io/posts/petalinux/petalinux_2/</guid>
@@ -93,8 +109,6 @@
 <p>在执行 petalinux-config 命令需要修改的部分</p>
 <ol>
 <li>
-<ol>
-<li>
 <p>修改 U-Boot 配置
 </p>
 </li>
@@ -102,10 +116,6 @@
 <p>可以修改 netboot offset，即从远程下载镜像到内存中的地址偏移，远程 tftp server 的 IP 地址
 </p>
 </li>
-</ol>
-</li>
-<li>
-<ol>
 <li>
 <p>修改镜像打包相关配置
 </p>
@@ -113,8 +123,6 @@
 <li>
 <p>修改根文件系统位置、nfs 文件系统挂载目录、nfs server IP 地址、内核镜像名、以及 host tftpboot 目录
 </p>
-</li>
-</ol>
 </li>
 <li>
 <p>build 整个系统</p>
@@ -278,7 +286,7 @@
 </div>]]></description>
 </item>
 <item>
-    <title>Petalinux(一)：安装使用</title>
+    <title>Petalinux(一)：安装</title>
     <link>http://gitzhangzhao.github.io/posts/petalinux/petalinux_1/</link>
     <pubDate>Mon, 19 Jun 2023 11:35:36 &#43;0800</pubDate><author>gitzhangzhao@gmail.com (张昭)</author><guid>http://gitzhangzhao.github.io/posts/petalinux/petalinux_1/</guid>
     <description><![CDATA[<p><strong><em>申明: 本文严禁任何组织或个人在 CSDN 上进行转载，其他平台转载需经作者授权</em></strong></p>
@@ -1034,11 +1042,11 @@ image.ub: linux 的内核镜像，并且打包了设备树文件 plnx_arm-system
 </li>
 <li>
 <p>GTrush 的博客</p>
-<p><a href="gtrush.com" rel="">新手 Gentoo 折腾记录 1</a></p>
+<p><a href="https://gtrush.com" target="_blank" rel="noopener noreffer">新手 Gentoo 折腾记录 1</a></p>
 </li>
 <li>
 <p>Jioushan 的博客</p>
-<p><a href="blog.jsmsr.com" rel="">不完整的 Gentoo 安装</a></p>
+<p><a href="https://blog.jsmsr.com" target="_blank" rel="noopener noreffer">不完整的 Gentoo 安装</a></p>
 </li>
 <li>
 <p>Google，Stack Overflow，gentoo wiki，arch wiki 等</p>
@@ -1206,13 +1214,73 @@ image.ub: linux 的内核镜像，并且打包了设备树文件 plnx_arm-system
 </span></span></code></pre></td></tr></table>
 </div>
 </div><h4 id="循环依赖问题">循环依赖问题</h4>
-<p>是在安装 polybar 的时候遇到了这个问题，其他人反应 vim 也有这个循环依赖。貌似不是个别人遇到的问题
-如下报错信息:</p>
+<p>是在安装 polybar 的时候遇到了这个问题，其他人反应 vim 也有这个循环依赖。貌似不是个别人遇到的问题</p>
+<p>循环依赖问题：循环依赖可以是多个，比如：A 依赖 B，B 依赖 C，而 C 又依赖 A。而在此过程中，A 的 USE 会对 B 造成影响，而 B 又对 C 造成影响，这种影响可以是+或者- USE。但是 C 又依赖了 A，与 A 的新 USE 冲突</p>
+<p>如下报错信息:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code></code></pre></td>
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"> <span class="o">*</span> <span class="nx">Error</span><span class="p">:</span> <span class="nx">circular</span> <span class="nx">dependencies</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl"><span class="err">​</span>
+</span></span><span class="line"><span class="cl"><span class="p">(</span><span class="nx">media</span><span class="o">-</span><span class="nx">libs</span><span class="o">/</span><span class="nx">libsndfile</span><span class="o">-</span><span class="mf">1.2.0</span><span class="p">:</span><span class="mi">0</span><span class="o">/</span><span class="mi">0</span><span class="p">::</span><span class="nx">gentoo</span><span class="p">,</span> <span class="nx">ebuild</span> <span class="nx">scheduled</span> <span class="k">for</span> <span class="nx">merge</span><span class="p">)</span> <span class="nx">depends</span> <span class="nf">on</span>
+</span></span><span class="line"><span class="cl"> <span class="p">(</span><span class="nx">media</span><span class="o">-</span><span class="nx">sound</span><span class="o">/</span><span class="nx">mpg123</span><span class="o">-</span><span class="mf">1.31.3</span><span class="p">:</span><span class="mi">0</span><span class="o">/</span><span class="mi">0</span><span class="p">::</span><span class="nx">gentoo</span><span class="p">,</span> <span class="nx">ebuild</span> <span class="nx">scheduled</span> <span class="k">for</span> <span class="nx">merge</span><span class="p">)</span> <span class="p">(</span><span class="nx">buildtime_slot_op</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="p">(</span><span class="nx">media</span><span class="o">-</span><span class="nx">sound</span><span class="o">/</span><span class="nx">pulseaudio</span><span class="o">-</span><span class="mf">16.1</span><span class="p">:</span><span class="mi">0</span><span class="o">/</span><span class="mi">0</span><span class="p">::</span><span class="nx">gentoo</span><span class="p">,</span> <span class="nx">ebuild</span> <span class="nx">scheduled</span> <span class="k">for</span> <span class="nx">merge</span><span class="p">)</span> <span class="p">(</span><span class="nx">buildtime</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"> <span class="err"> </span> <span class="p">(</span><span class="nx">media</span><span class="o">-</span><span class="nx">libs</span><span class="o">/</span><span class="nx">libpulse</span><span class="o">-</span><span class="mf">16.1</span><span class="o">-</span><span class="nx">r2</span><span class="p">:</span><span class="mi">0</span><span class="o">/</span><span class="mi">0</span><span class="p">::</span><span class="nx">gentoo</span><span class="p">,</span> <span class="nx">ebuild</span> <span class="nx">scheduled</span> <span class="k">for</span> <span class="nx">merge</span><span class="p">)</span> <span class="p">(</span><span class="nx">buildtime</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"> <span class="err"> </span>  <span class="p">(</span><span class="nx">media</span><span class="o">-</span><span class="nx">libs</span><span class="o">/</span><span class="nx">libsndfile</span><span class="o">-</span><span class="mf">1.2.0</span><span class="p">:</span><span class="mi">0</span><span class="o">/</span><span class="mi">0</span><span class="p">::</span><span class="nx">gentoo</span><span class="p">,</span> <span class="nx">ebuild</span> <span class="nx">scheduled</span> <span class="k">for</span> <span class="nx">merge</span><span class="p">)</span> <span class="p">(</span><span class="nx">buildtime</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="err">​</span>
+</span></span><span class="line"><span class="cl"><span class="nx">It</span> <span class="nx">might</span> <span class="nx">be</span> <span class="nx">possible</span> <span class="nx">to</span> <span class="k">break</span> <span class="nx">this</span> <span class="nx">cycle</span>
+</span></span><span class="line"><span class="cl"><span class="nx">by</span> <span class="nx">applying</span> <span class="nx">any</span> <span class="nx">of</span> <span class="nx">the</span> <span class="nx">following</span> <span class="nx">changes</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl"><span class="o">-</span> <span class="nx">media</span><span class="o">-</span><span class="nx">libs</span><span class="o">/</span><span class="nx">libsndfile</span><span class="o">-</span><span class="mf">1.2.0</span> <span class="p">(</span><span class="nx">Change</span> <span class="nx">USE</span><span class="p">:</span> <span class="o">+</span><span class="nx">minimal</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="o">-</span> <span class="nx">media</span><span class="o">-</span><span class="nx">sound</span><span class="o">/</span><span class="nx">mpg123</span><span class="o">-</span><span class="mf">1.31.3</span> <span class="p">(</span><span class="nx">Change</span> <span class="nx">USE</span><span class="p">:</span> <span class="o">-</span><span class="nx">pulseaudio</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="err">​</span>
+</span></span><span class="line"><span class="cl"><span class="nx">Note</span> <span class="nx">that</span> <span class="nx">this</span> <span class="nx">change</span> <span class="nx">can</span> <span class="nx">be</span> <span class="nx">reverted</span><span class="p">,</span> <span class="nx">once</span> <span class="nx">the</span> <span class="kn">package</span> <span class="nx">has</span> <span class="nx">been</span> <span class="nx">installed</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="err">​</span>
+</span></span><span class="line"><span class="cl"><span class="nx">Note</span> <span class="nx">that</span> <span class="nx">the</span> <span class="nx">dependency</span> <span class="nx">graph</span> <span class="nx">contains</span> <span class="nx">a</span> <span class="nx">lot</span> <span class="nx">of</span> <span class="nx">cycles</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="nx">Several</span> <span class="nx">changes</span> <span class="nx">might</span> <span class="nx">be</span> <span class="nx">required</span> <span class="nx">to</span> <span class="nx">resolve</span> <span class="nx">all</span> <span class="nx">cycles</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="nx">Temporarily</span> <span class="nx">changing</span> <span class="nx">some</span> <span class="nx">use</span> <span class="nx">flag</span> <span class="k">for</span> <span class="nx">all</span> <span class="nx">packages</span> <span class="nx">might</span> <span class="nx">be</span> <span class="nx">the</span> <span class="nx">better</span> <span class="nx">option</span><span class="p">.</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>解决方法：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 首先打破循环依赖，-1(oneshot) 避免把包写入 world 文件</span>
+</span></span><span class="line"><span class="cl"><span class="nv">USE</span><span class="o">=</span><span class="s2">&#34;-pulseaudio&#34;</span> emerge -1 media-sound/mpg123
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 安装 polybar，Global USE 定义了 pulseaudio</span>
+</span></span><span class="line"><span class="cl">emerge polybar
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 成功安装后，再恢复以前的状态</span>
+</span></span><span class="line"><span class="cl"><span class="nv">USE</span><span class="o">=</span><span class="s2">&#34;pulseaudio&#34;</span> emerge -1 media-sound/mpg123
+</span></span></code></pre></td></tr></table>
 </div>
 </div>]]></description>
 </item>

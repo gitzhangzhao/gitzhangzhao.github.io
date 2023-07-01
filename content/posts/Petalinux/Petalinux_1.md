@@ -1,10 +1,10 @@
 ---
-title: "Petalinux(一)：安装使用"
+title: "Petalinux(一)：安装"
 date: 2023-06-19T11:35:36+08:00
 draft: false
 math: true
 tags: ["Petalinux", "ZYNQ", "NFS"]
-categories: ["Embedded System"]
+categories: ["Embedded EVR"]
 summary: "Embedded Linux development on ZYNQ made easy with Petalinux"
 ---
 

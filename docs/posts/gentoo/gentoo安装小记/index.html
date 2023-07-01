@@ -5,14 +5,14 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="robots" content="noodp" />
         <title>Gentoo 安装小记 - 张昭的Blog</title><meta name="description" content="Welcome to Zhangzhao&#39;s blog."><meta property="og:title" content="Gentoo 安装小记" />
-<meta property="og:description" content="Gentoo Linux 安装过程记录，总结前人成果，KISS and Suckless" />
+<meta property="og:description" content="Gentoo Linux，KISS and Suckless" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="http://gitzhangzhao.github.io/posts/gentoo/gentoo%E5%AE%89%E8%A3%85%E5%B0%8F%E8%AE%B0/" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2023-06-18T23:54:08+08:00" />
 <meta property="article:modified_time" content="2023-06-18T23:54:08+08:00" />
 <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Gentoo 安装小记"/>
-<meta name="twitter:description" content="Gentoo Linux 安装过程记录，总结前人成果，KISS and Suckless"/>
+<meta name="twitter:description" content="Gentoo Linux，KISS and Suckless"/>
 <meta name="application-name" content="张昭的Blog">
 <meta name="apple-mobile-web-app-title" content="张昭的Blog"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -25,7 +25,7 @@
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "http:\/\/gitzhangzhao.github.io\/posts\/gentoo\/gentoo%E5%AE%89%E8%A3%85%E5%B0%8F%E8%AE%B0\/"
-        },"genre": "posts","keywords": "Linux, Gentoo","wordcount":  1626 ,
+        },"genre": "posts","keywords": "Linux, Gentoo","wordcount":  1939 ,
         "url": "http:\/\/gitzhangzhao.github.io\/posts\/gentoo\/gentoo%E5%AE%89%E8%A3%85%E5%B0%8F%E8%AE%B0\/","datePublished": "2023-06-18T23:54:08+08:00","dateModified": "2023-06-18T23:54:08+08:00","publisher": {
             "@type": "Organization",
             "name": "张昭"},"author": {
@@ -100,7 +100,7 @@
             <div class="toc-content" id="toc-content-auto"></div>
         </div><article class="page single" data-toc="enable"><div class="single-card" ><h2 class="single-title animated flipInX">Gentoo 安装小记</h2><div class="post-meta">
                 <div class="post-meta-line"><span class="post-author"><a href="https://github.com/gitzhangzhao" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle fa-fw"></i>张昭</a></span>&nbsp;<span class="post-category">出版于  <a href="/categories/linux/"><i class="far fa-folder fa-fw"></i>Linux</a></span></div>
-                <div class="post-meta-line"><span><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2023-06-18">2023-06-18</time></span>&nbsp;<span><i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 1626 字</span>&nbsp;
+                <div class="post-meta-line"><span><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2023-06-18">2023-06-18</time></span>&nbsp;<span><i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 1939 字</span>&nbsp;
                     <span><i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 4 分钟</span>&nbsp;</div>
             </div>
             
@@ -175,11 +175,11 @@
 </li>
 <li>
 <p>GTrush 的博客</p>
-<p><a href="gtrush.com" rel="">新手 Gentoo 折腾记录 1</a></p>
+<p><a href="https://gtrush.com" target="_blank" rel="noopener noreffer">新手 Gentoo 折腾记录 1</a></p>
 </li>
 <li>
 <p>Jioushan 的博客</p>
-<p><a href="blog.jsmsr.com" rel="">不完整的 Gentoo 安装</a></p>
+<p><a href="https://blog.jsmsr.com" target="_blank" rel="noopener noreffer">不完整的 Gentoo 安装</a></p>
 </li>
 <li>
 <p>Google，Stack Overflow，gentoo wiki，arch wiki 等</p>
@@ -347,13 +347,73 @@
 </span></span></code></pre></td></tr></table>
 </div>
 </div><h4 id="循环依赖问题">循环依赖问题</h4>
-<p>是在安装 polybar 的时候遇到了这个问题，其他人反应 vim 也有这个循环依赖。貌似不是个别人遇到的问题
-如下报错信息:</p>
+<p>是在安装 polybar 的时候遇到了这个问题，其他人反应 vim 也有这个循环依赖。貌似不是个别人遇到的问题</p>
+<p>循环依赖问题：循环依赖可以是多个，比如：A 依赖 B，B 依赖 C，而 C 又依赖 A。而在此过程中，A 的 USE 会对 B 造成影响，而 B 又对 C 造成影响，这种影响可以是+或者- USE。但是 C 又依赖了 A，与 A 的新 USE 冲突</p>
+<p>如下报错信息:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code></code></pre></td>
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"> <span class="o">*</span> <span class="nx">Error</span><span class="p">:</span> <span class="nx">circular</span> <span class="nx">dependencies</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl"><span class="err">​</span>
+</span></span><span class="line"><span class="cl"><span class="p">(</span><span class="nx">media</span><span class="o">-</span><span class="nx">libs</span><span class="o">/</span><span class="nx">libsndfile</span><span class="o">-</span><span class="mf">1.2.0</span><span class="p">:</span><span class="mi">0</span><span class="o">/</span><span class="mi">0</span><span class="p">::</span><span class="nx">gentoo</span><span class="p">,</span> <span class="nx">ebuild</span> <span class="nx">scheduled</span> <span class="k">for</span> <span class="nx">merge</span><span class="p">)</span> <span class="nx">depends</span> <span class="nf">on</span>
+</span></span><span class="line"><span class="cl"> <span class="p">(</span><span class="nx">media</span><span class="o">-</span><span class="nx">sound</span><span class="o">/</span><span class="nx">mpg123</span><span class="o">-</span><span class="mf">1.31.3</span><span class="p">:</span><span class="mi">0</span><span class="o">/</span><span class="mi">0</span><span class="p">::</span><span class="nx">gentoo</span><span class="p">,</span> <span class="nx">ebuild</span> <span class="nx">scheduled</span> <span class="k">for</span> <span class="nx">merge</span><span class="p">)</span> <span class="p">(</span><span class="nx">buildtime_slot_op</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="p">(</span><span class="nx">media</span><span class="o">-</span><span class="nx">sound</span><span class="o">/</span><span class="nx">pulseaudio</span><span class="o">-</span><span class="mf">16.1</span><span class="p">:</span><span class="mi">0</span><span class="o">/</span><span class="mi">0</span><span class="p">::</span><span class="nx">gentoo</span><span class="p">,</span> <span class="nx">ebuild</span> <span class="nx">scheduled</span> <span class="k">for</span> <span class="nx">merge</span><span class="p">)</span> <span class="p">(</span><span class="nx">buildtime</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"> <span class="err"> </span> <span class="p">(</span><span class="nx">media</span><span class="o">-</span><span class="nx">libs</span><span class="o">/</span><span class="nx">libpulse</span><span class="o">-</span><span class="mf">16.1</span><span class="o">-</span><span class="nx">r2</span><span class="p">:</span><span class="mi">0</span><span class="o">/</span><span class="mi">0</span><span class="p">::</span><span class="nx">gentoo</span><span class="p">,</span> <span class="nx">ebuild</span> <span class="nx">scheduled</span> <span class="k">for</span> <span class="nx">merge</span><span class="p">)</span> <span class="p">(</span><span class="nx">buildtime</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"> <span class="err"> </span>  <span class="p">(</span><span class="nx">media</span><span class="o">-</span><span class="nx">libs</span><span class="o">/</span><span class="nx">libsndfile</span><span class="o">-</span><span class="mf">1.2.0</span><span class="p">:</span><span class="mi">0</span><span class="o">/</span><span class="mi">0</span><span class="p">::</span><span class="nx">gentoo</span><span class="p">,</span> <span class="nx">ebuild</span> <span class="nx">scheduled</span> <span class="k">for</span> <span class="nx">merge</span><span class="p">)</span> <span class="p">(</span><span class="nx">buildtime</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="err">​</span>
+</span></span><span class="line"><span class="cl"><span class="nx">It</span> <span class="nx">might</span> <span class="nx">be</span> <span class="nx">possible</span> <span class="nx">to</span> <span class="k">break</span> <span class="nx">this</span> <span class="nx">cycle</span>
+</span></span><span class="line"><span class="cl"><span class="nx">by</span> <span class="nx">applying</span> <span class="nx">any</span> <span class="nx">of</span> <span class="nx">the</span> <span class="nx">following</span> <span class="nx">changes</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl"><span class="o">-</span> <span class="nx">media</span><span class="o">-</span><span class="nx">libs</span><span class="o">/</span><span class="nx">libsndfile</span><span class="o">-</span><span class="mf">1.2.0</span> <span class="p">(</span><span class="nx">Change</span> <span class="nx">USE</span><span class="p">:</span> <span class="o">+</span><span class="nx">minimal</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="o">-</span> <span class="nx">media</span><span class="o">-</span><span class="nx">sound</span><span class="o">/</span><span class="nx">mpg123</span><span class="o">-</span><span class="mf">1.31.3</span> <span class="p">(</span><span class="nx">Change</span> <span class="nx">USE</span><span class="p">:</span> <span class="o">-</span><span class="nx">pulseaudio</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="err">​</span>
+</span></span><span class="line"><span class="cl"><span class="nx">Note</span> <span class="nx">that</span> <span class="nx">this</span> <span class="nx">change</span> <span class="nx">can</span> <span class="nx">be</span> <span class="nx">reverted</span><span class="p">,</span> <span class="nx">once</span> <span class="nx">the</span> <span class="kn">package</span> <span class="nx">has</span> <span class="nx">been</span> <span class="nx">installed</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="err">​</span>
+</span></span><span class="line"><span class="cl"><span class="nx">Note</span> <span class="nx">that</span> <span class="nx">the</span> <span class="nx">dependency</span> <span class="nx">graph</span> <span class="nx">contains</span> <span class="nx">a</span> <span class="nx">lot</span> <span class="nx">of</span> <span class="nx">cycles</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="nx">Several</span> <span class="nx">changes</span> <span class="nx">might</span> <span class="nx">be</span> <span class="nx">required</span> <span class="nx">to</span> <span class="nx">resolve</span> <span class="nx">all</span> <span class="nx">cycles</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="nx">Temporarily</span> <span class="nx">changing</span> <span class="nx">some</span> <span class="nx">use</span> <span class="nx">flag</span> <span class="k">for</span> <span class="nx">all</span> <span class="nx">packages</span> <span class="nx">might</span> <span class="nx">be</span> <span class="nx">the</span> <span class="nx">better</span> <span class="nx">option</span><span class="p">.</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>解决方法：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 首先打破循环依赖，-1(oneshot) 避免把包写入 world 文件</span>
+</span></span><span class="line"><span class="cl"><span class="nv">USE</span><span class="o">=</span><span class="s2">&#34;-pulseaudio&#34;</span> emerge -1 media-sound/mpg123
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 安装 polybar，Global USE 定义了 pulseaudio</span>
+</span></span><span class="line"><span class="cl">emerge polybar
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 成功安装后，再恢复以前的状态</span>
+</span></span><span class="line"><span class="cl"><span class="nv">USE</span><span class="o">=</span><span class="s2">&#34;pulseaudio&#34;</span> emerge -1 media-sound/mpg123
+</span></span></code></pre></td></tr></table>
 </div>
 </div></div><div class="post-footer" id="post-footer">
     <div class="post-info"><div class="post-info-tag"><span><a href="/tags/linux/">Linux</a>
@@ -366,7 +426,7 @@
         </div><div class="post-info-share">
             <span><a href="#" onclick="return false;" title="分享到 Twitter" data-sharer="twitter" data-url="http://gitzhangzhao.github.io/posts/gentoo/gentoo%E5%AE%89%E8%A3%85%E5%B0%8F%E8%AE%B0/" data-title="Gentoo 安装小记" data-hashtags="Linux,Gentoo"><i class="fab fa-twitter fa-fw"></i></a><a href="#" onclick="return false;" title="分享到 Facebook" data-sharer="facebook" data-url="http://gitzhangzhao.github.io/posts/gentoo/gentoo%E5%AE%89%E8%A3%85%E5%B0%8F%E8%AE%B0/" data-hashtag="Linux"><i class="fab fa-facebook-square fa-fw"></i></a></span>
         </div></div><div class="post-nav">
-            <a href="/posts/petalinux/petalinux_1/" class="next" rel="next" title="Petalinux(一)：安装使用">Next Post<i class="fas fa-angle-right fa-fw"></i></a></div></div>
+            <a href="/posts/petalinux/petalinux_1/" class="next" rel="next" title="Petalinux(一)：安装">Next Post<i class="fas fa-angle-right fa-fw"></i></a></div></div>
 </div></article></div>
             </main>
             <footer class="footer"><div class="footer-container"><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2023</span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>

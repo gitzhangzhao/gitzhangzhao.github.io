@@ -4,22 +4,22 @@
         <link>http://gitzhangzhao.github.io/tags/</link>
         <description>Tags - 标签 - 张昭的Blog</description>
         <generator>Hugo -- gohugo.io</generator><language>zh-cn</language><managingEditor>gitzhangzhao@gmail.com (张昭)</managingEditor>
-            <webMaster>gitzhangzhao@gmail.com (张昭)</webMaster><lastBuildDate>Mon, 19 Jun 2023 11:48:55 &#43;0800</lastBuildDate><atom:link href="http://gitzhangzhao.github.io/tags/" rel="self" type="application/rss+xml" /><item>
-    <title>NFS</title>
-    <link>http://gitzhangzhao.github.io/tags/nfs/</link>
-    <pubDate>Mon, 19 Jun 2023 11:48:55 &#43;0800</pubDate><author>gitzhangzhao@gmail.com (张昭)</author><guid>http://gitzhangzhao.github.io/tags/nfs/</guid>
-    <description><![CDATA[]]></description>
-</item>
-<item>
+            <webMaster>gitzhangzhao@gmail.com (张昭)</webMaster><lastBuildDate>Sat, 01 Jul 2023 15:52:02 &#43;0800</lastBuildDate><atom:link href="http://gitzhangzhao.github.io/tags/" rel="self" type="application/rss+xml" /><item>
     <title>Petalinux</title>
     <link>http://gitzhangzhao.github.io/tags/petalinux/</link>
-    <pubDate>Mon, 19 Jun 2023 11:48:55 &#43;0800</pubDate><author>gitzhangzhao@gmail.com (张昭)</author><guid>http://gitzhangzhao.github.io/tags/petalinux/</guid>
+    <pubDate>Sat, 01 Jul 2023 15:52:02 &#43;0800</pubDate><author>gitzhangzhao@gmail.com (张昭)</author><guid>http://gitzhangzhao.github.io/tags/petalinux/</guid>
     <description><![CDATA[]]></description>
 </item>
 <item>
     <title>ZYNQ</title>
     <link>http://gitzhangzhao.github.io/tags/zynq/</link>
-    <pubDate>Mon, 19 Jun 2023 11:48:55 &#43;0800</pubDate><author>gitzhangzhao@gmail.com (张昭)</author><guid>http://gitzhangzhao.github.io/tags/zynq/</guid>
+    <pubDate>Sat, 01 Jul 2023 15:52:02 &#43;0800</pubDate><author>gitzhangzhao@gmail.com (张昭)</author><guid>http://gitzhangzhao.github.io/tags/zynq/</guid>
+    <description><![CDATA[]]></description>
+</item>
+<item>
+    <title>NFS</title>
+    <link>http://gitzhangzhao.github.io/tags/nfs/</link>
+    <pubDate>Mon, 19 Jun 2023 11:48:55 &#43;0800</pubDate><author>gitzhangzhao@gmail.com (张昭)</author><guid>http://gitzhangzhao.github.io/tags/nfs/</guid>
     <description><![CDATA[]]></description>
 </item>
 <item>

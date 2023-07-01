@@ -93,8 +93,6 @@
 <p>在执行 petalinux-config 命令需要修改的部分</p>
 <ol>
 <li>
-<ol>
-<li>
 <p>修改 U-Boot 配置
 </p>
 </li>
@@ -102,10 +100,6 @@
 <p>可以修改 netboot offset，即从远程下载镜像到内存中的地址偏移，远程 tftp server 的 IP 地址
 </p>
 </li>
-</ol>
-</li>
-<li>
-<ol>
 <li>
 <p>修改镜像打包相关配置
 </p>
@@ -113,8 +107,6 @@
 <li>
 <p>修改根文件系统位置、nfs 文件系统挂载目录、nfs server IP 地址、内核镜像名、以及 host tftpboot 目录
 </p>
-</li>
-</ol>
 </li>
 <li>
 <p>build 整个系统</p>
@@ -278,7 +270,7 @@
 </div>]]></description>
 </item>
 <item>
-    <title>Petalinux(一)：安装使用</title>
+    <title>Petalinux(一)：安装</title>
     <link>http://gitzhangzhao.github.io/posts/petalinux/petalinux_1/</link>
     <pubDate>Mon, 19 Jun 2023 11:35:36 &#43;0800</pubDate><author>gitzhangzhao@gmail.com (张昭)</author><guid>http://gitzhangzhao.github.io/posts/petalinux/petalinux_1/</guid>
     <description><![CDATA[<p><strong><em>申明: 本文严禁任何组织或个人在 CSDN 上进行转载，其他平台转载需经作者授权</em></strong></p>

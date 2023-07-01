@@ -4,7 +4,23 @@
         <link>http://gitzhangzhao.github.io/tags/zynq/</link>
         <description>ZYNQ - 标签 - 张昭的Blog</description>
         <generator>Hugo -- gohugo.io</generator><language>zh-cn</language><managingEditor>gitzhangzhao@gmail.com (张昭)</managingEditor>
-            <webMaster>gitzhangzhao@gmail.com (张昭)</webMaster><lastBuildDate>Mon, 19 Jun 2023 11:48:55 &#43;0800</lastBuildDate><atom:link href="http://gitzhangzhao.github.io/tags/zynq/" rel="self" type="application/rss+xml" /><item>
+            <webMaster>gitzhangzhao@gmail.com (张昭)</webMaster><lastBuildDate>Sat, 01 Jul 2023 15:52:02 &#43;0800</lastBuildDate><atom:link href="http://gitzhangzhao.github.io/tags/zynq/" rel="self" type="application/rss+xml" /><item>
+    <title>Petalinux(三)：完全使用手册</title>
+    <link>http://gitzhangzhao.github.io/posts/petalinux/petalinux_3/</link>
+    <pubDate>Sat, 01 Jul 2023 15:52:02 &#43;0800</pubDate><author>gitzhangzhao@gmail.com (张昭)</author><guid>http://gitzhangzhao.github.io/posts/petalinux/petalinux_3/</guid>
+    <description><![CDATA[<p><strong><em>申明: 本文严禁任何组织或个人在 CSDN 上进行转载,其他平台转载需经作者授权</em></strong></p>
+<blockquote>
+<p>之前的两篇文章介绍了 Petalinux 的安装和远程启动，这篇文章重点介绍 Petalinux 的使用</p>
+</blockquote>
+<blockquote>
+<p>前提条件：一台可以联网的服务器，并且已经安装好 Vivado 软件</p>
+</blockquote>
+<blockquote>
+<p>本使用手册以 Embedded EVR 为例子，详细介绍从 FPGA 代码的综合、布局布线、生成 bit 流，到使用 Petalinux 创建工程、配置、编译和部署的过程解决</p>
+</blockquote>
+]]></description>
+</item>
+<item>
     <title>Petalinux(二)：远程启动</title>
     <link>http://gitzhangzhao.github.io/posts/petalinux/petalinux_2/</link>
     <pubDate>Mon, 19 Jun 2023 11:48:55 &#43;0800</pubDate><author>gitzhangzhao@gmail.com (张昭)</author><guid>http://gitzhangzhao.github.io/posts/petalinux/petalinux_2/</guid>
@@ -93,8 +109,6 @@
 <p>在执行 petalinux-config 命令需要修改的部分</p>
 <ol>
 <li>
-<ol>
-<li>
 <p>修改 U-Boot 配置
 </p>
 </li>
@@ -102,10 +116,6 @@
 <p>可以修改 netboot offset，即从远程下载镜像到内存中的地址偏移，远程 tftp server 的 IP 地址
 </p>
 </li>
-</ol>
-</li>
-<li>
-<ol>
 <li>
 <p>修改镜像打包相关配置
 </p>
@@ -113,8 +123,6 @@
 <li>
 <p>修改根文件系统位置、nfs 文件系统挂载目录、nfs server IP 地址、内核镜像名、以及 host tftpboot 目录
 </p>
-</li>
-</ol>
 </li>
 <li>
 <p>build 整个系统</p>
@@ -278,7 +286,7 @@
 </div>]]></description>
 </item>
 <item>
-    <title>Petalinux(一)：安装使用</title>
+    <title>Petalinux(一)：安装</title>
     <link>http://gitzhangzhao.github.io/posts/petalinux/petalinux_1/</link>
     <pubDate>Mon, 19 Jun 2023 11:35:36 &#43;0800</pubDate><author>gitzhangzhao@gmail.com (张昭)</author><guid>http://gitzhangzhao.github.io/posts/petalinux/petalinux_1/</guid>
     <description><![CDATA[<p><strong><em>申明: 本文严禁任何组织或个人在 CSDN 上进行转载，其他平台转载需经作者授权</em></strong></p>
