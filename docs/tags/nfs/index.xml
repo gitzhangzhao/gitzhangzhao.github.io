@@ -93,20 +93,16 @@
 <p>在执行 petalinux-config 命令需要修改的部分</p>
 <ol>
 <li>
-<p>修改 U-Boot 配置
-</p>
+<p>修改 U-Boot 配置</p>
+<p></p>
 </li>
 <li>
-<p>可以修改 netboot offset，即从远程下载镜像到内存中的地址偏移，远程 tftp server 的 IP 地址
-</p>
+<p>可以修改 netboot offset，即从远程下载镜像到内存中的地址偏移，远程 tftp server 的 IP 地址</p>
 </li>
 <li>
-<p>修改镜像打包相关配置
-</p>
-</li>
-<li>
-<p>修改根文件系统位置、nfs 文件系统挂载目录、nfs server IP 地址、内核镜像名、以及 host tftpboot 目录
-</p>
+<p>修改镜像打包相关配置</p>
+<p></p>
+<p></p>
 </li>
 <li>
 <p>build 整个系统</p>

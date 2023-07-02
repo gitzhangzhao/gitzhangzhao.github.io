@@ -5,14 +5,14 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="robots" content="noodp" />
         <title>Petalinux(三)：完全使用手册 - 张昭的Blog</title><meta name="description" content="Welcome to Zhangzhao&#39;s blog."><meta property="og:title" content="Petalinux(三)：完全使用手册" />
-<meta property="og:description" content="申明: 本文严禁任何组织或个人在 CSDN 上进行转载,其他平台转载需经作者授权 之前的两篇文章介绍了 Petalinux 的安装和远程启动，这篇文章重点介绍 Petalinux 的使用 前提条件" />
+<meta property="og:description" content="More is more" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="http://gitzhangzhao.github.io/posts/petalinux/petalinux_3/" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2023-07-01T15:52:02+08:00" />
 <meta property="article:modified_time" content="2023-07-01T23:42:22+08:00" />
 <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Petalinux(三)：完全使用手册"/>
-<meta name="twitter:description" content="申明: 本文严禁任何组织或个人在 CSDN 上进行转载,其他平台转载需经作者授权 之前的两篇文章介绍了 Petalinux 的安装和远程启动，这篇文章重点介绍 Petalinux 的使用 前提条件"/>
+<meta name="twitter:description" content="More is more"/>
 <meta name="application-name" content="张昭的Blog">
 <meta name="apple-mobile-web-app-title" content="张昭的Blog"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -25,7 +25,7 @@
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "http:\/\/gitzhangzhao.github.io\/posts\/petalinux\/petalinux_3\/"
-        },"genre": "posts","keywords": "Petalinux, ZYNQ","wordcount":  148 ,
+        },"genre": "posts","keywords": "Petalinux, ZYNQ","wordcount":  2271 ,
         "url": "http:\/\/gitzhangzhao.github.io\/posts\/petalinux\/petalinux_3\/","datePublished": "2023-07-01T15:52:02+08:00","dateModified": "2023-07-01T23:42:22+08:00","publisher": {
             "@type": "Organization",
             "name": "张昭"},"author": {
@@ -100,8 +100,8 @@
             <div class="toc-content" id="toc-content-auto"></div>
         </div><article class="page single" data-toc="enable"><div class="single-card" ><h2 class="single-title animated flipInX">Petalinux(三)：完全使用手册</h2><div class="post-meta">
                 <div class="post-meta-line"><span class="post-author"><a href="https://github.com/gitzhangzhao" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle fa-fw"></i>张昭</a></span>&nbsp;<span class="post-category">出版于  <a href="/categories/embedded-evr/"><i class="far fa-folder fa-fw"></i>Embedded EVR</a></span></div>
-                <div class="post-meta-line"><span><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2023-07-01">2023-07-01</time></span>&nbsp;<span><i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 148 字</span>&nbsp;
-                    <span><i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 1 分钟</span>&nbsp;</div>
+                <div class="post-meta-line"><span><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2023-07-01">2023-07-01</time></span>&nbsp;<span><i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 2271 字</span>&nbsp;
+                    <span><i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 5 分钟</span>&nbsp;</div>
             </div>
             
             <hr><div class="details toc" id="toc-static"  data-kept="">
@@ -109,18 +109,262 @@
                         <span>目录</span>
                         <span><i class="details-icon fas fa-angle-right"></i></span>
                     </div>
-                    <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents"></nav></div>
+                    <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#前言">前言</a></li>
+        <li><a href="#内容">内容</a>
+          <ul>
+            <li><a href="#在-timing4-上生成嵌入式-evr-的-bit-流文件">在 timing4 上生成嵌入式 EVR 的 bit 流文件</a>
+              <ul>
+                <li><a href="#1-登录到-timing4-服务器的图形界面">1. 登录到 timing4 服务器的图形界面</a></li>
+                <li><a href="#2-启动-vivado">2. 启动 Vivado</a></li>
+                <li><a href="#3-在-vivado-中综合并布线嵌入式-evr">3. 在 Vivado 中综合并布线嵌入式 EVR</a></li>
+                <li><a href="#4-将硬件描述文件导出">4. 将硬件描述文件导出</a></li>
+              </ul>
+            </li>
+            <li><a href="#制作-petalinux-镜像">制作 Petalinux 镜像</a></li>
+            <li><a href="#使用-petalinux-镜像创建容器">使用 Petalinux 镜像创建容器</a></li>
+            <li><a href="#修改或添加所需的设备树">修改或添加所需的设备树</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
                 </div><div class="content" id="content"><p><strong><em>申明: 本文严禁任何组织或个人在 CSDN 上进行转载,其他平台转载需经作者授权</em></strong></p>
 <blockquote>
-<p>之前的两篇文章介绍了 Petalinux 的安装和远程启动，这篇文章重点介绍 Petalinux 的使用</p>
+<p>之前的两篇文章介绍了 Petalinux 的安装和远程启动，本手册是系列的第三篇文章。本篇以 Embedded EVR 为例，详细介绍从 FPGA 代码的综合、布局布线、生成 bit 流，到使用 Petalinux 创建工程、配置、编译和部署的过程</p>
 </blockquote>
 <blockquote>
 <p>前提条件：一台可以联网的服务器，并且已经安装好 Vivado 软件</p>
 </blockquote>
-<blockquote>
-<p>本使用手册以 Embedded EVR 为例子，详细介绍从 FPGA 代码的综合、布局布线、生成 bit 流，到使用 Petalinux 创建工程、配置、编译和部署的过程解决</p>
-</blockquote>
-</div><div class="post-footer" id="post-footer">
+<h2 id="前言">前言</h2>
+<p>博士期间，我主要利用 timing4(192.168.206.186) 服务器完成嵌入式 EVR 的研究，其中涉及到 FPGA 开发和嵌入式 Linux 系统。嵌入式系统的开发往往具有步骤复杂、过程繁琐的特点，Petalinux 这类自动化的软件工具大大简化了开发步骤</p>
+<p>在 Docker 环境中使用 Petalinux 的原因，已经在系列第一篇文章中介绍了。本手册按照如下的步骤来介绍 Petalinux 的使用：</p>
+<ul>
+<li>在 timing4 上生成嵌入式 EVR 的 bit 流文件</li>
+<li>导出嵌入式 EVR 的硬件描述文件到 Petalinux 容器中</li>
+<li>制作 Petalinux 镜像，以 2017.04 为例</li>
+<li>使用 Petalinux 镜像创建容器</li>
+<li>修改或添加所需的设备树</li>
+<li>根据硬件描述文件配置 Petalinux</li>
+<li>配置 Linux 内核、U-Boot 和根文件系统</li>
+<li>编译整个 Petalinux 工程</li>
+<li>打包并整理内核、U-Boot 和根文件系统等镜像</li>
+<li>使用镜像文件制作可启动的 TF 卡</li>
+<li>容器使用中可能遇到的问题</li>
+<li>在遇到不可解决的问题时，恢复 Docker 环境</li>
+</ul>
+<h2 id="内容">内容</h2>
+<h3 id="在-timing4-上生成嵌入式-evr-的-bit-流文件">在 timing4 上生成嵌入式 EVR 的 bit 流文件</h3>
+<h4 id="1-登录到-timing4-服务器的图形界面">1. 登录到 timing4 服务器的图形界面</h4>
+<p>由于我们需要使用 Vivado 工具，所以需要登录图形界面。登录 timing4 服务器的图形化界面有两种方式：</p>
+<ul>
+<li>
+<p>使用 xrdp 协议
+timing4 服务器安装了 xrdp 服务器，可以直接使用 windows 自带的远程桌面，登录 192.168.206.186.用户名使用自己的用户名，随后会提示输入密码</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://pic.imgdb.cn/item/64a0ebcb1ddac507cc4df043.jpg"
+        data-srcset="https://pic.imgdb.cn/item/64a0ebcb1ddac507cc4df043.jpg, https://pic.imgdb.cn/item/64a0ebcb1ddac507cc4df043.jpg 1.5x, https://pic.imgdb.cn/item/64a0ebcb1ddac507cc4df043.jpg 2x"
+        data-sizes="auto"
+        alt="https://pic.imgdb.cn/item/64a0ebcb1ddac507cc4df043.jpg"
+        title="请输入图片描述" /></p>
+</li>
+<li>
+<p>使用 rustdesk
+timing4 服务器上安装了 rustdesk Server，远程登录需要在 timing4 上安装运行 rustdesk Client，并且在自己的电脑上也安装好 rustdesk Client。具体的操作步骤请参考<a href="https://rustdesk.com/docs/zh-cn/" target="_blank" rel="noopener noreffer">rustdesk 使用手册</a></p>
+</li>
+</ul>
+<p>上述两种方式各有优劣，方式 1 不需要安装额外客户端软件，方式 2 具有文件传输等更丰富便捷的功能</p>
+<h4 id="2-启动-vivado">2. 启动 Vivado</h4>
+<p>timing4 上的 Vivado 安装在目录<code>/opt/Xilinx/Vivado/2017.4</code>下，在这个目录下存在 setting64.sh 文件，其中配置了 Vivado 所需的一些环境变量以及 PATH 变量。建议在启动 Vivado 之前先执行<code>source /opt/Xilinx/Vivado/2017.4/setting64.sh</code>，也可以将这个命令添加进用户自己的.bashrc 或者.zshrc 中。.zshrc 中的环境变量可以参考<code>/home/zhangzh/.zshrc</code></p>
+<p>在终端中执行 vivado 命令，即可打开 Vivado 的图形化界面，此后的操作和 Windows 下一致：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://pic.imgdb.cn/item/64a0eab41ddac507cc4c5225.jpg"
+        data-srcset="https://pic.imgdb.cn/item/64a0eab41ddac507cc4c5225.jpg, https://pic.imgdb.cn/item/64a0eab41ddac507cc4c5225.jpg 1.5x, https://pic.imgdb.cn/item/64a0eab41ddac507cc4c5225.jpg 2x"
+        data-sizes="auto"
+        alt="https://pic.imgdb.cn/item/64a0eab41ddac507cc4c5225.jpg"
+        title="请输入图片描述" /></p>
+<h4 id="3-在-vivado-中综合并布线嵌入式-evr">3. 在 Vivado 中综合并布线嵌入式 EVR</h4>
+<p>嵌入式 EVR 的代码放在目录<code>/home/zhangzh/Lab/vivado</code>中，其中 test9 为 EVR 功能模块的代码，打包为自定义 IP，放在<code>/home/zhangzh/Lab/vivado/test9/test9.ip_user_files</code>目录下。test9_wizard 为自定义 IP 和 ZYNQ IP 的连线工程，其主要内容为 Block Design 和约束文件</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://pic.imgdb.cn/item/64a0eb2a1ddac507cc4cff4f.jpg"
+        data-srcset="https://pic.imgdb.cn/item/64a0eb2a1ddac507cc4cff4f.jpg, https://pic.imgdb.cn/item/64a0eb2a1ddac507cc4cff4f.jpg 1.5x, https://pic.imgdb.cn/item/64a0eb2a1ddac507cc4cff4f.jpg 2x"
+        data-sizes="auto"
+        alt="https://pic.imgdb.cn/item/64a0eb2a1ddac507cc4cff4f.jpg"
+        title="请输入图片描述" /></p>
+<p>如果没有修改代码的需要，则只需打开 test9_wizard 工程。在下图 1 的位置有生成 bit 流的按钮，将按顺序自动的运行综合，布局布线，最后产生 bit 流。一杯咖啡后，右上角显示<code>wirte_bitstream Complete √</code>即表示运行成功。布线后生成的 bit 流文件为<code>/home/zhangzh/Lab/vivado/test9_wizard/test9_wizard.runs/impl_1/design_1_wrapper.bit</code>。这个文件可以通过 JTAG 的方式直接烧写进 FPGA 中，但无法被 U-Boot 或 xdevcfg 烧写。还需要使用 bootgen 工具将其转换为 BIN 文件格式</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://pic.imgdb.cn/item/64a0e9331ddac507cc49ee63.png"
+        data-srcset="https://pic.imgdb.cn/item/64a0e9331ddac507cc49ee63.png, https://pic.imgdb.cn/item/64a0e9331ddac507cc49ee63.png 1.5x, https://pic.imgdb.cn/item/64a0e9331ddac507cc49ee63.png 2x"
+        data-sizes="auto"
+        alt="https://pic.imgdb.cn/item/64a0e9331ddac507cc49ee63.png"
+        title="请输入图片描述" /></p>
+<h4 id="4-将硬件描述文件导出">4. 将硬件描述文件导出</h4>
+<p>为什么上一步已经得到了嵌入式 EVR 的 bit 流，还需要将硬件描述文件导出？这是因为硬件描述文件(.hdf)描述了完整的硬件信息，包括 FPGA 中使用的资源，这些信息正是 Petalinux 所需要的。需要注意的是，在 Vivado 的高版本中，hdf 文件已经被 xsa 文件替代</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://pic.imgdb.cn/item/64a0eb8c1ddac507cc4d9473.jpg"
+        data-srcset="https://pic.imgdb.cn/item/64a0eb8c1ddac507cc4d9473.jpg, https://pic.imgdb.cn/item/64a0eb8c1ddac507cc4d9473.jpg 1.5x, https://pic.imgdb.cn/item/64a0eb8c1ddac507cc4d9473.jpg 2x"
+        data-sizes="auto"
+        alt="https://pic.imgdb.cn/item/64a0eb8c1ddac507cc4d9473.jpg"
+        title="请输入图片描述" /></p>
+<p>此时，FPGA 部分的工作就可以结束了，Petalinux 随后会根据硬件描述文件中提供的信息去配置工程，或者从 Vivado 工程中将 bit 流文件拷贝出来。在 Petalinux 最终生成的镜像文件中，同样也包含 bit 流文件</p>
+<h3 id="制作-petalinux-镜像">制作 Petalinux 镜像</h3>
+<p>本节以 2017.04 版本为例，介绍如何在 timing4 上制作 Petalinux 镜像</p>
+<ol>
+<li>创建 Dockerfile 文件</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">$ touch Dockerfile
+</span></span><span class="line"><span class="cl"><span class="c1"># 将以下内容写入 Dockerfile</span>
+</span></span><span class="line"><span class="cl">$ cat Dockerfile
+</span></span><span class="line"><span class="cl">FROM ubuntu:16.04
+</span></span><span class="line"><span class="cl">RUN dpkg --add-architecture i386
+</span></span><span class="line"><span class="cl">RUN apt update <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>        <span class="o">&amp;&amp;</span> apt install -y sudo libssl-dev flex bison chrpath socat autoconf libtool texinfo gcc-multilib libsdl1.2-dev libglib2.0-dev screen pax net-tools wget diffstat xterm gawk xvfb git make libncurses5-dev tftpd zlib1g libssl-dev gnupg tar unzip build-essential libtool-bin dialog cpio lsb-release zlib1g:i386 zlib1g-dev:i386 locales openjdk-8-jdk<span class="s2">&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s2">
+</span></span></span><span class="line"><span class="cl"><span class="s2"># build 镜像
+</span></span></span><span class="line"><span class="cl"><span class="s2"></span>$<span class="s2"> docker build -t &lt;image_name&gt; .
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>使用 docker images 命令来管理镜像。latest 为默认的镜像 tag</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://pic.imgdb.cn/item/64a0f9681ddac507cc63e20a.jpg"
+        data-srcset="https://pic.imgdb.cn/item/64a0f9681ddac507cc63e20a.jpg, https://pic.imgdb.cn/item/64a0f9681ddac507cc63e20a.jpg 1.5x, https://pic.imgdb.cn/item/64a0f9681ddac507cc63e20a.jpg 2x"
+        data-sizes="auto"
+        alt="https://pic.imgdb.cn/item/64a0f9681ddac507cc63e20a.jpg"
+        title="请输入图片描述" /></p>
+<h3 id="使用-petalinux-镜像创建容器">使用 Petalinux 镜像创建容器</h3>
+<p>获得镜像后，创建一个容器</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># 使用镜像创建容器</span>
+</span></span><span class="line"><span class="cl">$ docker run -it --name &lt;name&gt; -v &lt;dir:dir&gt; --user root &lt;image_name&gt; /bin/bash
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 使用 docker exec 命令启动 docker</span>
+</span></span><span class="line"><span class="cl">$ docker start name
+</span></span><span class="line"><span class="cl">$ docker <span class="nb">exec</span> --user root -it &lt;name&gt; /bin/bash
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>进入容器后，在容器中继续执行安装</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># 添加普通用户</span>
+</span></span><span class="line"><span class="cl">$ adduser &lt;user_name&gt;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 修改 /etc/sudoers 文件，添加 sudo 权限</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 用普通用户身份启动 docker</span>
+</span></span><span class="line"><span class="cl">$ docker <span class="nb">exec</span> --user &lt;user_name&gt; -it &lt;name&gt; /bin/bash
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 配置安装 locales， 使用 en_US.UTF-8</span>
+</span></span><span class="line"><span class="cl">$ sudo dpkg-reconfigure locales
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 设置 LANG 环境变量为 en_US.UTF-8</span>
+</span></span><span class="line"><span class="cl">$ <span class="nb">export</span> <span class="nv">LANG</span><span class="o">=</span><span class="s2">&#34;en_US.UTF-8&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 从共享目录中将 Petalinux 安装镜像 copy 到容器中</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 执行安装，lisence 输入 yes</span>
+</span></span><span class="line"><span class="cl">$ ./petalinux-v2017.4-final-installer.run dir
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 安装完成后，source Petalinux 的安装目录中的 setting.sh</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># petalinux 开头的命令可以使用</span>
+</span></span><span class="line"><span class="cl">$ petalinux-xxx
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>使用 docker ps -a 查看所有的容器
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://pic.imgdb.cn/item/64a0fa761ddac507cc657d99.jpg"
+        data-srcset="https://pic.imgdb.cn/item/64a0fa761ddac507cc657d99.jpg, https://pic.imgdb.cn/item/64a0fa761ddac507cc657d99.jpg 1.5x, https://pic.imgdb.cn/item/64a0fa761ddac507cc657d99.jpg 2x"
+        data-sizes="auto"
+        alt="https://pic.imgdb.cn/item/64a0fa761ddac507cc657d99.jpg"
+        title="请输入图片描述" /></p>
+<p>其中 petalinux_image 创建了 2 个容器，这两个容器是相关不关联的</p>
+<p>注意：mzz2017/v2raya 镜像和 v2ray 容器是 timing4 服务器上的系统代理，用于访问外网。在浏览器中输入<code>localhost:2017</code>，管理代理的节点</p>
+<h3 id="修改或添加所需的设备树">修改或添加所需的设备树</h3>
+<p>假设 petalinux_20220621 容器已被成功创建</p>
+<p>timing4 每次重启后，都需要运行<code>docker start petalinux_20220621</code>来启动容器。然后使用<code>docker exec --user zhangzh -it petalinux_20220621 /bin/bash</code> 命令来进入容器，<code>--user</code>后应为自己在容器中新建的用户</p>
+<p>需要注意的是：Petalinux 不支持除了 bash 以外的其他 shell</p>
+<p>为了方便每次 source Petalinux 的安装目录中的 setting.sh，可以在自己的目录下的<code>.bashrc</code>文件中添加如下内容：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">$ tail -3 .bashrc
+</span></span><span class="line"><span class="cl"><span class="nb">export</span> <span class="nv">LANG</span><span class="o">=</span><span class="s2">&#34;en_US.UTF-8&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nb">cd</span> <span class="nv">$HOME</span>
+</span></span><span class="line"><span class="cl"><span class="nb">source</span> /xxx/settings.sh
+</span></span></code></pre></td></tr></table>
+</div>
+</div></div><div class="post-footer" id="post-footer">
     <div class="post-info"><div class="post-info-tag"><span><a href="/tags/petalinux/">Petalinux</a>
                 </span><span><a href="/tags/zynq/">ZYNQ</a>
                 </span></div><div class="post-info-line"><div class="post-info-mod">

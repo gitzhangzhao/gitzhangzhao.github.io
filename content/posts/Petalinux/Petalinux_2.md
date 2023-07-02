@@ -78,24 +78,24 @@ zynq> bootz 10000000 - 10080000
 在执行 petalinux-config 命令需要修改的部分
 
 1. 修改 U-Boot 配置
+
    ![请输入图片描述][2]
 
 2. 可以修改 netboot offset，即从远程下载镜像到内存中的地址偏移，远程 tftp server 的 IP 地址
-   ![请输入图片描述][3]
 
 3. 修改镜像打包相关配置
+
    ![请输入图片描述][4]
 
-4. 修改根文件系统位置、nfs 文件系统挂载目录、nfs server IP 地址、内核镜像名、以及 host tftpboot 目录
    ![请输入图片描述][5]
 
-5. build 整个系统
+4. build 整个系统
 
    ```bash
    $ petalinux-build
    ```
 
-6. 将编译后的输出文件打包成适合部署的格式
+5. 将编译后的输出文件打包成适合部署的格式
 
    ```bash
    # 一般 BOOT.BIN 包含 fsbl 文件、bitstream 和 U-Boot 文件
