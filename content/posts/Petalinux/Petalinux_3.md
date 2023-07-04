@@ -24,6 +24,7 @@ summary: "More is more"
 - 导出嵌入式 EVR 的硬件描述文件到 Petalinux 容器中
 - 制作 Petalinux 镜像，以 2017.04 为例
 - 使用 Petalinux 镜像创建容器
+- 启动容器，创建 Petalinux 工程
 - 修改或添加所需的设备树
 - 根据硬件描述文件配置 Petalinux
 - 配置 Linux 内核、U-Boot 和根文件系统
@@ -131,6 +132,7 @@ $ sudo dpkg-reconfigure locales
 $ export LANG="en_US.UTF-8"
 
 # 从共享目录中将 Petalinux 安装镜像 copy 到容器中
+$ cp /mnt/petalinux/petalinux-v2017.4-final-installer.run ~
 
 # 执行安装，lisence 输入 yes
 $ ./petalinux-v2017.4-final-installer.run dir
@@ -148,11 +150,11 @@ $ petalinux-xxx
 
 注意：mzz2017/v2raya 镜像和 v2ray 容器是 timing4 服务器上的系统代理，用于访问外网。在浏览器中输入`localhost:2017`，管理代理的节点
 
-### 修改或添加所需的设备树
+### 进入容器
 
-假设 petalinux_20220621 容器已被成功创建
+此时 petalinux_20220621 容器已被成功创建
 
-timing4 每次重启后，都需要运行`docker start petalinux_20220621`来启动容器。然后使用`docker exec --user zhangzh -it petalinux_20220621 /bin/bash` 命令来进入容器，`--user`后应为自己在容器中新建的用户
+timing4 每次重启后，都需要运行`docker start petalinux_20220621`来启动容器。然后使用`docker exec --user zhangzh -it petalinux_20220621 /bin/bash` 命令来进入容器，`--user`后应为自己在容器中新建的用户。使用 exit 退出容器，此时容器没有关闭，下次仍然使用`docker exec`命令进入
 
 需要注意的是：Petalinux 不支持除了 bash 以外的其他 shell
 
@@ -165,6 +167,67 @@ cd $HOME
 source /xxx/settings.sh
 ```
 
+### 创建 Petalinux 工程
+
+进入 Petalinux 环境后，在普通用户下新建工程目录，然后使用`petalinux-creat`创建一个工程
+
+```sh
+$ petalinux-create --type <project_type> --template zynq --name xxx
+```
+
+- 这里的 type 是创建的类型，有三种类型：
+  - project: petalinux 标准的工程
+  - apps: linux 用户态应用程序，首先创建好 project，在到工程目录下使用`petalinux-create -t apps --template install --name <app-name> --enable`命令创建一个应用。`--template`可以选择 c、c++等模板。然后将应用程序代码拷贝到`components/apps/<app-name>/src`目录下，应用程序就可以被 Petalinux 编译并包含在根文件系统镜像中
+  - modules: linux 内核态模块，用于在 Petalinux 环境下编写内核模块代码，编写的内核模块会被包含在根文件系统镜像中
+
+在嵌入式 EVR 中，只需要创建 project，应用程序 EPICS 不通过 Petalinux 来编译
+
+```sh
+$ petalinux-create --type project --template zynq --name embedded_evr
+```
+
+此时，一个 Petalinux 工程就被创建完毕了。此时目录中只有`config.project`文件和`project-spec`目录
+
+### 添加设备树节点
+
+在工程创建好以后，我们先不导入硬件配置，而要添加我们需要的代码。对于嵌入式 EVR，FPGA 部分相当于 Linux 的设备，所以需要添加一个挂在 AXI 总线上的节点
+
+ZYNQ 本身带了一些设备树文件，Petalinux 会默认包含并编译这部分设备树文件。这些设备树文件用于 PS 部分一些标准的系统和 FPGA 部分的官方 IP。对于嵌入式 EVR 这种自定义的设备，就需要添加新的设备树。Petalinux 中添加设备树不需要修改 ZYNQ 的设备树代码，而是在目录`/home/zhangzh/workspace/embedded_evr/project-spec/meta-user/recipes-bsp/device-tree/files`下的`system-user.dtsi`文件中进行修改
+
+```dts
+# 添加如下内容
+
+/include/ "system-conf.dtsi"
+/ {
+amba_pl: amba_pl {
+                #address-cells = <1>;
+                #size-cells = <1>;
+                compatible = "simple-bus";
+                ranges ;
+                uio_dev@43c00000 {
+                        compatible = "generic-uio";
+                        interrupt-controller;
+                        interrupt-parent = <&intc>;
+                        interrupts = <0x0 0x1d 0x1>;
+                        reg = <0x43c00000 0x10000>;
+                };
+        };
+};
+```
+
+为了让内核匹配设备驱动程序，还需要修改内核启动参数，将`generic-uio`标识符传入内核。通常有两种方式，可以在`petalinux config`后或者直接在上述文件中添加 bootargs 变量
+
+```dts
+# 添加内核启动参数
+
+chosen {
+            bootargs = "console=ttyPS0,115200 earlyprintk uio_pdrv_genirq.of_id=generic-uio root=/dev/mmcblk0p2 rw rootwait";
+            stdout-path = "serial0:115200n8";
+        };
+```
+
+在设备树中添加的内核参数会被 U-Boot 程序读取，并设置 U-Boot 的 bootargs 变量。其中，对于 ZYNQ console 的值为 ttyPS0，波特率取决于串口芯片。root 挂载的文件系统必须是 linux 系统支持的根文件系统设备名。`uio_pdrv_genirq.of_id`表示了`uio_pdrv_genirq`这个驱动程序匹配字符串，需要和设备树中的一致
+
 [0]: https://pic.imgdb.cn/item/64a0ebcb1ddac507cc4df043.jpg
 [1]: https://pic.imgdb.cn/item/64a0eab41ddac507cc4c5225.jpg
 [2]: https://pic.imgdb.cn/item/64a0eb2a1ddac507cc4cff4f.jpg
@@ -172,3 +235,7 @@ source /xxx/settings.sh
 [4]: https://pic.imgdb.cn/item/64a0eb8c1ddac507cc4d9473.jpg
 [5]: https://pic.imgdb.cn/item/64a0f9681ddac507cc63e20a.jpg
 [6]: https://pic.imgdb.cn/item/64a0fa761ddac507cc657d99.jpg
+
+```
+
+```

@@ -9,7 +9,7 @@
 <meta property="og:type" content="article" />
 <meta property="og:url" content="http://gitzhangzhao.github.io/posts/petalinux/petalinux_3/" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2023-07-01T15:52:02+08:00" />
-<meta property="article:modified_time" content="2023-07-01T23:42:22+08:00" />
+<meta property="article:modified_time" content="2023-07-02T12:31:21+08:00" />
 <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Petalinux(三)：完全使用手册"/>
 <meta name="twitter:description" content="More is more"/>
@@ -25,8 +25,8 @@
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "http:\/\/gitzhangzhao.github.io\/posts\/petalinux\/petalinux_3\/"
-        },"genre": "posts","keywords": "Petalinux, ZYNQ","wordcount":  2271 ,
-        "url": "http:\/\/gitzhangzhao.github.io\/posts\/petalinux\/petalinux_3\/","datePublished": "2023-07-01T15:52:02+08:00","dateModified": "2023-07-01T23:42:22+08:00","publisher": {
+        },"genre": "posts","keywords": "Petalinux, ZYNQ","wordcount":  3356 ,
+        "url": "http:\/\/gitzhangzhao.github.io\/posts\/petalinux\/petalinux_3\/","datePublished": "2023-07-01T15:52:02+08:00","dateModified": "2023-07-02T12:31:21+08:00","publisher": {
             "@type": "Organization",
             "name": "张昭"},"author": {
                 "@type": "Person",
@@ -100,8 +100,8 @@
             <div class="toc-content" id="toc-content-auto"></div>
         </div><article class="page single" data-toc="enable"><div class="single-card" ><h2 class="single-title animated flipInX">Petalinux(三)：完全使用手册</h2><div class="post-meta">
                 <div class="post-meta-line"><span class="post-author"><a href="https://github.com/gitzhangzhao" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle fa-fw"></i>张昭</a></span>&nbsp;<span class="post-category">出版于  <a href="/categories/embedded-evr/"><i class="far fa-folder fa-fw"></i>Embedded EVR</a></span></div>
-                <div class="post-meta-line"><span><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2023-07-01">2023-07-01</time></span>&nbsp;<span><i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 2271 字</span>&nbsp;
-                    <span><i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 5 分钟</span>&nbsp;</div>
+                <div class="post-meta-line"><span><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2023-07-01">2023-07-01</time></span>&nbsp;<span><i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 3356 字</span>&nbsp;
+                    <span><i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 7 分钟</span>&nbsp;</div>
             </div>
             
             <hr><div class="details toc" id="toc-static"  data-kept="">
@@ -126,7 +126,9 @@
             </li>
             <li><a href="#制作-petalinux-镜像">制作 Petalinux 镜像</a></li>
             <li><a href="#使用-petalinux-镜像创建容器">使用 Petalinux 镜像创建容器</a></li>
-            <li><a href="#修改或添加所需的设备树">修改或添加所需的设备树</a></li>
+            <li><a href="#进入容器">进入容器</a></li>
+            <li><a href="#创建-petalinux-工程">创建 Petalinux 工程</a></li>
+            <li><a href="#添加设备树节点">添加设备树节点</a></li>
           </ul>
         </li>
       </ul>
@@ -148,6 +150,7 @@
 <li>导出嵌入式 EVR 的硬件描述文件到 Petalinux 容器中</li>
 <li>制作 Petalinux 镜像，以 2017.04 为例</li>
 <li>使用 Petalinux 镜像创建容器</li>
+<li>启动容器，创建 Petalinux 工程</li>
 <li>修改或添加所需的设备树</li>
 <li>根据硬件描述文件配置 Petalinux</li>
 <li>配置 Linux 内核、U-Boot 和根文件系统</li>
@@ -307,6 +310,7 @@ timing4 服务器上安装了 rustdesk Server，远程登录需要在 timing4 �
 </span><span class="lnt">21
 </span><span class="lnt">22
 </span><span class="lnt">23
+</span><span class="lnt">24
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># 添加普通用户</span>
@@ -324,6 +328,7 @@ timing4 服务器上安装了 rustdesk Server，远程登录需要在 timing4 �
 </span></span><span class="line"><span class="cl">$ <span class="nb">export</span> <span class="nv">LANG</span><span class="o">=</span><span class="s2">&#34;en_US.UTF-8&#34;</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1"># 从共享目录中将 Petalinux 安装镜像 copy 到容器中</span>
+</span></span><span class="line"><span class="cl">$ cp /mnt/petalinux/petalinux-v2017.4-final-installer.run ~
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1"># 执行安装，lisence 输入 yes</span>
 </span></span><span class="line"><span class="cl">$ ./petalinux-v2017.4-final-installer.run dir
@@ -345,9 +350,9 @@ timing4 服务器上安装了 rustdesk Server，远程登录需要在 timing4 �
         title="请输入图片描述" /></p>
 <p>其中 petalinux_image 创建了 2 个容器，这两个容器是相关不关联的</p>
 <p>注意：mzz2017/v2raya 镜像和 v2ray 容器是 timing4 服务器上的系统代理，用于访问外网。在浏览器中输入<code>localhost:2017</code>，管理代理的节点</p>
-<h3 id="修改或添加所需的设备树">修改或添加所需的设备树</h3>
-<p>假设 petalinux_20220621 容器已被成功创建</p>
-<p>timing4 每次重启后，都需要运行<code>docker start petalinux_20220621</code>来启动容器。然后使用<code>docker exec --user zhangzh -it petalinux_20220621 /bin/bash</code> 命令来进入容器，<code>--user</code>后应为自己在容器中新建的用户</p>
+<h3 id="进入容器">进入容器</h3>
+<p>此时 petalinux_20220621 容器已被成功创建</p>
+<p>timing4 每次重启后，都需要运行<code>docker start petalinux_20220621</code>来启动容器。然后使用<code>docker exec --user zhangzh -it petalinux_20220621 /bin/bash</code> 命令来进入容器，<code>--user</code>后应为自己在容器中新建的用户。使用 exit 退出容器，此时容器没有关闭，下次仍然使用<code>docker exec</code>命令进入</p>
 <p>需要注意的是：Petalinux 不支持除了 bash 以外的其他 shell</p>
 <p>为了方便每次 source Petalinux 的安装目录中的 setting.sh，可以在自己的目录下的<code>.bashrc</code>文件中添加如下内容：</p>
 <div class="highlight"><div class="chroma">
@@ -364,11 +369,111 @@ timing4 服务器上安装了 rustdesk Server，远程登录需要在 timing4 �
 </span></span><span class="line"><span class="cl"><span class="nb">source</span> /xxx/settings.sh
 </span></span></code></pre></td></tr></table>
 </div>
+</div><h3 id="创建-petalinux-工程">创建 Petalinux 工程</h3>
+<p>进入 Petalinux 环境后，在普通用户下新建工程目录，然后使用<code>petalinux-creat</code>创建一个工程</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">$ petalinux-create --type &lt;project_type&gt; --template zynq --name xxx
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>这里的 type 是创建的类型，有三种类型：
+<ul>
+<li>project: petalinux 标准的工程</li>
+<li>apps: linux 用户态应用程序，首先创建好 project，在到工程目录下使用<code>petalinux-create -t apps --template install --name &lt;app-name&gt; --enable</code>命令创建一个应用。<code>--template</code>可以选择 c、c++等模板。然后将应用程序代码拷贝到<code>components/apps/&lt;app-name&gt;/src</code>目录下，应用程序就可以被 Petalinux 编译并包含在根文件系统镜像中</li>
+<li>modules: linux 内核态模块，用于在 Petalinux 环境下编写内核模块代码，编写的内核模块会被包含在根文件系统镜像中</li>
+</ul>
+</li>
+</ul>
+<p>在嵌入式 EVR 中，只需要创建 project，应用程序 EPICS 不通过 Petalinux 来编译</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">$ petalinux-create --type project --template zynq --name embedded_evr
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>此时，一个 Petalinux 工程就被创建完毕了。此时目录中只有<code>config.project</code>文件和<code>project-spec</code>目录</p>
+<h3 id="添加设备树节点">添加设备树节点</h3>
+<p>在工程创建好以后，我们先不导入硬件配置，而要添加我们需要的代码。对于嵌入式 EVR，FPGA 部分相当于 Linux 的设备，所以需要添加一个挂在 AXI 总线上的节点</p>
+<p>ZYNQ 本身带了一些设备树文件，Petalinux 会默认包含并编译这部分设备树文件。这些设备树文件用于 PS 部分一些标准的系统和 FPGA 部分的官方 IP。对于嵌入式 EVR 这种自定义的设备，就需要添加新的设备树。Petalinux 中添加设备树不需要修改 ZYNQ 的设备树代码，而是在目录<code>/home/zhangzh/workspace/embedded_evr/project-spec/meta-user/recipes-bsp/device-tree/files</code>下的<code>system-user.dtsi</code>文件中进行修改</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># 添加如下内容
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">/include/ &#34;system-conf.dtsi&#34;
+</span></span><span class="line"><span class="cl">/ {
+</span></span><span class="line"><span class="cl">amba_pl: amba_pl {
+</span></span><span class="line"><span class="cl">                #address-cells = &lt;1&gt;;
+</span></span><span class="line"><span class="cl">                #size-cells = &lt;1&gt;;
+</span></span><span class="line"><span class="cl">                compatible = &#34;simple-bus&#34;;
+</span></span><span class="line"><span class="cl">                ranges ;
+</span></span><span class="line"><span class="cl">                uio_dev@43c00000 {
+</span></span><span class="line"><span class="cl">                        compatible = &#34;generic-uio&#34;;
+</span></span><span class="line"><span class="cl">                        interrupt-controller;
+</span></span><span class="line"><span class="cl">                        interrupt-parent = &lt;&amp;intc&gt;;
+</span></span><span class="line"><span class="cl">                        interrupts = &lt;0x0 0x1d 0x1&gt;;
+</span></span><span class="line"><span class="cl">                        reg = &lt;0x43c00000 0x10000&gt;;
+</span></span><span class="line"><span class="cl">                };
+</span></span><span class="line"><span class="cl">        };
+</span></span><span class="line"><span class="cl">};
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>为了让内核匹配设备驱动程序，还需要修改内核启动参数，将<code>generic-uio</code>标识符传入内核。通常有两种方式，可以在<code>petalinux config</code>后或者直接在上述文件中添加 bootargs 变量</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># 添加内核启动参数
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">chosen {
+</span></span><span class="line"><span class="cl">            bootargs = &#34;console=ttyPS0,115200 earlyprintk uio_pdrv_genirq.of_id=generic-uio root=/dev/mmcblk0p2 rw rootwait&#34;;
+</span></span><span class="line"><span class="cl">            stdout-path = &#34;serial0:115200n8&#34;;
+</span></span><span class="line"><span class="cl">        };
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>在设备树中添加的内核参数会被 U-Boot 程序读取，并设置 U-Boot 的 bootargs 变量。其中，对于 ZYNQ console 的值为 ttyPS0，波特率取决于串口芯片。root 挂载的文件系统必须是 linux 系统支持的根文件系统设备名。<code>uio_pdrv_genirq.of_id</code>表示了<code>uio_pdrv_genirq</code>这个驱动程序匹配字符串，需要和设备树中的一致</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"></code></pre></td></tr></table>
+</div>
 </div></div><div class="post-footer" id="post-footer">
     <div class="post-info"><div class="post-info-tag"><span><a href="/tags/petalinux/">Petalinux</a>
                 </span><span><a href="/tags/zynq/">ZYNQ</a>
                 </span></div><div class="post-info-line"><div class="post-info-mod">
-                <span>更新于 2023-07-01</span>
+                <span>更新于 2023-07-02</span>
             </div><div class="post-info-mod"><span>
                             <a class="link-to-markdown" href="/posts/petalinux/petalinux_3/index.md" target="_blank">阅读原始文档</a>
                         </span></div>
