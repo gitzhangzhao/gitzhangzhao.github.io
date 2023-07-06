@@ -287,13 +287,27 @@ timing4 服务器上安装了 rustdesk Server，远程登录需要在 timing4 �
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>在设备树中添加的内核参数会被 U-Boot 程序读取，并设置 U-Boot 的 bootargs 变量。其中，对于 ZYNQ console 的值为 ttyPS0，波特率取决于串口芯片。root 挂载的文件系统必须是 linux 系统支持的根文件系统设备名。<code>uio_pdrv_genirq.of_id</code>表示了<code>uio_pdrv_genirq</code>这个驱动程序匹配字符串，需要和设备树中的一致</p>
+<p>另一种方式是<code>petalinux-config</code>后，在 tui 界面中找到<code>user set bootargs</code>并添加</p>
+<p></p>
+<h3 id="根据硬件描述文件配置-petalinux">根据硬件描述文件配置 Petalinux</h3>
+<p>随后，执行如下命令，Petalinux 会从 vivado 工程中导入硬件描述文件，并自动完成硬件的相关配置</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code></code></pre></td>
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"> petalinux-config --get-hw-description /mnt/vivado/test9_wizard/test9_wizard.sdk
+</span></span></code></pre></td></tr></table>
 </div>
-</div>]]></description>
+</div><p>上述命令有几个需要注意的点：</p>
+<ul>
+<li>容器内部的/mnt 目录也就是外部系统的共享目录。创建容器时，需要将<code>/home/zhangzh/Lab</code>目录和容器的<code>/mnt</code>目录共享。如果共享了别的目录，应该修改这里的路径，使 Petalinux 找到 vivado 工程的目录</li>
+<li>嵌入式事件定时系统的 hdf 文件导出到了 test9_wizard 路径下</li>
+<li>路劲需要写到 vivado 工程根目录下的 sdk 文件夹</li>
+<li>命令执行期间会弹出 tui 界面进行配置</li>
+</ul>
+<p>对于嵌入式事件定时系统，需要在此时更改上一节中所描述的内核启动参数</p>
+]]></description>
 </item>
 <item>
     <title>Petalinux(二)：远程启动</title>

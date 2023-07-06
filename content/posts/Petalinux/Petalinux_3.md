@@ -228,6 +228,27 @@ chosen {
 
 在设备树中添加的内核参数会被 U-Boot 程序读取，并设置 U-Boot 的 bootargs 变量。其中，对于 ZYNQ console 的值为 ttyPS0，波特率取决于串口芯片。root 挂载的文件系统必须是 linux 系统支持的根文件系统设备名。`uio_pdrv_genirq.of_id`表示了`uio_pdrv_genirq`这个驱动程序匹配字符串，需要和设备树中的一致
 
+另一种方式是`petalinux-config`后，在 tui 界面中找到`user set bootargs`并添加
+
+![请输入图片描述][7]
+
+### 根据硬件描述文件配置 Petalinux
+
+随后，执行如下命令，Petalinux 会从 vivado 工程中导入硬件描述文件，并自动完成硬件的相关配置
+
+```sh
+ petalinux-config --get-hw-description /mnt/vivado/test9_wizard/test9_wizard.sdk
+```
+
+上述命令有几个需要注意的点：
+
+- 容器内部的/mnt 目录也就是外部系统的共享目录。创建容器时，需要将`/home/zhangzh/Lab`目录和容器的`/mnt`目录共享。如果共享了别的目录，应该修改这里的路径，使 Petalinux 找到 vivado 工程的目录
+- 嵌入式事件定时系统的 hdf 文件导出到了 test9_wizard 路径下
+- 路劲需要写到 vivado 工程根目录下的 sdk 文件夹
+- 命令执行期间会弹出 tui 界面进行配置
+
+对于嵌入式事件定时系统，需要在此时更改上一节中所描述的内核启动参数
+
 [0]: https://pic.imgdb.cn/item/64a0ebcb1ddac507cc4df043.jpg
 [1]: https://pic.imgdb.cn/item/64a0eab41ddac507cc4c5225.jpg
 [2]: https://pic.imgdb.cn/item/64a0eb2a1ddac507cc4cff4f.jpg
@@ -235,7 +256,4 @@ chosen {
 [4]: https://pic.imgdb.cn/item/64a0eb8c1ddac507cc4d9473.jpg
 [5]: https://pic.imgdb.cn/item/64a0f9681ddac507cc63e20a.jpg
 [6]: https://pic.imgdb.cn/item/64a0fa761ddac507cc657d99.jpg
-
-```
-
-```
+[7]: https://pic.imgdb.cn/item/64a6d1e21ddac507ccc1a71a.png

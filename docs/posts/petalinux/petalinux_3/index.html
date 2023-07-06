@@ -9,7 +9,7 @@
 <meta property="og:type" content="article" />
 <meta property="og:url" content="http://gitzhangzhao.github.io/posts/petalinux/petalinux_3/" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2023-07-01T15:52:02+08:00" />
-<meta property="article:modified_time" content="2023-07-02T12:31:21+08:00" />
+<meta property="article:modified_time" content="2023-07-05T00:06:02+08:00" />
 <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Petalinux(三)：完全使用手册"/>
 <meta name="twitter:description" content="More is more"/>
@@ -25,8 +25,8 @@
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "http:\/\/gitzhangzhao.github.io\/posts\/petalinux\/petalinux_3\/"
-        },"genre": "posts","keywords": "Petalinux, ZYNQ","wordcount":  3356 ,
-        "url": "http:\/\/gitzhangzhao.github.io\/posts\/petalinux\/petalinux_3\/","datePublished": "2023-07-01T15:52:02+08:00","dateModified": "2023-07-02T12:31:21+08:00","publisher": {
+        },"genre": "posts","keywords": "Petalinux, ZYNQ","wordcount":  3661 ,
+        "url": "http:\/\/gitzhangzhao.github.io\/posts\/petalinux\/petalinux_3\/","datePublished": "2023-07-01T15:52:02+08:00","dateModified": "2023-07-05T00:06:02+08:00","publisher": {
             "@type": "Organization",
             "name": "张昭"},"author": {
                 "@type": "Person",
@@ -100,8 +100,8 @@
             <div class="toc-content" id="toc-content-auto"></div>
         </div><article class="page single" data-toc="enable"><div class="single-card" ><h2 class="single-title animated flipInX">Petalinux(三)：完全使用手册</h2><div class="post-meta">
                 <div class="post-meta-line"><span class="post-author"><a href="https://github.com/gitzhangzhao" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle fa-fw"></i>张昭</a></span>&nbsp;<span class="post-category">出版于  <a href="/categories/embedded-evr/"><i class="far fa-folder fa-fw"></i>Embedded EVR</a></span></div>
-                <div class="post-meta-line"><span><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2023-07-01">2023-07-01</time></span>&nbsp;<span><i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 3356 字</span>&nbsp;
-                    <span><i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 7 分钟</span>&nbsp;</div>
+                <div class="post-meta-line"><span><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2023-07-01">2023-07-01</time></span>&nbsp;<span><i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 3661 字</span>&nbsp;
+                    <span><i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 8 分钟</span>&nbsp;</div>
             </div>
             
             <hr><div class="details toc" id="toc-static"  data-kept="">
@@ -129,6 +129,7 @@
             <li><a href="#进入容器">进入容器</a></li>
             <li><a href="#创建-petalinux-工程">创建 Petalinux 工程</a></li>
             <li><a href="#添加设备树节点">添加设备树节点</a></li>
+            <li><a href="#根据硬件描述文件配置-petalinux">根据硬件描述文件配置 Petalinux</a></li>
           </ul>
         </li>
       </ul>
@@ -463,17 +464,38 @@ timing4 服务器上安装了 rustdesk Server，远程登录需要在 timing4 �
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>在设备树中添加的内核参数会被 U-Boot 程序读取，并设置 U-Boot 的 bootargs 变量。其中，对于 ZYNQ console 的值为 ttyPS0，波特率取决于串口芯片。root 挂载的文件系统必须是 linux 系统支持的根文件系统设备名。<code>uio_pdrv_genirq.of_id</code>表示了<code>uio_pdrv_genirq</code>这个驱动程序匹配字符串，需要和设备树中的一致</p>
+<p>另一种方式是<code>petalinux-config</code>后，在 tui 界面中找到<code>user set bootargs</code>并添加</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://pic.imgdb.cn/item/64a6d1e21ddac507ccc1a71a.png"
+        data-srcset="https://pic.imgdb.cn/item/64a6d1e21ddac507ccc1a71a.png, https://pic.imgdb.cn/item/64a6d1e21ddac507ccc1a71a.png 1.5x, https://pic.imgdb.cn/item/64a6d1e21ddac507ccc1a71a.png 2x"
+        data-sizes="auto"
+        alt="https://pic.imgdb.cn/item/64a6d1e21ddac507ccc1a71a.png"
+        title="请输入图片描述" /></p>
+<h3 id="根据硬件描述文件配置-petalinux">根据硬件描述文件配置 Petalinux</h3>
+<p>随后，执行如下命令，Petalinux 会从 vivado 工程中导入硬件描述文件，并自动完成硬件的相关配置</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code></code></pre></td>
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"> petalinux-config --get-hw-description /mnt/vivado/test9_wizard/test9_wizard.sdk
+</span></span></code></pre></td></tr></table>
 </div>
-</div></div><div class="post-footer" id="post-footer">
+</div><p>上述命令有几个需要注意的点：</p>
+<ul>
+<li>容器内部的/mnt 目录也就是外部系统的共享目录。创建容器时，需要将<code>/home/zhangzh/Lab</code>目录和容器的<code>/mnt</code>目录共享。如果共享了别的目录，应该修改这里的路径，使 Petalinux 找到 vivado 工程的目录</li>
+<li>嵌入式事件定时系统的 hdf 文件导出到了 test9_wizard 路径下</li>
+<li>路劲需要写到 vivado 工程根目录下的 sdk 文件夹</li>
+<li>命令执行期间会弹出 tui 界面进行配置</li>
+</ul>
+<p>对于嵌入式事件定时系统，需要在此时更改上一节中所描述的内核启动参数</p>
+</div><div class="post-footer" id="post-footer">
     <div class="post-info"><div class="post-info-tag"><span><a href="/tags/petalinux/">Petalinux</a>
                 </span><span><a href="/tags/zynq/">ZYNQ</a>
                 </span></div><div class="post-info-line"><div class="post-info-mod">
-                <span>更新于 2023-07-02</span>
+                <span>更新于 2023-07-05</span>
             </div><div class="post-info-mod"><span>
                             <a class="link-to-markdown" href="/posts/petalinux/petalinux_3/index.md" target="_blank">阅读原始文档</a>
                         </span></div>
