@@ -199,3 +199,7 @@ emerge polybar
 # 成功安装后，再恢复以前的状态
 USE="pulseaudio" emerge -1 media-sound/mpg123
 ```
+
+---
+
+目前已放弃 Gentoo，此文章结束

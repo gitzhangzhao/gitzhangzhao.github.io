@@ -1567,7 +1567,9 @@ image.ub: linux 的内核镜像，并且打包了设备树文件 plnx_arm-system
 </span></span><span class="line"><span class="cl"><span class="nv">USE</span><span class="o">=</span><span class="s2">&#34;pulseaudio&#34;</span> emerge -1 media-sound/mpg123
 </span></span></code></pre></td></tr></table>
 </div>
-</div>]]></description>
+</div><hr>
+<p>目前已放弃 Gentoo，此文章结束</p>
+]]></description>
 </item>
 </channel>
 </rss>
