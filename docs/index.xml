@@ -816,7 +816,7 @@ image.ub: linux 的内核镜像，并且打包了设备树文件 plnx_arm-system
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-tcl" data-lang="tcl"><span class="line"><span class="cl"><span class="nv">set_property</span> PACKAGE_PIN R19 <span class="k">[</span><span class="nv">get_ports</span> <span class="k">{</span><span class="nv">gpio_out</span><span class="k">}]</span> <span class="err">#</span> R19<span class="err">引脚连接板上的</span>led<span class="err">灯</span>
+<pre tabindex="0" class="chroma"><code class="language-tcl" data-lang="tcl"><span class="line"><span class="cl"><span class="nv">set_property</span> PACKAGE_PIN R19 <span class="k">[</span><span class="nv">get_ports</span> <span class="k">{</span><span class="nv">gpio_out</span><span class="k">}]</span> <span class="err">#</span> R19引脚连接板上的led灯
 </span></span><span class="line"><span class="cl"><span class="nv">set_property</span> IOSTANDARD LVCMOS33 <span class="k">[</span><span class="nv">get_ports</span> <span class="k">{</span><span class="nv">gpio_out</span><span class="k">}]</span>
 </span></span></code></pre></td></tr></table>
 </div>
@@ -979,7 +979,7 @@ image.ub: linux 的内核镜像，并且打包了设备树文件 plnx_arm-system
 </span></span><span class="line"><span class="cl"><span class="p">#</span> <span class="err">将寄存器的第</span><span class="mh">0</span><span class="err">位连接到输出信号</span>
 </span></span><span class="line"><span class="cl"><span class="k">assign</span> <span class="n">test_out</span> <span class="o">=</span> <span class="n">slv_reg0</span><span class="p">[</span><span class="mh">0</span><span class="p">];</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="p">#</span> <span class="err">将总线模块打包，在</span><span class="n">test</span><span class="err">中调用</span><span class="n">AXI</span><span class="err">总线，添加一个输出信号</span><span class="n">test_out</span>
+</span></span><span class="line"><span class="cl"><span class="p">#</span> <span class="err">将总线模块打包，在</span><span class="n">test中调用AXI总线</span><span class="err">，添加一个输出信号</span><span class="n">test_out</span>
 </span></span><span class="line"><span class="cl"><span class="n">myip_v1_0_S00_AXI</span> <span class="p">#</span> <span class="p">(</span>
 </span></span><span class="line"><span class="cl">		<span class="p">.</span><span class="n">C_S_AXI_DATA_WIDTH</span><span class="p">(</span><span class="n">C_S00_AXI_DATA_WIDTH</span><span class="p">),</span>
 </span></span><span class="line"><span class="cl">		<span class="p">.</span><span class="n">C_S_AXI_ADDR_WIDTH</span><span class="p">(</span><span class="n">C_S00_AXI_ADDR_WIDTH</span><span class="p">)</span>
@@ -1008,10 +1008,10 @@ image.ub: linux 的内核镜像，并且打包了设备树文件 plnx_arm-system
 </span></span><span class="line"><span class="cl">		<span class="p">.</span><span class="n">test_out</span><span class="p">(</span><span class="n">test_out</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">	<span class="p">);</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="p">#</span> <span class="err">修改</span><span class="n">wrapper</span><span class="err">添加输出信号</span>
+</span></span><span class="line"><span class="cl"><span class="p">#</span> <span class="err">修改</span><span class="n">wrapper添加输出信号</span>
 </span></span><span class="line"><span class="cl"><span class="k">output</span> <span class="kt">wire</span> <span class="n">test_out</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="p">#</span> <span class="err">绑定输出信号到</span><span class="n">led</span><span class="err">灯相连的引脚</span>
+</span></span><span class="line"><span class="cl"><span class="p">#</span> <span class="err">绑定输出信号到</span><span class="n">led灯相连的引脚</span>
 </span></span><span class="line"><span class="cl"><span class="n">set_property</span> <span class="n">PACKAGE_PIN</span> <span class="n">R19</span> <span class="p">[</span><span class="n">get_ports</span> <span class="p">{</span><span class="n">test_out</span><span class="p">}]</span>
 </span></span><span class="line"><span class="cl"><span class="n">set_property</span> <span class="n">IOSTANDARD</span> <span class="n">LVCMOS33</span> <span class="p">[</span><span class="n">get_ports</span> <span class="p">{</span><span class="n">test_out</span><span class="p">}]</span>
 </span></span></code></pre></td></tr></table>
@@ -1170,25 +1170,25 @@ image.ub: linux 的内核镜像，并且打包了设备树文件 plnx_arm-system
 </span></span><span class="line"><span class="cl">        <span class="p">#</span> <span class="err">写时钟：</span><span class="n">FCLK_CLK0</span>
 </span></span><span class="line"><span class="cl">        <span class="p">.</span><span class="n">BRAM_PORTA_0_clk</span><span class="p">(</span><span class="n">s00_axi_aclk_0_1</span><span class="p">),</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">        <span class="p">#</span> <span class="err">写数据：</span><span class="mh">16</span><span class="n">bit</span><span class="err">数据</span>
+</span></span><span class="line"><span class="cl">        <span class="p">#</span> <span class="err">写数据：</span><span class="mh">16</span><span class="n">bit数据</span>
 </span></span><span class="line"><span class="cl">        <span class="p">.</span><span class="n">BRAM_PORTA_0_din</span><span class="p">(</span><span class="n">AXI_Lite_register02</span><span class="p">[</span><span class="mh">15</span><span class="o">:</span><span class="mh">0</span><span class="p">]),</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">        <span class="p">#</span> <span class="n">PORTA</span><span class="err">使能</span>
+</span></span><span class="line"><span class="cl">        <span class="p">#</span> <span class="n">PORTA使能</span>
 </span></span><span class="line"><span class="cl">        <span class="p">.</span><span class="n">BRAM_PORTA_0_en</span><span class="p">(</span><span class="mh">1</span><span class="mb">&#39;b1</span><span class="p">),</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">        <span class="p">#</span> <span class="n">PORTA</span><span class="err">写使能</span>
+</span></span><span class="line"><span class="cl">        <span class="p">#</span> <span class="n">PORTA写使能</span>
 </span></span><span class="line"><span class="cl">        <span class="p">.</span><span class="n">BRAM_PORTA_0_we</span><span class="p">(</span><span class="mh">1</span><span class="mb">&#39;b1</span><span class="p">),</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">        <span class="p">#</span> <span class="n">PORTB</span><span class="err">读地址</span>
+</span></span><span class="line"><span class="cl">        <span class="p">#</span> <span class="n">PORTB读地址</span>
 </span></span><span class="line"><span class="cl">        <span class="p">.</span><span class="n">BRAM_PORTB_0_addr</span><span class="p">(</span><span class="n">AXI_Lite_register03</span><span class="p">[</span><span class="mh">7</span><span class="o">:</span><span class="mh">0</span><span class="p">]),</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">        <span class="p">#</span> <span class="n">PORTB</span><span class="err">读时钟</span>
+</span></span><span class="line"><span class="cl">        <span class="p">#</span> <span class="n">PORTB读时钟</span>
 </span></span><span class="line"><span class="cl">        <span class="p">.</span><span class="n">BRAM_PORTB_0_clk</span><span class="p">(</span><span class="n">s00_axi_aclk_0_1</span><span class="p">),</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">        <span class="p">#</span> <span class="n">PORTB</span><span class="err">读数据</span>
+</span></span><span class="line"><span class="cl">        <span class="p">#</span> <span class="n">PORTB读数据</span>
 </span></span><span class="line"><span class="cl">        <span class="p">.</span><span class="n">BRAM_PORTB_0_dout</span><span class="p">(</span><span class="n">w_ramout</span><span class="p">[</span><span class="mh">15</span><span class="o">:</span><span class="mh">0</span><span class="p">]),</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">        <span class="p">#</span> <span class="n">PORTB</span><span class="err">读使能</span>
+</span></span><span class="line"><span class="cl">        <span class="p">#</span> <span class="n">PORTB读使能</span>
 </span></span><span class="line"><span class="cl">        <span class="p">.</span><span class="n">BRAM_PORTB_0_en</span><span class="p">(</span><span class="mh">1</span><span class="mb">&#39;b1</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">    <span class="p">);</span>
@@ -1531,8 +1531,8 @@ image.ub: linux 的内核镜像，并且打包了设备树文件 plnx_arm-system
 </span></span><span class="line"><span class="cl"><span class="p">(</span><span class="nx">media</span><span class="o">-</span><span class="nx">libs</span><span class="o">/</span><span class="nx">libsndfile</span><span class="o">-</span><span class="mf">1.2.0</span><span class="p">:</span><span class="mi">0</span><span class="o">/</span><span class="mi">0</span><span class="p">::</span><span class="nx">gentoo</span><span class="p">,</span> <span class="nx">ebuild</span> <span class="nx">scheduled</span> <span class="k">for</span> <span class="nx">merge</span><span class="p">)</span> <span class="nx">depends</span> <span class="nf">on</span>
 </span></span><span class="line"><span class="cl"> <span class="p">(</span><span class="nx">media</span><span class="o">-</span><span class="nx">sound</span><span class="o">/</span><span class="nx">mpg123</span><span class="o">-</span><span class="mf">1.31.3</span><span class="p">:</span><span class="mi">0</span><span class="o">/</span><span class="mi">0</span><span class="p">::</span><span class="nx">gentoo</span><span class="p">,</span> <span class="nx">ebuild</span> <span class="nx">scheduled</span> <span class="k">for</span> <span class="nx">merge</span><span class="p">)</span> <span class="p">(</span><span class="nx">buildtime_slot_op</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">  <span class="p">(</span><span class="nx">media</span><span class="o">-</span><span class="nx">sound</span><span class="o">/</span><span class="nx">pulseaudio</span><span class="o">-</span><span class="mf">16.1</span><span class="p">:</span><span class="mi">0</span><span class="o">/</span><span class="mi">0</span><span class="p">::</span><span class="nx">gentoo</span><span class="p">,</span> <span class="nx">ebuild</span> <span class="nx">scheduled</span> <span class="k">for</span> <span class="nx">merge</span><span class="p">)</span> <span class="p">(</span><span class="nx">buildtime</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"> <span class="err"> </span> <span class="p">(</span><span class="nx">media</span><span class="o">-</span><span class="nx">libs</span><span class="o">/</span><span class="nx">libpulse</span><span class="o">-</span><span class="mf">16.1</span><span class="o">-</span><span class="nx">r2</span><span class="p">:</span><span class="mi">0</span><span class="o">/</span><span class="mi">0</span><span class="p">::</span><span class="nx">gentoo</span><span class="p">,</span> <span class="nx">ebuild</span> <span class="nx">scheduled</span> <span class="k">for</span> <span class="nx">merge</span><span class="p">)</span> <span class="p">(</span><span class="nx">buildtime</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"> <span class="err"> </span>  <span class="p">(</span><span class="nx">media</span><span class="o">-</span><span class="nx">libs</span><span class="o">/</span><span class="nx">libsndfile</span><span class="o">-</span><span class="mf">1.2.0</span><span class="p">:</span><span class="mi">0</span><span class="o">/</span><span class="mi">0</span><span class="p">::</span><span class="nx">gentoo</span><span class="p">,</span> <span class="nx">ebuild</span> <span class="nx">scheduled</span> <span class="k">for</span> <span class="nx">merge</span><span class="p">)</span> <span class="p">(</span><span class="nx">buildtime</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">   <span class="p">(</span><span class="nx">media</span><span class="o">-</span><span class="nx">libs</span><span class="o">/</span><span class="nx">libpulse</span><span class="o">-</span><span class="mf">16.1</span><span class="o">-</span><span class="nx">r2</span><span class="p">:</span><span class="mi">0</span><span class="o">/</span><span class="mi">0</span><span class="p">::</span><span class="nx">gentoo</span><span class="p">,</span> <span class="nx">ebuild</span> <span class="nx">scheduled</span> <span class="k">for</span> <span class="nx">merge</span><span class="p">)</span> <span class="p">(</span><span class="nx">buildtime</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">(</span><span class="nx">media</span><span class="o">-</span><span class="nx">libs</span><span class="o">/</span><span class="nx">libsndfile</span><span class="o">-</span><span class="mf">1.2.0</span><span class="p">:</span><span class="mi">0</span><span class="o">/</span><span class="mi">0</span><span class="p">::</span><span class="nx">gentoo</span><span class="p">,</span> <span class="nx">ebuild</span> <span class="nx">scheduled</span> <span class="k">for</span> <span class="nx">merge</span><span class="p">)</span> <span class="p">(</span><span class="nx">buildtime</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="err">​</span>
 </span></span><span class="line"><span class="cl"><span class="nx">It</span> <span class="nx">might</span> <span class="nx">be</span> <span class="nx">possible</span> <span class="nx">to</span> <span class="k">break</span> <span class="nx">this</span> <span class="nx">cycle</span>
 </span></span><span class="line"><span class="cl"><span class="nx">by</span> <span class="nx">applying</span> <span class="nx">any</span> <span class="nx">of</span> <span class="nx">the</span> <span class="nx">following</span> <span class="nx">changes</span><span class="p">:</span>
@@ -1570,7 +1570,9 @@ image.ub: linux 的内核镜像，并且打包了设备树文件 plnx_arm-system
 </span></span></code></pre></td></tr></table>
 </div>
 </div><hr>
-<p>目前已放弃 Gentoo，此文章结束</p>
+<hr>
+<hr>
+<p><strong>由于日常维护和debug太耗时，目前已放弃 Gentoo，此文章结束</strong></p>
 ]]></description>
 </item>
 </channel>

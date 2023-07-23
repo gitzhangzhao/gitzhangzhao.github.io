@@ -195,6 +195,8 @@ USE="pulseaudio" emerge -1 media-sound/mpg123
 ```
 
 ---
+---
+---
 
-目前已放弃 Gentoo，此文章结束
+**由于日常维护和debug太耗时，目前已放弃 Gentoo，此文章结束**
 
