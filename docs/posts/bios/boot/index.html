@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>Boot 过程分析 - 张昭的Blog</title><meta name="description" content="Welcome to Zhangzhao&#39;s blog."><meta property="og:title" content="Boot 过程分析" />
+<meta property="og:description" content="申明: 本文严禁任何组织或个人在CSDN上进行转载,其他平台转载需经作者授权 启动过程完整分析 本篇文章详细完整的讨论现代处理器 boot 的过程，主要面向" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://gitzhangzhao.github.io/posts/bios/boot/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2023-08-04T14:00:29+08:00" />
+<meta property="article:modified_time" content="2023-08-04T14:00:29+08:00" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Boot 过程分析"/>
+<meta name="twitter:description" content="申明: 本文严禁任何组织或个人在CSDN上进行转载,其他平台转载需经作者授权 启动过程完整分析 本篇文章详细完整的讨论现代处理器 boot 的过程，主要面向"/>
+<meta name="application-name" content="张昭的Blog">
+<meta name="apple-mobile-web-app-title" content="张昭的Blog"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="http://gitzhangzhao.github.io/posts/bios/boot/" /><link rel="prev" href="http://gitzhangzhao.github.io/posts/petalinux/petalinux_3/" /><link rel="stylesheet" href="/css/page.min.css"><link rel="stylesheet" href="/css/home.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Boot 过程分析",
+        "inLanguage": "zh-cn",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "http:\/\/gitzhangzhao.github.io\/posts\/bios\/boot\/"
+        },"genre": "posts","keywords": "","wordcount":  961 ,
+        "url": "http:\/\/gitzhangzhao.github.io\/posts\/bios\/boot\/","datePublished": "2023-08-04T14:00:29+08:00","dateModified": "2023-08-04T14:00:29+08:00","publisher": {
+            "@type": "Organization",
+            "name": "张昭"},"author": {
+                "@type": "Person",
+                "name": "张昭"
+            },"description": ""
+    }
+    </script></head><body data-header-desktop="auto" data-header-mobile="auto"><script>(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : '' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="张昭的Blog">张昭的Blog</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> 文章 </a><a class="menu-item" href="/tags/"> 标签 </a><a class="menu-item" href="/categories/"> 分类 </a><a class="menu-item" href="/about/"> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="#" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="#" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="#" onclick="return false;" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="张昭的Blog">张昭的Blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="#" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="#" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="#" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="">文章</a><a class="menu-item" href="/tags/" title="">标签</a><a class="menu-item" href="/categories/" title="">分类</a><a class="menu-item" href="/about/" title="">关于</a><div class="menu-item"><a href="#" onclick="return false;" class="theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div></div>
+    </div>
+</header><div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single" data-toc="enable"><div class="single-card" ><h2 class="single-title animated flipInX">Boot 过程分析</h2><div class="post-meta">
+                <div class="post-meta-line"><span class="post-author"><a href="https://github.com/gitzhangzhao" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle fa-fw"></i>张昭</a></span>&nbsp;<span class="post-category">出版于  <a href="/categories/"><i class="far fa-folder fa-fw"></i>Categories</a></span></div>
+                <div class="post-meta-line"><span><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2023-08-04">2023-08-04</time></span>&nbsp;<span><i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 961 字</span>&nbsp;
+                    <span><i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 2 分钟</span>&nbsp;</div>
+            </div>
+            
+            <hr><div class="details toc" id="toc-static"  data-kept="">
+                    <div class="details-summary toc-title">
+                        <span>目录</span>
+                        <span><i class="details-icon fas fa-angle-right"></i></span>
+                    </div>
+                    <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#启动过程完整分析">启动过程完整分析</a>
+      <ul>
+        <li><a href="#after-cpu-加电或-reset-后到-bios-执行之前的阶段">After CPU 加电或 Reset 后，到 BIOS 执行之前的阶段</a>
+          <ul>
+            <li><a href="#1-cpu-自检">1. CPU 自检</a></li>
+            <li><a href="#2-设置-cpu-寄存器">2. 设置 CPU 寄存器</a></li>
+            <li><a href="#3-load-bios">3. Load BIOS</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+                </div><div class="content" id="content"><p><em><strong>申明: 本文严禁任何组织或个人在CSDN上进行转载,其他平台转载需经作者授权</strong></em></p>
+<h1 id="启动过程完整分析">启动过程完整分析</h1>
+<p>本篇文章详细完整的讨论现代处理器 boot 的过程，主要面向对象为 Intel、AMD 的 X86 架构和大部分 ARM 处理器架构</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="1"
+        data-srcset="1, 1 1.5x, 1 2x"
+        data-sizes="auto"
+        alt="1"
+        title="1" /></p>
+<pre><code>&gt; **前置概念**
+
+&gt; CPU 的引脚宝贵，只能用来连接高速设备（包括 Memory 和 PCIE 设备），原本通过北桥芯片来连接。但是目前，北桥芯片（用来连接内存和高速 PCIE）已经被集成进 CPU 中
+
+&gt; 低速的 IO（USB、SATA、eSPI 等）和其余的 PCIE 设备，不会直连 CPU 的，而是通过南桥芯片（PCH）来连接。PCH 是一块 IO 密集型芯片，BMC 芯片和 BIOS 芯片也是连接在 PCH 上的。然后 PCH 通过高速串行的总线 DMI 来和 CPU 连接，这样的目的是节约 CPU 的引脚（本质上是引脚复用）
+</code></pre>
+<h2 id="after-cpu-加电或-reset-后到-bios-执行之前的阶段">After CPU 加电或 Reset 后，到 BIOS 执行之前的阶段</h2>
+<h3 id="1-cpu-自检">1. CPU 自检</h3>
+<pre><code>CPU 进行自身硬件初始化。初始化完成后，CPU 被设置为实地址模式，地址无分页。所有寄存器被初始化为特定的值， Cache、TLB（Translation Lookup Table）、BLB（Branch Target Buffer）这三个部件的内容被清空（Invalidate）
+</code></pre>
+<h3 id="2-设置-cpu-寄存器">2. 设置 CPU 寄存器</h3>
+<pre><code>寄存器 EIP（Instruction Pointer）、CS（Code Segment）被设置为 0x0000FFF0 和 0xFFFF0000。在实地址模式下（寄存器字长为 16 位），指令的物理地址是 CS &lt;&lt; 4 + EIP。CPU 根据硬件设计，计算出第一条指令的地址：0xFFFF0000+0xFFF0 = 0xFFFFFFF0。随后，CPU 会从这个地址取指令并执行，需要在这个地址存放 BIOS 的代码
+</code></pre>
+<h3 id="3-load-bios">3. Load BIOS</h3>
+<pre><code>现在的问题是：在上电启动后，CPU 外围设备包括内存初始化还没有进行，没有内存可供使用，虽然有可以直接使用 Cache 替代内存的方法(Cache As RAM，CAR)，但总是没有直接用起来方便
+
+但是，BIOS 代码是存放在一块 NOR Flash 中的，这块 Flash 在主板上通过 SPI 总线与 PCH 相连。NOR Flash 和我们用在 SSD 里面的 Flash 一个显著的不同就是它是字节寻址的，而不是块寻址。这就意味着它可以 XIP（eXecute in place），直接执行代码而不需要先 copy 到内存中
+
+随后，CPU 去寻址 0xFFFFFFF0，PCH 的 SPI 总线默认 decode 该地址，从 Flash 芯片取指令；SPI 控制器响应 Flash 并返回内容给 DMI 总线（连接 PCH 和 CPU 的总线）；DMI 总线将指令给 CPU，开始解码执行。随后，通过这种方式一点一点 decode 运行，这个过程通常又称为 shadow
+
+---
+
+待续
+
+[1]: https://pic.imgdb.cn/item/64ccb42f1ddac507cc7bf288.png
+</code></pre>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info"><div class="post-info-tag"><span><a href="/tags/">Tags</a>
+                </span></div><div class="post-info-line"><div class="post-info-mod">
+                <span>更新于 2023-08-04</span>
+            </div><div class="post-info-mod"><span>
+                            <a class="link-to-markdown" href="/posts/bios/boot/index.md" target="_blank">阅读原始文档</a>
+                        </span></div>
+        </div><div class="post-info-share">
+            <span><a href="#" onclick="return false;" title="分享到 Twitter" data-sharer="twitter" data-url="http://gitzhangzhao.github.io/posts/bios/boot/" data-title="Boot 过程分析" data-hashtags=""><i class="fab fa-twitter fa-fw"></i></a><a href="#" onclick="return false;" title="分享到 Facebook" data-sharer="facebook" data-url="http://gitzhangzhao.github.io/posts/bios/boot/" data-hashtag=""><i class="fab fa-facebook-square fa-fw"></i></a></span>
+        </div></div><div class="post-nav"><a href="/posts/petalinux/petalinux_3/" class="prev" rel="prev" title="Petalinux(三)：完全使用手册"><i class="fas fa-angle-left fa-fw"></i>Previous Post</a></div></div>
+</div></article></div>
+            </main>
+            <footer class="footer"><div class="footer-container"><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2023</span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+</div>
+<script>
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker
+        .register('/sw.min.js?version=0.0.1', { scope: '/' })
+        .then(() => {
+            console.info('张昭的Blog\u00A0Service Worker Registered');
+        }, err => console.error('张昭的Blog\u00A0Service Worker registration failed: ', err));
+
+    navigator.serviceWorker
+        .ready
+        .then(() => {
+            console.info('张昭的Blog\u00A0Service Worker Ready');
+        });
+}
+</script>
+</footer>
+        </div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-chevron-up fa-fw"></i>
+            </a></div><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><link rel="stylesheet" href="/lib/katex/katex.min.css"><link rel="stylesheet" href="/lib/katex/copy-tex.min.css"><script src="https://polyfill.io/v3/polyfill.min.js?features=Array.prototype.fill%2CArray.prototype.find%2CArray.from%2CIntersectionObserver%2CMath.sign%2CObject.assign%2CPromise%2CObject.entries%2Chtml5shiv%2CObject.values%2Cfetch%2CElement.prototype.after"></script><script src="/lib/autocomplete/autocomplete.min.js"></script><script src="/lib/lunr/lunr.min.js"></script><script src="/lib/lunr/lunr.stemmer.support.min.js"></script><script src="/lib/lunr/lunr.zh.min.js"></script><script src="/lib/lazysizes/lazysizes.min.js"></script><script src="/lib/clipboard/clipboard.min.js"></script><script src="/lib/sharer/sharer.min.js"></script><script src="/lib/katex/katex.min.js"></script><script src="/lib/katex/auto-render.min.js"></script><script src="/lib/katex/copy-tex.min.js"></script><script src="/lib/katex/mhchem.min.js"></script><script>window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":20},"comment":{},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"highlightTag":"em","lunrIndexURL":"/index.json","lunrLanguageCode":"zh","lunrSegmentitURL":"/lib/lunr/lunr.segmentit.js","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"lunr"}};</script><script src="/js/theme.min.js"></script></body></html>
