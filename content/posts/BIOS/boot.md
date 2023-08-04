@@ -3,8 +3,9 @@ title: "Boot 过程分析"
 date: 2023-08-04T14:00:29+08:00
 draft: false
 math: true
-tags: [""]
-categories: [""]
+tags: ["BIOS","UEFI","X86","Boot"]
+categories: ["BIOS"]
+summary: "BIOS has now evolved into UEFI"
 ---
 ***申明: 本文严禁任何组织或个人在CSDN上进行转载,其他平台转载需经作者授权***
 
