@@ -41,4 +41,4 @@ summary: "BIOS has now evolved into UEFI"
 
 待续
 
-[1]: https://pic.imgdb.cn/item/64ccb42f1ddac507cc7bf288.png
+[1]: https://pic.imgdb.cn/item/64ccbcdf1ddac507cc907466.png
