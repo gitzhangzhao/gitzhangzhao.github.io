@@ -9,7 +9,7 @@
 <meta property="og:type" content="article" />
 <meta property="og:url" content="http://gitzhangzhao.github.io/posts/bios/uefi_1/" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2023-08-08T17:50:12+08:00" />
-<meta property="article:modified_time" content="2023-08-08T17:50:12+08:00" />
+<meta property="article:modified_time" content="2023-08-08T17:55:45+08:00" />
 <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="理解 UEFI 中的面向对象"/>
 <meta name="twitter:description" content="UEFI 系列第一篇"/>
@@ -25,8 +25,8 @@
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "http:\/\/gitzhangzhao.github.io\/posts\/bios\/uefi_1\/"
-        },"genre": "posts","keywords": "BIOS, UEFI, EDK2","wordcount":  2801 ,
-        "url": "http:\/\/gitzhangzhao.github.io\/posts\/bios\/uefi_1\/","datePublished": "2023-08-08T17:50:12+08:00","dateModified": "2023-08-08T17:50:12+08:00","publisher": {
+        },"genre": "posts","keywords": "BIOS, UEFI, EDK2","wordcount":  2798 ,
+        "url": "http:\/\/gitzhangzhao.github.io\/posts\/bios\/uefi_1\/","datePublished": "2023-08-08T17:50:12+08:00","dateModified": "2023-08-08T17:55:45+08:00","publisher": {
             "@type": "Organization",
             "name": "张昭"},"author": {
                 "@type": "Person",
@@ -100,7 +100,7 @@
             <div class="toc-content" id="toc-content-auto"></div>
         </div><article class="page single" data-toc="enable"><div class="single-card" ><h2 class="single-title animated flipInX">理解 UEFI 中的面向对象</h2><div class="post-meta">
                 <div class="post-meta-line"><span class="post-author"><a href="https://github.com/gitzhangzhao" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle fa-fw"></i>张昭</a></span>&nbsp;<span class="post-category">出版于  <a href="/categories/bios/"><i class="far fa-folder fa-fw"></i>BIOS</a></span></div>
-                <div class="post-meta-line"><span><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2023-08-08">2023-08-08</time></span>&nbsp;<span><i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 2801 字</span>&nbsp;
+                <div class="post-meta-line"><span><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2023-08-08">2023-08-08</time></span>&nbsp;<span><i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 2798 字</span>&nbsp;
                     <span><i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 6 分钟</span>&nbsp;</div>
             </div>
             
@@ -119,7 +119,9 @@
   </ul>
 </nav></div>
                 </div><div class="content" id="content"><p><em><strong>申明: 本文严禁任何组织或个人在CSDN上进行转载,其他平台转载需经作者授权</strong></em></p>
+<blockquote>
 <p>UEFI 并不是一个面向对象的系统，它是基于 C 语言的，C 语言是一种过程式语言。然而，UEFI 使用了一些设计模式和技术来模拟面向对象编程的某些特性，如封装、抽象和多态</p>
+</blockquote>
 <ol>
 <li>封装：UEFI 使用结构体（struct）来封装数据和操作数据的函数。例如，每个 UEFI 协议都定义为一个结构体，其中包含一组函数指针，这些函数提供了协议的行为。这种方式类似于面向对象编程中的类和方法（Kernel 中也是类似）</li>
 <li>抽象：UEFI 使用接口（协议）来定义可以由多个不同的实现提供的行为。这类似于面向对象编程中的接口或抽象类</li>
@@ -270,10 +272,16 @@
 <p>还有一个概念，就是 GUID，<strong>每个协议接口都由一个全局唯一标识符（GUID）来标识</strong>。当一个驱动程序或应用程序想要使用一个特定的协议接口时，它需要通过 GUID 来查找这个协议接口。这个过程通常是通过调用 LocateProtocol 或 OpenProtocol 这样的 UEFI 服务来完成的。例如，如果一个驱动程序想要使用 EFI_SIMPLE_TEXT_INPUT_PROTOCOL（这是一个用于从键盘读取输入的协议），它需要先获取这个协议的 GUID，然后调用 LocateProtocol 函数，传入这个 GUID 作为参数。如果成功，LocateProtocol 函数会返回一个指向 EFI_SIMPLE_TEXT_INPUT_PROTOCOL 接口的指针，然后驱动程序就可以通过这个指针来调用协议的函数。这种通过 GUID 来访问协议接口的机制使得 UEFI 可以在运行时动态地添加、删除和查找协议接口，这是一种非常灵活和强大的设计</p>
 <p>根据此前的分析：在 UEFI 中，一个句柄（Handle）可以关联多个协议接口（Protocol Interface），这些协议接口被组织成一个链表，这个链表可以通过句柄的 Protocols 成员来访问。然而，在实际的使用中，通常不会直接操作这个链表。相反，UEFI 提供了一组服务，如 LocateProtocol 和 OpenProtocol，这些服务可以根据 GUID 来查找协议接口，这使得查找协议接口变得更加简单和安全。总的来说，虽然可以直接通过句柄的 Protocols 成员来访问所有的协议接口，但在实际的使用中，通常会通过 UEFI 提供的服务来查找和访问协议接口</p>
 <p><strong>以上的概念用下图来描述：</strong></p>
-<p>![][1]</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://pic.imgdb.cn/item/64d206df1ddac507ccefe33b.jpg"
+        data-srcset="https://pic.imgdb.cn/item/64d206df1ddac507ccefe33b.jpg, https://pic.imgdb.cn/item/64d206df1ddac507ccefe33b.jpg 1.5x, https://pic.imgdb.cn/item/64d206df1ddac507ccefe33b.jpg 2x"
+        data-sizes="auto"
+        alt="https://pic.imgdb.cn/item/64d206df1ddac507ccefe33b.jpg"
+        title="https://pic.imgdb.cn/item/64d206df1ddac507ccefe33b.jpg" /></p>
 <hr>
 <p>待续</p>
-<p>1: <a href="https://pic.imgdb.cn/item/64d206df1ddac507ccefe33b.jpg" target="_blank" rel="noopener noreffer">https://pic.imgdb.cn/item/64d206df1ddac507ccefe33b.jpg</a></p>
 </div><div class="post-footer" id="post-footer">
     <div class="post-info"><div class="post-info-tag"><span><a href="/tags/bios/">BIOS</a>
                 </span><span><a href="/tags/uefi/">UEFI</a>
