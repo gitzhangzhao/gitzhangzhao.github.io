@@ -3,7 +3,7 @@ title: "Boot 过程分析"
 date: 2023-08-04T14:00:29+08:00
 draft: false
 math: true
-tags: ["BIOS","UEFI","X86","Boot"]
+tags: ["BIOS","UEFI","X86","Boot","EDK2"]
 categories: ["BIOS"]
 summary: "BIOS has now evolved into UEFI"
 ---

@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>Petalinux(二)：远程启动 - 张昭的Blog</title><meta name="description" content="Welcome to Zhangzhao&#39;s blog."><meta property="og:title" content="Petalinux(二)：远程启动" />
+<meta property="og:description" content="With Petalinux, remote booting of embedded Linux systems on ZYNQ becomes a breeze" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://gitzhangzhao.github.io/posts/embedeedevr/petalinux/petalinux_2/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2023-06-19T11:48:55+08:00" />
+<meta property="article:modified_time" content="2023-06-19T11:48:55+08:00" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Petalinux(二)：远程启动"/>
+<meta name="twitter:description" content="With Petalinux, remote booting of embedded Linux systems on ZYNQ becomes a breeze"/>
+<meta name="application-name" content="张昭的Blog">
+<meta name="apple-mobile-web-app-title" content="张昭的Blog"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="http://gitzhangzhao.github.io/posts/embedeedevr/petalinux/petalinux_2/" /><link rel="prev" href="http://gitzhangzhao.github.io/posts/embedeedevr/petalinux/petalinux_1/" /><link rel="next" href="http://gitzhangzhao.github.io/posts/embedeedevr/petalinux/petalinux_3/" /><link rel="stylesheet" href="/css/page.min.css"><link rel="stylesheet" href="/css/home.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Petalinux(二)：远程启动",
+        "inLanguage": "zh-cn",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "http:\/\/gitzhangzhao.github.io\/posts\/embedeedevr\/petalinux\/petalinux_2\/"
+        },"genre": "posts","keywords": "Petalinux, ZYNQ, NFS","wordcount":  2708 ,
+        "url": "http:\/\/gitzhangzhao.github.io\/posts\/embedeedevr\/petalinux\/petalinux_2\/","datePublished": "2023-06-19T11:48:55+08:00","dateModified": "2023-06-19T11:48:55+08:00","publisher": {
+            "@type": "Organization",
+            "name": "张昭"},"author": {
+                "@type": "Person",
+                "name": "张昭"
+            },"description": ""
+    }
+    </script></head><body data-header-desktop="auto" data-header-mobile="auto"><script>(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : '' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="张昭的Blog">张昭的Blog</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> 文章 </a><a class="menu-item" href="/tags/"> 标签 </a><a class="menu-item" href="/categories/"> 分类 </a><a class="menu-item" href="/about/"> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="#" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="#" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="#" onclick="return false;" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="张昭的Blog">张昭的Blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="#" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="#" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="#" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="">文章</a><a class="menu-item" href="/tags/" title="">标签</a><a class="menu-item" href="/categories/" title="">分类</a><a class="menu-item" href="/about/" title="">关于</a><div class="menu-item"><a href="#" onclick="return false;" class="theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div></div>
+    </div>
+</header><div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single" data-toc="enable"><div class="single-card" ><h2 class="single-title animated flipInX">Petalinux(二)：远程启动</h2><div class="post-meta">
+                <div class="post-meta-line"><span class="post-author"><a href="https://github.com/gitzhangzhao" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle fa-fw"></i>张昭</a></span>&nbsp;<span class="post-category">出版于  <a href="/categories/embedded-evr/"><i class="far fa-folder fa-fw"></i>Embedded EVR</a></span></div>
+                <div class="post-meta-line"><span><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2023-06-19">2023-06-19</time></span>&nbsp;<span><i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 2708 字</span>&nbsp;
+                    <span><i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 6 分钟</span>&nbsp;</div>
+            </div>
+            
+            <hr><div class="details toc" id="toc-static"  data-kept="">
+                    <div class="details-summary toc-title">
+                        <span>目录</span>
+                        <span><i class="details-icon fas fa-angle-right"></i></span>
+                    </div>
+                    <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#1-目标">1. 目标</a></li>
+            <li><a href="#2-组成fsblu-bootkernel-和根文件系统">2. 组成：FSBL、U-Boot、kernel 和根文件系统</a></li>
+            <li><a href="#3-boot-所需文件的来源">3. BOOT 所需文件的来源</a></li>
+            <li><a href="#各种文件的组织方式">各种文件的组织方式</a>
+              <ul>
+                <li><a href="#boot-文件的打包">BOOT 文件的打包</a></li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <li><a href="#4-使用手动编译生成可远程启动的镜像文件">4. 使用手动编译生成可远程启动的镜像文件</a>
+          <ul>
+            <li><a href="#配置-u-boot-环境变量通过-tftp-启动-linux-kernel">配置 U-Boot 环境变量通过 tftp 启动 linux kernel</a></li>
+            <li><a href="#5-使用-petalinux-工具生成可远程启动镜像">5. 使用 petalinux 工具生成可远程启动镜像</a></li>
+            <li><a href="#6-配置-u-boot-启动-petalinux-编译的内核">6. 配置 U-Boot 启动 petalinux 编译的内核</a>
+              <ul>
+                <li><a href="#基本步骤">基本步骤</a></li>
+                <li><a href="#配置默认启动命令">配置默认启动命令</a></li>
+                <li><a href="#配置内核参数环境变量">配置内核参数环境变量</a></li>
+              </ul>
+            </li>
+            <li><a href="#挂载-nfs-文件系统">挂载 nfs 文件系统</a>
+              <ul>
+                <li><a href="#在挂载-nfs-时遇到问题内核启动报错">在挂载 nfs 时遇到问题：内核启动报错</a></li>
+                <li><a href="#不能成功挂载的原因">不能成功挂载的原因</a></li>
+                <li><a href="#解决方法">解决方法</a></li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+                </div><div class="content" id="content"><p><strong><em>申明: 本文严禁任何组织或个人在 CSDN 上进行转载，其他平台转载需经作者授权</em></strong></p>
+<blockquote>
+<p>对于 Linux 远程启动是很普遍的，在 Petalinux 上配置远程启动很简单，并且 Petalinux 会自动配置 U-Boot 变量并增加内核启动参数</p>
+</blockquote>
+<h3 id="1-目标">1. 目标</h3>
+<ul>
+<li>
+<p>内核文件通过 tftp 从 host 下载并启动，挂载的根文件系统为网络文件系统（nfs）</p>
+</li>
+<li>
+<p>基本过程：BOOT.BIN 文件包括了硬件 bit 流、FSBL 和 U-Boot，这个文件放在板卡的 tf 卡或者 QSPI Flash 中，用于启动 Linux 内核。Linux 内核和设备树文件 image.ub 放在 host 上的 tftpboot 目录，U-Boot 通过 tftp 下载内核镜像到内存中，并启动内核。内核启动后，挂载 host 上的 nfs 文件系统作为根文件系统</p>
+</li>
+</ul>
+<h3 id="2-组成fsblu-bootkernel-和根文件系统">2. 组成：FSBL、U-Boot、kernel 和根文件系统</h3>
+<ol>
+<li><strong>FSBL：</strong> 第二阶段引导文件，由 vivado 提供源码，用于在第一阶段引导代码（固定在芯片内的 rom 里）结束后，初始化一些 ZYNQ 常用的外设，由于是外部代码，可以根据需要自行修改</li>
+<li><strong>U-Boot：</strong> 第二阶段引导结束后将跳转执行 U-Boot，fsbl 没有远程拷贝的功能，所以 U-Boot 必须放置在板卡的可启动 ROM 内，主要为 TF 卡和 QSPI FLASH；U-Boot 具有板卡上大部分设备的驱动程序，可以配置网络，下载镜像并拷贝进内存中，最后跳转到内核的启动点</li>
+<li><strong>device tree：</strong> 设备树文件描述了硬件设备的信息，需要被 U-Boot 拷贝进内存并告诉内核地址，内核启动后读取设备树文件获取设备信息</li>
+<li><strong>Kernel：</strong> 内核镜像，有 uImage、zImage 等不同形式，具有不同的压缩方式与格式。U-Boot 支持各种形式的内核镜像，内核可以在本地部署也可以通过 tftp 或者 nfs 协议从 host 下载内核镜像，内核启动后初始化硬件并挂载根文件系统</li>
+<li><strong>根文件系统：</strong> 内核可以挂载本地 eMMC、TF 卡和远程 host 中的文件系统</li>
+</ol>
+<h3 id="3-boot-所需文件的来源">3. BOOT 所需文件的来源</h3>
+<ol>
+<li><strong>FSBL：</strong> 由 VIVADO SDK 工具提供，使用 make 编译</li>
+<li><strong>U-Boot：</strong> 由官方发布源码，Xilinx 添加一些独有驱动，在 Github Xilinx 代码仓库维护，使用 make 编译</li>
+<li><strong>Kernel：</strong> Linux 内核源码，使用 make 编译</li>
+<li><strong>device tree：</strong> 由内核提供一部分，Xilinx 提供一部分，用户也可以自行添加，使用内核工具中的设备树专用编译器编译</li>
+<li><strong>根文件系统：</strong> 不同发行版针对不同体系结构有不同的根文件系统，目录结构固定，直接解压到被挂载的根目录，不需要编译</li>
+</ol>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://pic.imgdb.cn/item/648845061ddac507cc672cbf.png"
+        data-srcset="https://pic.imgdb.cn/item/648845061ddac507cc672cbf.png, https://pic.imgdb.cn/item/648845061ddac507cc672cbf.png 1.5x, https://pic.imgdb.cn/item/648845061ddac507cc672cbf.png 2x"
+        data-sizes="auto"
+        alt="https://pic.imgdb.cn/item/648845061ddac507cc672cbf.png"
+        title="请输入图片描述" /></p>
+<h3 id="各种文件的组织方式">各种文件的组织方式</h3>
+<p>由于最终都是将各种镜像拷贝进内存，被在每一阶段的最后跳转到下一阶段的执行点，所以理论上 BOOT 的过程可以将各种文件放置在不同的位置，或者相同位置下的不同文件</p>
+<h4 id="boot-文件的打包">BOOT 文件的打包</h4>
+<ol>
+<li>FSBL、U-Boot、kernel、device tree 一起打包进 BOOT.BIN</li>
+<li>FSBL、U-Boot 打包进 BOOT.BIN，kernel 和 device tree 打包进 image.ub</li>
+<li>FSBL、U-Boot 打包进 BOOT.BIN，kernel 和 device tree 独立为 zImage 和 system.dtb</li>
+<li>在 2 或 3 的基础上，BOOT.BIN 放在本地，kernel 和 device tree 放在远端，U-Boot 通过 tftp 协议从网络下载 kernel 和 device tree</li>
+<li>在 2 或 3 的基础上，BOOT.BIN 放在本地，kernel 和 device tree 放在远端，U-Boot 通过 nfs 协议从网络下载 kernel 和 device tree</li>
+<li>在 1、2、3、4、5 的基础上，BOOT.BIN 可以放在 tf 卡的第一分区或者 QSPI Flash 中</li>
+<li>在 1、2、3、4、5、6 的基础上，根文件系统可以放在 tf 卡的非第一分区、eMMC 或通过 nfs 从网络挂载</li>
+</ol>
+<h2 id="4-使用手动编译生成可远程启动的镜像文件">4. 使用手动编译生成可远程启动的镜像文件</h2>
+<ul>
+<li>
+<p>使用手动编译 U-Boot 和 kernel 过程略</p>
+<h3 id="配置-u-boot-环境变量通过-tftp-启动-linux-kernel">配置 U-Boot 环境变量通过 tftp 启动 linux kernel</h3>
+<ul>
+<li>在 U-Boot 启动后，通过配置一些 U-Boot 环境变量来远程启动内核，这里假设内核和设备树文件放在 host 的/tftpboot 目录内</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 设置本机ip地址和host ip地址</span>
+</span></span><span class="line"><span class="cl">zynq&gt; setenv ipaddr 192.168.206.187
+</span></span><span class="line"><span class="cl">zynq&gt; setenv serverip 192.168.206.187
+</span></span><span class="line"><span class="cl"><span class="c1"># 将内核镜像zImage和设备树文件system.dtb通过tfpt下载进内存</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 将内核镜像下载到内存地址0x10000000</span>
+</span></span><span class="line"><span class="cl">zynq&gt; tftpboot <span class="m">10000000</span> zImage
+</span></span><span class="line"><span class="cl"><span class="c1"># 将设备树文件下载到内存地址</span>
+</span></span><span class="line"><span class="cl">zynq&gt; tftpboot <span class="m">10080000</span> system.dtb
+</span></span><span class="line"><span class="cl"><span class="c1"># 将地址传入bootz命令，启动zImage形式的内核</span>
+</span></span><span class="line"><span class="cl">zynq&gt; bootz <span class="m">10000000</span> - <span class="m">10080000</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>由于手动编译设备树和内核文件分离，而挂载文件系统部分相似，后续挂载 nfs 见下一章节介绍</li>
+</ul>
+<h3 id="5-使用-petalinux-工具生成可远程启动镜像">5. 使用 petalinux 工具生成可远程启动镜像</h3>
+<p>在执行 petalinux-config 命令需要修改的部分</p>
+<ol>
+<li>
+<p>修改 U-Boot 配置</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://pic.imgdb.cn/item/6488459c1ddac507cc6b7b93.png"
+        data-srcset="https://pic.imgdb.cn/item/6488459c1ddac507cc6b7b93.png, https://pic.imgdb.cn/item/6488459c1ddac507cc6b7b93.png 1.5x, https://pic.imgdb.cn/item/6488459c1ddac507cc6b7b93.png 2x"
+        data-sizes="auto"
+        alt="https://pic.imgdb.cn/item/6488459c1ddac507cc6b7b93.png"
+        title="请输入图片描述" /></p>
+</li>
+<li>
+<p>可以修改 netboot offset，即从远程下载镜像到内存中的地址偏移，远程 tftp server 的 IP 地址</p>
+</li>
+<li>
+<p>修改镜像打包相关配置</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://pic.imgdb.cn/item/648845c01ddac507cc6c988d.png"
+        data-srcset="https://pic.imgdb.cn/item/648845c01ddac507cc6c988d.png, https://pic.imgdb.cn/item/648845c01ddac507cc6c988d.png 1.5x, https://pic.imgdb.cn/item/648845c01ddac507cc6c988d.png 2x"
+        data-sizes="auto"
+        alt="https://pic.imgdb.cn/item/648845c01ddac507cc6c988d.png"
+        title="请输入图片描述" /></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://pic.imgdb.cn/item/648845e31ddac507cc6d7334.png"
+        data-srcset="https://pic.imgdb.cn/item/648845e31ddac507cc6d7334.png, https://pic.imgdb.cn/item/648845e31ddac507cc6d7334.png 1.5x, https://pic.imgdb.cn/item/648845e31ddac507cc6d7334.png 2x"
+        data-sizes="auto"
+        alt="https://pic.imgdb.cn/item/648845e31ddac507cc6d7334.png"
+        title="请输入图片描述" /></p>
+</li>
+<li>
+<p>build 整个系统</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">$ petalinux-build
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p>将编译后的输出文件打包成适合部署的格式</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 一般 BOOT.BIN 包含 fsbl 文件、bitstream 和 U-Boot 文件</span>
+</span></span><span class="line"><span class="cl">$ petalinux-package --boot --fsbl --fpga --u-boot --force
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+</ol>
+<ul>
+<li>
+<p>其余部分不需要修改，相关根文件系统挂载方式等等配置会生成相关内核参数，内核参数由 U-Boot 在启动时传递给内核</p>
+</li>
+<li>
+<p>这里和之前手动编译生成启动镜像不同，没有下载设备树文件 system.dtb，原因是使用 petalinux 打包的内核镜像 image.ub 中是包含了设备树文件的。因为 image.ub 文件是通过 mkimage 命令制作的，是将内核镜像 zImage 和设备树 system.dtb 打包到一起</p>
+</li>
+</ul>
+<h3 id="6-配置-u-boot-启动-petalinux-编译的内核">6. 配置 U-Boot 启动 petalinux 编译的内核</h3>
+<h4 id="基本步骤">基本步骤</h4>
+<ul>
+<li>
+<p>基本步骤和手动编译启动内核一致，在远程 host 上需要具有 nfs 服务器，配置好 nfs 目录，并将根文件系统解压进该目录</p>
+</li>
+<li>
+<p>在设置 IP 地址这一步，U-Boot 会先通过 DHCP 从 server 申请 IP 地址，如果 server 上有 DHCP 服务器，U-Boot 就会自动设置 ipaddr 这个环境变量，可以通过 printenv 打印出所有环境变量，serverip 这个环境变量是在 petalinux 配置阶段设置的</p>
+</li>
+<li>
+<p>netboot 这个环境变量是 U-Boot 设置的，为 <code>tfptboot ${netstart} ${kernel_img} &amp;&amp; bootm</code>, 其中 kernel_img 就是 image.ub</p>
+</li>
+<li>
+<p>步骤：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"> <span class="c1"># 设置本机 ip 地址和 host ip 地址</span>
+</span></span><span class="line"><span class="cl"> zynq&gt; setenv ipaddr 192.168.138.2
+</span></span><span class="line"><span class="cl"> zynq&gt; setenv servimagee通过 tfpt 下载进内存
+</span></span><span class="line"><span class="cl"> <span class="c1"># netboot 这个环境变量是 U-Boot 设置的，为 tfptboot ${netstart} ${kernel_img} &amp;&amp; bootm, 其中 kernel_img 就是 image.ub</span>
+</span></span><span class="line"><span class="cl"> zynq&gt; run netboot
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+</ul>
+<h4 id="配置默认启动命令">配置默认启动命令</h4>
+<ul>
+<li>
+<p>设置 U-Boot 默认命令，U-Boot 启动后会先配置网络，网络配置完成后就会进入倒计时，倒计时结束执行 bootcmd 中的命令，如果想自动 boot，只需要</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">zynq&gt; setenv bootcmd run netboot
+</span></span><span class="line"><span class="cl"><span class="c1"># 保存所有环境变量到 qspi</span>
+</span></span><span class="line"><span class="cl">zynq&gt; saveenv
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+</ul>
+<h4 id="配置内核参数环境变量">配置内核参数环境变量</h4>
+<ul>
+<li>在设备树文件中有一个 chosen 字段，里面设置了内核参数变量 bootargs，U-Boot 中如果不手动配置这个变量，使用的是设备树文件中的内核参数，但是 U-Boot 中的 bootargs 环境变量具有最高优先级</li>
+</ul>
+<h3 id="挂载-nfs-文件系统">挂载 nfs 文件系统</h3>
+<ul>
+<li>
+<p>决定根文件系统的方式主要是内核的启动参数，配置从 nfs 挂载，bootargs 应该被设置为</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># petalinux会根据选项自动配置该变量</span>
+</span></span><span class="line"><span class="cl">zynq&gt; setenv bootargs ‘console<span class="o">=</span>ttyPS0,115200 <span class="nv">root</span><span class="o">=</span>/dev/nfs rw <span class="nv">nfsroot</span><span class="o">=</span>192.168.138.1:/home/zynq/linux/nfs/rootfs,tcp <span class="nv">ip</span><span class="o">=</span>dhcp’
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p>这个环境变量意义是，根文件系统使用 nfs 的方式以 rw 挂载，根文件系统目录在 <code>192.168.138.1:/home/zynq/linux/nfs/rootfs</code>，本机 ip 地址配置为 dhcp 方式从 server 获取</p>
+</li>
+<li>
+<p>内核启动后会自动挂载 nfs 文件系统，如果挂载成功，内核就会启动完成</p>
+</li>
+</ul>
+<h4 id="在挂载-nfs-时遇到问题内核启动报错">在挂载 nfs 时遇到问题：内核启动报错</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">VFS: Unable to mount root fs via NFS, trying floppy.
+</span></span><span class="line"><span class="cl">VFS: Cannot open root device <span class="s2">&#34;nfs&#34;</span> or unknown-block<span class="o">(</span>2,0<span class="o">)</span>: error -6
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="不能成功挂载的原因">不能成功挂载的原因</h4>
+<ol>
+<li>防火墙问题</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">$ ufw disable
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="2">
+<li>由于 nfs 版本不支持</li>
+</ol>
+<ul>
+<li>目前新安装的 nfs 为 v4 版本，v2 已经废弃，但是很多比较老的内核不支持 v4，可能由于 nfs</li>
+</ul>
+<h4 id="解决方法">解决方法</h4>
+<ol>
+<li>
+<p>在内核配置中打开 nfs 文件系统对 nfs v4 的支持：</p>
+<p><code>&lt;*&gt; NFS client support for NFS version 4</code></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://pic.imgdb.cn/item/648845e31ddac507cc6d7334.png"
+        data-srcset="https://pic.imgdb.cn/item/648845e31ddac507cc6d7334.png, https://pic.imgdb.cn/item/648845e31ddac507cc6d7334.png 1.5x, https://pic.imgdb.cn/item/648845e31ddac507cc6d7334.png 2x"
+        data-sizes="auto"
+        alt="https://pic.imgdb.cn/item/648845e31ddac507cc6d7334.png"
+        title="请输入图片描述" /></p>
+</li>
+<li>
+<p>在 nfs server 端的配置中打开对 nfs v2、nfs v3 和 nfs v4 的支持</p>
+</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">$ <span class="nb">echo</span> <span class="s1">&#39;RPCNFSDOPTS=&#34;--nfs-version 2,3,4 --debug --syslog&#34;&#39;</span> &gt;&gt; /etc/default/nfs-kernel-server
+</span></span><span class="line"><span class="cl">$ systmectl restart nfs-server.service
+</span></span></code></pre></td></tr></table>
+</div>
+</div></div><div class="post-footer" id="post-footer">
+    <div class="post-info"><div class="post-info-tag"><span><a href="/tags/petalinux/">Petalinux</a>
+                </span><span><a href="/tags/zynq/">ZYNQ</a>
+                </span><span><a href="/tags/nfs/">NFS</a>
+                </span></div><div class="post-info-line"><div class="post-info-mod">
+                <span>更新于 2023-06-19</span>
+            </div><div class="post-info-mod"><span>
+                            <a class="link-to-markdown" href="/posts/embedeedevr/petalinux/petalinux_2/index.md" target="_blank">阅读原始文档</a>
+                        </span></div>
+        </div><div class="post-info-share">
+            <span><a href="#" onclick="return false;" title="分享到 Twitter" data-sharer="twitter" data-url="http://gitzhangzhao.github.io/posts/embedeedevr/petalinux/petalinux_2/" data-title="Petalinux(二)：远程启动" data-hashtags="Petalinux,ZYNQ,NFS"><i class="fab fa-twitter fa-fw"></i></a><a href="#" onclick="return false;" title="分享到 Facebook" data-sharer="facebook" data-url="http://gitzhangzhao.github.io/posts/embedeedevr/petalinux/petalinux_2/" data-hashtag="Petalinux"><i class="fab fa-facebook-square fa-fw"></i></a></span>
+        </div></div><div class="post-nav"><a href="/posts/embedeedevr/petalinux/petalinux_1/" class="prev" rel="prev" title="Petalinux(一)：安装"><i class="fas fa-angle-left fa-fw"></i>Previous Post</a>
+            <a href="/posts/embedeedevr/petalinux/petalinux_3/" class="next" rel="next" title="Petalinux(三)：完全使用手册">Next Post<i class="fas fa-angle-right fa-fw"></i></a></div></div>
+</div></article></div>
+            </main>
+            <footer class="footer"><div class="footer-container"><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2023</span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+</div>
+<script>
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker
+        .register('/sw.min.js?version=0.0.1', { scope: '/' })
+        .then(() => {
+            console.info('张昭的Blog\u00A0Service Worker Registered');
+        }, err => console.error('张昭的Blog\u00A0Service Worker registration failed: ', err));
+
+    navigator.serviceWorker
+        .ready
+        .then(() => {
+            console.info('张昭的Blog\u00A0Service Worker Ready');
+        });
+}
+</script>
+</footer>
+        </div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-chevron-up fa-fw"></i>
+            </a></div><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><link rel="stylesheet" href="/lib/katex/katex.min.css"><link rel="stylesheet" href="/lib/katex/copy-tex.min.css"><script src="https://polyfill.io/v3/polyfill.min.js?features=Array.prototype.fill%2CArray.prototype.find%2CArray.from%2CIntersectionObserver%2CMath.sign%2CObject.assign%2CPromise%2CObject.entries%2Chtml5shiv%2CObject.values%2Cfetch%2CElement.prototype.after"></script><script src="/lib/autocomplete/autocomplete.min.js"></script><script src="/lib/lunr/lunr.min.js"></script><script src="/lib/lunr/lunr.stemmer.support.min.js"></script><script src="/lib/lunr/lunr.zh.min.js"></script><script src="/lib/lazysizes/lazysizes.min.js"></script><script src="/lib/clipboard/clipboard.min.js"></script><script src="/lib/sharer/sharer.min.js"></script><script src="/lib/katex/katex.min.js"></script><script src="/lib/katex/auto-render.min.js"></script><script src="/lib/katex/copy-tex.min.js"></script><script src="/lib/katex/mhchem.min.js"></script><script>window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":20},"comment":{},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"highlightTag":"em","lunrIndexURL":"/index.json","lunrLanguageCode":"zh","lunrSegmentitURL":"/lib/lunr/lunr.segmentit.js","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"lunr"}};</script><script src="/js/theme.min.js"></script></body></html>

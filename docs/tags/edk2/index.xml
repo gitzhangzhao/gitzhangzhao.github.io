@@ -1,10 +1,10 @@
 <rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
     <channel>
-        <title>BIOS - 分类 - 张昭的Blog</title>
-        <link>http://gitzhangzhao.github.io/categories/bios/</link>
-        <description>BIOS - 分类 - 张昭的Blog</description>
+        <title>EDK2 - 标签 - 张昭的Blog</title>
+        <link>http://gitzhangzhao.github.io/tags/edk2/</link>
+        <description>EDK2 - 标签 - 张昭的Blog</description>
         <generator>Hugo -- gohugo.io</generator><language>zh-cn</language><managingEditor>gitzhangzhao@gmail.com (张昭)</managingEditor>
-            <webMaster>gitzhangzhao@gmail.com (张昭)</webMaster><lastBuildDate>Tue, 08 Aug 2023 17:50:12 &#43;0800</lastBuildDate><atom:link href="http://gitzhangzhao.github.io/categories/bios/" rel="self" type="application/rss+xml" /><item>
+            <webMaster>gitzhangzhao@gmail.com (张昭)</webMaster><lastBuildDate>Tue, 08 Aug 2023 17:50:12 &#43;0800</lastBuildDate><atom:link href="http://gitzhangzhao.github.io/tags/edk2/" rel="self" type="application/rss+xml" /><item>
     <title>理解 UEFI 中的面向对象</title>
     <link>http://gitzhangzhao.github.io/posts/bios/uefi_1/</link>
     <pubDate>Tue, 08 Aug 2023 17:50:12 &#43;0800</pubDate><author>gitzhangzhao@gmail.com (张昭)</author><guid>http://gitzhangzhao.github.io/posts/bios/uefi_1/</guid>

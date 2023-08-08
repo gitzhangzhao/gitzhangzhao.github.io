@@ -2,25 +2,27 @@
     xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
     xmlns:xhtml="http://www.w3.org/1999/xhtml"
     ><url>
-            <loc>http://gitzhangzhao.github.io/tags/bios/</loc><lastmod>2023-08-07T15:58:48&#43;08:00</lastmod></url><url>
-            <loc>http://gitzhangzhao.github.io/categories/bios/</loc><lastmod>2023-08-07T15:58:48&#43;08:00</lastmod></url><url>
-            <loc>http://gitzhangzhao.github.io/tags/boot/</loc><lastmod>2023-08-07T15:58:48&#43;08:00</lastmod></url><url>
-            <loc>http://gitzhangzhao.github.io/posts/bios/boot/</loc><lastmod>2023-08-07T15:58:48&#43;08:00</lastmod></url><url>
-            <loc>http://gitzhangzhao.github.io/categories/</loc><lastmod>2023-08-07T15:58:48&#43;08:00</lastmod></url><url>
-            <loc>http://gitzhangzhao.github.io/posts/</loc><lastmod>2023-08-07T15:58:48&#43;08:00</lastmod></url><url>
-            <loc>http://gitzhangzhao.github.io/tags/</loc><lastmod>2023-08-07T15:58:48&#43;08:00</lastmod></url><url>
-            <loc>http://gitzhangzhao.github.io/tags/uefi/</loc><lastmod>2023-08-07T15:58:48&#43;08:00</lastmod></url><url>
-            <loc>http://gitzhangzhao.github.io/tags/x86/</loc><lastmod>2023-08-07T15:58:48&#43;08:00</lastmod></url><url>
-            <loc>http://gitzhangzhao.github.io/</loc><lastmod>2023-08-07T15:58:48&#43;08:00</lastmod></url><url>
-            <loc>http://gitzhangzhao.github.io/categories/embedded-evr/</loc><lastmod>2023-07-06T22:57:14&#43;08:00</lastmod></url><url>
-            <loc>http://gitzhangzhao.github.io/tags/petalinux/</loc><lastmod>2023-07-06T22:57:14&#43;08:00</lastmod></url><url>
-            <loc>http://gitzhangzhao.github.io/posts/petalinux/petalinux_3/</loc><lastmod>2023-07-06T22:57:14&#43;08:00</lastmod></url><url>
-            <loc>http://gitzhangzhao.github.io/tags/zynq/</loc><lastmod>2023-07-06T22:57:14&#43;08:00</lastmod></url><url>
-            <loc>http://gitzhangzhao.github.io/tags/nfs/</loc><lastmod>2023-07-02T12:31:21&#43;08:00</lastmod></url><url>
-            <loc>http://gitzhangzhao.github.io/posts/petalinux/petalinux_2/</loc><lastmod>2023-07-02T12:31:21&#43;08:00</lastmod></url><url>
-            <loc>http://gitzhangzhao.github.io/posts/petalinux/petalinux_1/</loc><lastmod>2023-07-01T23:43:26&#43;08:00</lastmod></url><url>
+            <loc>http://gitzhangzhao.github.io/tags/bios/</loc><lastmod>2023-08-08T17:50:12&#43;08:00</lastmod></url><url>
+            <loc>http://gitzhangzhao.github.io/categories/bios/</loc><lastmod>2023-08-08T17:50:12&#43;08:00</lastmod></url><url>
+            <loc>http://gitzhangzhao.github.io/categories/</loc><lastmod>2023-08-08T17:50:12&#43;08:00</lastmod></url><url>
+            <loc>http://gitzhangzhao.github.io/tags/edk2/</loc><lastmod>2023-08-08T17:50:12&#43;08:00</lastmod></url><url>
+            <loc>http://gitzhangzhao.github.io/posts/</loc><lastmod>2023-08-08T17:50:12&#43;08:00</lastmod></url><url>
+            <loc>http://gitzhangzhao.github.io/tags/</loc><lastmod>2023-08-08T17:50:12&#43;08:00</lastmod></url><url>
+            <loc>http://gitzhangzhao.github.io/tags/uefi/</loc><lastmod>2023-08-08T17:50:12&#43;08:00</lastmod></url><url>
+            <loc>http://gitzhangzhao.github.io/posts/bios/uefi_1/</loc><lastmod>2023-08-08T17:50:12&#43;08:00</lastmod></url><url>
+            <loc>http://gitzhangzhao.github.io/</loc><lastmod>2023-08-08T17:50:12&#43;08:00</lastmod></url><url>
+            <loc>http://gitzhangzhao.github.io/tags/boot/</loc><lastmod>2023-08-07T18:00:24&#43;08:00</lastmod></url><url>
+            <loc>http://gitzhangzhao.github.io/posts/bios/boot/</loc><lastmod>2023-08-07T18:00:24&#43;08:00</lastmod></url><url>
+            <loc>http://gitzhangzhao.github.io/tags/x86/</loc><lastmod>2023-08-07T18:00:24&#43;08:00</lastmod></url><url>
+            <loc>http://gitzhangzhao.github.io/categories/embedded-evr/</loc><lastmod>2023-07-01T15:52:02&#43;08:00</lastmod></url><url>
+            <loc>http://gitzhangzhao.github.io/tags/petalinux/</loc><lastmod>2023-07-01T15:52:02&#43;08:00</lastmod></url><url>
+            <loc>http://gitzhangzhao.github.io/posts/embedeedevr/petalinux/petalinux_3/</loc><lastmod>2023-07-01T15:52:02&#43;08:00</lastmod></url><url>
+            <loc>http://gitzhangzhao.github.io/tags/zynq/</loc><lastmod>2023-07-01T15:52:02&#43;08:00</lastmod></url><url>
+            <loc>http://gitzhangzhao.github.io/tags/nfs/</loc><lastmod>2023-06-19T11:48:55&#43;08:00</lastmod></url><url>
+            <loc>http://gitzhangzhao.github.io/posts/embedeedevr/petalinux/petalinux_2/</loc><lastmod>2023-06-19T11:48:55&#43;08:00</lastmod></url><url>
+            <loc>http://gitzhangzhao.github.io/posts/embedeedevr/petalinux/petalinux_1/</loc><lastmod>2023-06-19T11:35:36&#43;08:00</lastmod></url><url>
             <loc>http://gitzhangzhao.github.io/tags/gentoo/</loc><lastmod>2023-06-18T23:54:08&#43;08:00</lastmod></url><url>
-            <loc>http://gitzhangzhao.github.io/posts/gentoo/gentoo%E5%AE%89%E8%A3%85%E5%B0%8F%E8%AE%B0/</loc><lastmod>2023-06-18T23:54:08&#43;08:00</lastmod></url><url>
+            <loc>http://gitzhangzhao.github.io/posts/linux/gentoo/gentoo%E5%AE%89%E8%A3%85%E5%B0%8F%E8%AE%B0/</loc><lastmod>2023-06-18T23:54:08&#43;08:00</lastmod></url><url>
             <loc>http://gitzhangzhao.github.io/tags/linux/</loc><lastmod>2023-06-18T23:54:08&#43;08:00</lastmod></url><url>
             <loc>http://gitzhangzhao.github.io/categories/linux/</loc><lastmod>2023-06-18T23:54:08&#43;08:00</lastmod></url><url>
             <loc>http://gitzhangzhao.github.io/about/</loc><lastmod>2023-08-04T16:37:56&#43;08:00</lastmod></url><url>
