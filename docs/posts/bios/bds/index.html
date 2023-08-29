@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>UEFI BDS 阶段代码梳理 - 张昭的Blog</title><meta name="description" content="Welcome to Zhangzhao&#39;s blog."><meta property="og:title" content="UEFI BDS 阶段代码梳理" />
+<meta property="og:description" content="DXE Install BDS Protocol 在 DXE 阶段的 Main 中，调用CoreDispatcher() -&gt; CoreStartImage()，进入各 DXE driver 的入口函数: 1 2 3 // MdeModulePkg/Core/Dxe/DxeMain/DxeMain.c Image-&gt;Status = Image-&gt;EntryPoint (ImageHandle, Image-&gt;Info.SystemTable); 此" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://gitzhangzhao.github.io/posts/bios/bds/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2023-08-29T16:37:13+08:00" />
+<meta property="article:modified_time" content="2023-08-29T16:37:13+08:00" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="UEFI BDS 阶段代码梳理"/>
+<meta name="twitter:description" content="DXE Install BDS Protocol 在 DXE 阶段的 Main 中，调用CoreDispatcher() -&gt; CoreStartImage()，进入各 DXE driver 的入口函数: 1 2 3 // MdeModulePkg/Core/Dxe/DxeMain/DxeMain.c Image-&gt;Status = Image-&gt;EntryPoint (ImageHandle, Image-&gt;Info.SystemTable); 此"/>
+<meta name="application-name" content="张昭的Blog">
+<meta name="apple-mobile-web-app-title" content="张昭的Blog"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="http://gitzhangzhao.github.io/posts/bios/bds/" /><link rel="prev" href="http://gitzhangzhao.github.io/posts/bios/uefi_1/" /><link rel="stylesheet" href="/css/page.min.css"><link rel="stylesheet" href="/css/home.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "UEFI BDS 阶段代码梳理",
+        "inLanguage": "zh-cn",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "http:\/\/gitzhangzhao.github.io\/posts\/bios\/bds\/"
+        },"genre": "posts","keywords": "BIOS, EDK2, UEFI, AMI, X86","wordcount":  988 ,
+        "url": "http:\/\/gitzhangzhao.github.io\/posts\/bios\/bds\/","datePublished": "2023-08-29T16:37:13+08:00","dateModified": "2023-08-29T16:37:13+08:00","publisher": {
+            "@type": "Organization",
+            "name": "张昭"},"author": {
+                "@type": "Person",
+                "name": "张昭"
+            },"description": ""
+    }
+    </script></head><body data-header-desktop="auto" data-header-mobile="auto"><script>(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : '' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="张昭的Blog">张昭的Blog</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> 文章 </a><a class="menu-item" href="/tags/"> 标签 </a><a class="menu-item" href="/categories/"> 分类 </a><a class="menu-item" href="/about/"> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="#" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="#" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="#" onclick="return false;" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="张昭的Blog">张昭的Blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="#" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="#" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="#" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="">文章</a><a class="menu-item" href="/tags/" title="">标签</a><a class="menu-item" href="/categories/" title="">分类</a><a class="menu-item" href="/about/" title="">关于</a><div class="menu-item"><a href="#" onclick="return false;" class="theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div></div>
+    </div>
+</header><div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single" data-toc="enable"><div class="single-card" ><h2 class="single-title animated flipInX">UEFI BDS 阶段代码梳理</h2><div class="post-meta">
+                <div class="post-meta-line"><span class="post-author"><a href="https://github.com/gitzhangzhao" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle fa-fw"></i>张昭</a></span>&nbsp;<span class="post-category">出版于  <a href="/categories/bios/"><i class="far fa-folder fa-fw"></i>BIOS</a></span></div>
+                <div class="post-meta-line"><span><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2023-08-29">2023-08-29</time></span>&nbsp;<span><i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 988 字</span>&nbsp;
+                    <span><i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 2 分钟</span>&nbsp;</div>
+            </div>
+            
+            <hr><div class="details toc" id="toc-static"  data-kept="">
+                    <div class="details-summary toc-title">
+                        <span>目录</span>
+                        <span><i class="details-icon fas fa-angle-right"></i></span>
+                    </div>
+                    <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#dxe-install-bds-protocol">DXE Install BDS Protocol</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+                </div><div class="content" id="content"><h3 id="dxe-install-bds-protocol">DXE Install BDS Protocol</h3>
+<ol>
+<li>在 DXE 阶段的 Main 中，调用<code>CoreDispatcher() -&gt; CoreStartImage()</code>，进入各 DXE driver 的入口函数:</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="c1">// MdeModulePkg/Core/Dxe/DxeMain/DxeMain.c
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl"><span class="n">Image</span><span class="o">-&gt;</span><span class="n">Status</span> <span class="o">=</span> <span class="n">Image</span><span class="o">-&gt;</span><span class="nf">EntryPoint</span> <span class="p">(</span><span class="n">ImageHandle</span><span class="p">,</span> <span class="n">Image</span><span class="o">-&gt;</span><span class="n">Info</span><span class="p">.</span><span class="n">SystemTable</span><span class="p">);</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>此阶段会 load 并执行各 DXE 的驱动程序，而 BDS 就属于 DXE 的一个驱动，所以<code>BdsInitialize()</code>这个函数会在此时被执行：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="c1">// MdeModulePkg/Universal/BdsDxe/BdsDxe.inf
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl"><span class="p">[</span><span class="n">Defines</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="n">INF_VERSION</span>                    <span class="o">=</span> <span class="mh">0x00010005</span>
+</span></span><span class="line"><span class="cl"><span class="n">BASE_NAME</span>                      <span class="o">=</span> <span class="n">BdsDxe</span>
+</span></span><span class="line"><span class="cl"><span class="n">MODULE_UNI_FILE</span>                <span class="o">=</span> <span class="n">BdsDxe</span><span class="p">.</span><span class="n">uni</span>
+</span></span><span class="line"><span class="cl"><span class="n">FILE_GUID</span>                      <span class="o">=</span> <span class="mi">6</span><span class="n">D33944A</span><span class="o">-</span><span class="n">EC75</span><span class="o">-</span><span class="mi">4855</span><span class="o">-</span><span class="n">A54D</span><span class="o">-</span><span class="mi">809</span><span class="n">C75241F6C</span>
+</span></span><span class="line"><span class="cl"><span class="n">MODULE_TYPE</span>                    <span class="o">=</span> <span class="n">DXE_DRIVER</span>                            <span class="c1">// BDS是DXE驱动
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">VERSION_STRING</span>                 <span class="o">=</span> <span class="mf">1.0</span>
+</span></span><span class="line"><span class="cl"><span class="n">ENTRY_POINT</span>                    <span class="o">=</span> <span class="n">BdsInitialize</span>                         <span class="c1">// 驱动入口函数
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>入口函数<code>BdsInitialize()</code>调用<code>InstallMultipleProtocolInterfaces()</code>注册 BdsArchProtocol 到 DXE Core，该 Protocol 的 Guid 为<code>gEfiBdsArchProtocolGuid</code>，<code>*gBds</code>是一个指向 BdsArchProtocol 的指针，在<code>MdeModulePkg/Core/Dxe/DxeMain/DxeMain.c</code>开始时定义：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="c1">// `MdeModulePkg/Core/Dxe/DxeMain/DxeMain.c
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl"><span class="n">EFI_BDS_ARCH_PROTOCOL</span>             <span class="o">*</span><span class="n">gBds</span>           <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>在 BDS 初始化阶段<code>BdsInitialize</code>，将该指针作为<code>InstallMultipleProtocolInterfaces()</code>的参数，目的是通过<code>gEfiBdsArchProtocolGuid</code>可以查询到<code>*gBds</code>：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="c1">// MdeModulePkg/Universal/BdsDxe/BdsEntry.c
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl"><span class="c1">// Install protocol interface
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">Handle</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">Status</span> <span class="o">=</span> <span class="n">gBS</span><span class="o">-&gt;</span><span class="nf">InstallMultipleProtocolInterfaces</span> <span class="p">(</span>
+</span></span><span class="line"><span class="cl">                <span class="o">&amp;</span><span class="n">Handle</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                <span class="o">&amp;</span><span class="n">gEfiBdsArchProtocolGuid</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                <span class="o">&amp;</span><span class="n">gBds</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                <span class="nb">NULL</span>
+</span></span><span class="line"><span class="cl">                <span class="p">);</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>在<code>InstallMultipleProtocolInterfaces()</code>之前，<code>*gBds</code>就已经指向 BDS 的入口函数<code>BdsEtry</code>：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="c1">// MdeModulePkg/Universal/BdsDxe/BdsEntry.c
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">EFI_BDS_ARCH_PROTOCOL</span>  <span class="n">gBds</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="n">BdsEntry</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>再讨论一下 BDS 的 Protocol，<code>EFI_BDS_ARCH_PROTOCOL</code>是在<code>Bds.h</code>中定义的：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="c1">// MdePkg/Include/Bds.h
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">typedef</span> <span class="k">struct</span> <span class="n">_EFI_BDS_ARCH_PROTOCOL</span> <span class="n">EFI_BDS_ARCH_PROTOCOL</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">typedef</span>
+</span></span><span class="line"><span class="cl"><span class="nf">VOID</span>
+</span></span><span class="line"><span class="cl"><span class="p">(</span><span class="n">EFIAPI</span> <span class="o">*</span><span class="n">EFI_BDS_ENTRY</span><span class="p">)(</span>
+</span></span><span class="line"><span class="cl">  <span class="n">IN</span> <span class="n">EFI_BDS_ARCH_PROTOCOL</span>  <span class="o">*</span><span class="n">This</span>
+</span></span><span class="line"><span class="cl"><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">struct</span> <span class="n">_EFI_BDS_ARCH_PROTOCOL</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">EFI_BDS_ENTRY</span>    <span class="n">Entry</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>其中，<code>EFI_BDS_ENTRY </code>就是这个 protocol 的一个服务，对应了一个<code>PROTOCOL_INTERFACE</code>。在之前的<code>InstallMultipleProtocolInterfaces()</code>函数中，<code>Entry</code>函数被指向<code>EFI_BDS_ARCH_PROTOCOL</code>这个 Protocol 的例化<code>PROTOCOL_INTERFACE</code>中的<code>*Interface</code>指针。所以根据 Bds 的 Guid <code>EFI_BDS_ARCH_PROTOCOL_GUID</code>可以找到<code>EFI_BDS_ARCH_PROTOCOL</code>这个 Protocol，再根据这个 Protocol 找到<code>PROTOCOL_INTERFACE</code>实现，就可以找到具体的被注册的<code>BdsEntry()</code>函数了</p>
+<p>另外，<code>*gBds</code>属于全局变量：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="c1">// MdeModulePkg/Core/Dxe/DxeMain.h
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">extern</span> <span class="n">EFI_BDS_ARCH_PROTOCOL</span>             <span class="o">*</span><span class="n">gBds</span><span class="p">;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>最后，在 Bds 的入口函数已经被安装后，可以直接通过<code>*gBds</code>指针访问<code>Entry()</code>函数了：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="n">gBds</span><span class="o">-&gt;</span><span class="nf">Entry</span> <span class="p">(</span><span class="n">gBds</span><span class="p">);</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="4">
+<li></li>
+</ol>
+<hr>
+<p>待续</p>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info"><div class="post-info-tag"><span><a href="/tags/bios/">BIOS</a>
+                </span><span><a href="/tags/edk2/">EDK2</a>
+                </span><span><a href="/tags/uefi/">UEFI</a>
+                </span><span><a href="/tags/ami/">AMI</a>
+                </span><span><a href="/tags/x86/">X86</a>
+                </span></div><div class="post-info-line"><div class="post-info-mod">
+                <span>更新于 2023-08-29</span>
+            </div><div class="post-info-mod"><span>
+                            <a class="link-to-markdown" href="/posts/bios/bds/index.md" target="_blank">阅读原始文档</a>
+                        </span></div>
+        </div><div class="post-info-share">
+            <span><a href="#" onclick="return false;" title="分享到 Twitter" data-sharer="twitter" data-url="http://gitzhangzhao.github.io/posts/bios/bds/" data-title="UEFI BDS 阶段代码梳理" data-hashtags="BIOS,EDK2,UEFI,AMI,X86"><i class="fab fa-twitter fa-fw"></i></a><a href="#" onclick="return false;" title="分享到 Facebook" data-sharer="facebook" data-url="http://gitzhangzhao.github.io/posts/bios/bds/" data-hashtag="BIOS"><i class="fab fa-facebook-square fa-fw"></i></a></span>
+        </div></div><div class="post-nav"><a href="/posts/bios/uefi_1/" class="prev" rel="prev" title="理解 UEFI 中的面向对象"><i class="fas fa-angle-left fa-fw"></i>Previous Post</a></div></div>
+</div></article></div>
+            </main>
+            <footer class="footer"><div class="footer-container"><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2023</span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+</div>
+<script>
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker
+        .register('/sw.min.js?version=0.0.1', { scope: '/' })
+        .then(() => {
+            console.info('张昭的Blog\u00A0Service Worker Registered');
+        }, err => console.error('张昭的Blog\u00A0Service Worker registration failed: ', err));
+
+    navigator.serviceWorker
+        .ready
+        .then(() => {
+            console.info('张昭的Blog\u00A0Service Worker Ready');
+        });
+}
+</script>
+</footer>
+        </div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-chevron-up fa-fw"></i>
+            </a></div><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><link rel="stylesheet" href="/lib/katex/katex.min.css"><link rel="stylesheet" href="/lib/katex/copy-tex.min.css"><script src="https://polyfill.io/v3/polyfill.min.js?features=Array.prototype.fill%2CArray.prototype.find%2CArray.from%2CIntersectionObserver%2CMath.sign%2CObject.assign%2CPromise%2CObject.entries%2Chtml5shiv%2CObject.values%2Cfetch%2CElement.prototype.after"></script><script src="/lib/autocomplete/autocomplete.min.js"></script><script src="/lib/lunr/lunr.min.js"></script><script src="/lib/lunr/lunr.stemmer.support.min.js"></script><script src="/lib/lunr/lunr.zh.min.js"></script><script src="/lib/lazysizes/lazysizes.min.js"></script><script src="/lib/clipboard/clipboard.min.js"></script><script src="/lib/sharer/sharer.min.js"></script><script src="/lib/katex/katex.min.js"></script><script src="/lib/katex/auto-render.min.js"></script><script src="/lib/katex/copy-tex.min.js"></script><script src="/lib/katex/mhchem.min.js"></script><script>window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":20},"comment":{},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"highlightTag":"em","lunrIndexURL":"/index.json","lunrLanguageCode":"zh","lunrSegmentitURL":"/lib/lunr/lunr.segmentit.js","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"lunr"}};</script><script src="/js/theme.min.js"></script></body></html>

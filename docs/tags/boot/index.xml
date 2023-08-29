@@ -8,8 +8,7 @@
     <title>Boot 过程分析</title>
     <link>http://gitzhangzhao.github.io/posts/bios/boot/</link>
     <pubDate>Fri, 04 Aug 2023 14:00:29 &#43;0800</pubDate><author>gitzhangzhao@gmail.com (张昭)</author><guid>http://gitzhangzhao.github.io/posts/bios/boot/</guid>
-    <description><![CDATA[<p><em><strong>申明: 本文严禁任何组织或个人在CSDN上进行转载,其他平台转载需经作者授权</strong></em></p>
-<p>本篇文章详细完整的讨论现代处理器 boot 的过程，主要面向对象为 Intel、AMD 的 X86 架构和大部分 ARM 处理器架构</p>
+    <description><![CDATA[<p>本篇文章详细完整的讨论现代处理器 boot 的过程，主要面向对象为 Intel、AMD 的 X86 架构和大部分 ARM 处理器架构</p>
 <p></p>
 <p><strong>前置概念</strong></p>
 <ul>

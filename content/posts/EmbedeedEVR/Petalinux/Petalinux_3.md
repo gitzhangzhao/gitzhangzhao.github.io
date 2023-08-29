@@ -7,9 +7,6 @@ tags: ["Petalinux", "ZYNQ"]
 categories: ["Embedded EVR"]
 summary: "More is more"
 ---
-
-**_申明: 本文严禁任何组织或个人在 CSDN 上进行转载,其他平台转载需经作者授权_**
-
 > 之前的两篇文章介绍了 Petalinux 的安装和远程启动，本手册是系列的第三篇文章。本篇以 Embedded EVR 为例，详细介绍从 FPGA 代码的综合、布局布线、生成 bit 流，到使用 Petalinux 创建工程、配置、编译和部署的过程
 
 > 前提条件：一台可以联网的服务器，并且已经安装好 Vivado 软件

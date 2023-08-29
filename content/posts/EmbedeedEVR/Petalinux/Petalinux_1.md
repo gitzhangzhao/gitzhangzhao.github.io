@@ -7,9 +7,6 @@ tags: ["Petalinux", "ZYNQ", "NFS"]
 categories: ["Embedded EVR"]
 summary: "Embedded Linux development on ZYNQ made easy with Petalinux"
 ---
-
-**_申明: 本文严禁任何组织或个人在 CSDN 上进行转载，其他平台转载需经作者授权_**
-
 > 课题需要可能要在 ZYNQ 上多次部署 Linux 并测试，普通的脚本安装方式太过繁琐，Xilinx 的 Petalinux 工具简化了很多流程。这里记录了一些主要步骤，由于实验室 Vivado 版本，所以选择的 Petalinux 版本也不是最新的
 
 ### why petalinux?

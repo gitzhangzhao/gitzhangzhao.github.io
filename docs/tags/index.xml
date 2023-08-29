@@ -4,34 +4,40 @@
         <link>http://gitzhangzhao.github.io/tags/</link>
         <description>Tags - 标签 - 张昭的Blog</description>
         <generator>Hugo -- gohugo.io</generator><language>zh-cn</language><managingEditor>gitzhangzhao@gmail.com (张昭)</managingEditor>
-            <webMaster>gitzhangzhao@gmail.com (张昭)</webMaster><lastBuildDate>Tue, 08 Aug 2023 17:50:12 &#43;0800</lastBuildDate><atom:link href="http://gitzhangzhao.github.io/tags/" rel="self" type="application/rss+xml" /><item>
+            <webMaster>gitzhangzhao@gmail.com (张昭)</webMaster><lastBuildDate>Tue, 29 Aug 2023 16:37:13 &#43;0800</lastBuildDate><atom:link href="http://gitzhangzhao.github.io/tags/" rel="self" type="application/rss+xml" /><item>
+    <title>AMI</title>
+    <link>http://gitzhangzhao.github.io/tags/ami/</link>
+    <pubDate>Tue, 29 Aug 2023 16:37:13 &#43;0800</pubDate><author>gitzhangzhao@gmail.com (张昭)</author><guid>http://gitzhangzhao.github.io/tags/ami/</guid>
+    <description><![CDATA[]]></description>
+</item>
+<item>
     <title>BIOS</title>
     <link>http://gitzhangzhao.github.io/tags/bios/</link>
-    <pubDate>Tue, 08 Aug 2023 17:50:12 &#43;0800</pubDate><author>gitzhangzhao@gmail.com (张昭)</author><guid>http://gitzhangzhao.github.io/tags/bios/</guid>
+    <pubDate>Tue, 29 Aug 2023 16:37:13 &#43;0800</pubDate><author>gitzhangzhao@gmail.com (张昭)</author><guid>http://gitzhangzhao.github.io/tags/bios/</guid>
     <description><![CDATA[]]></description>
 </item>
 <item>
     <title>EDK2</title>
     <link>http://gitzhangzhao.github.io/tags/edk2/</link>
-    <pubDate>Tue, 08 Aug 2023 17:50:12 &#43;0800</pubDate><author>gitzhangzhao@gmail.com (张昭)</author><guid>http://gitzhangzhao.github.io/tags/edk2/</guid>
+    <pubDate>Tue, 29 Aug 2023 16:37:13 &#43;0800</pubDate><author>gitzhangzhao@gmail.com (张昭)</author><guid>http://gitzhangzhao.github.io/tags/edk2/</guid>
     <description><![CDATA[]]></description>
 </item>
 <item>
     <title>UEFI</title>
     <link>http://gitzhangzhao.github.io/tags/uefi/</link>
-    <pubDate>Tue, 08 Aug 2023 17:50:12 &#43;0800</pubDate><author>gitzhangzhao@gmail.com (张昭)</author><guid>http://gitzhangzhao.github.io/tags/uefi/</guid>
+    <pubDate>Tue, 29 Aug 2023 16:37:13 &#43;0800</pubDate><author>gitzhangzhao@gmail.com (张昭)</author><guid>http://gitzhangzhao.github.io/tags/uefi/</guid>
+    <description><![CDATA[]]></description>
+</item>
+<item>
+    <title>X86</title>
+    <link>http://gitzhangzhao.github.io/tags/x86/</link>
+    <pubDate>Tue, 29 Aug 2023 16:37:13 &#43;0800</pubDate><author>gitzhangzhao@gmail.com (张昭)</author><guid>http://gitzhangzhao.github.io/tags/x86/</guid>
     <description><![CDATA[]]></description>
 </item>
 <item>
     <title>Boot</title>
     <link>http://gitzhangzhao.github.io/tags/boot/</link>
     <pubDate>Fri, 04 Aug 2023 14:00:29 &#43;0800</pubDate><author>gitzhangzhao@gmail.com (张昭)</author><guid>http://gitzhangzhao.github.io/tags/boot/</guid>
-    <description><![CDATA[]]></description>
-</item>
-<item>
-    <title>X86</title>
-    <link>http://gitzhangzhao.github.io/tags/x86/</link>
-    <pubDate>Fri, 04 Aug 2023 14:00:29 &#43;0800</pubDate><author>gitzhangzhao@gmail.com (张昭)</author><guid>http://gitzhangzhao.github.io/tags/x86/</guid>
     <description><![CDATA[]]></description>
 </item>
 <item>
