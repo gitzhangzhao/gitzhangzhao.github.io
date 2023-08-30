@@ -5,14 +5,14 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="robots" content="noodp" />
         <title>UEFI BDS 阶段代码梳理 - 张昭的Blog</title><meta name="description" content="Welcome to Zhangzhao&#39;s blog."><meta property="og:title" content="UEFI BDS 阶段代码梳理" />
-<meta property="og:description" content="DXE Install BDS Protocol 在 DXE 阶段的 Main 中，调用CoreDispatcher() -&gt; CoreStartImage()，进入各 DXE driver 的入口函数: 1 2 3 // MdeModulePkg/Core/Dxe/DxeMain/DxeMain.c Image-&gt;Status = Image-&gt;EntryPoint (ImageHandle, Image-&gt;Info.SystemTable); 此" />
+<meta property="og:description" content="UEFI 系列第二篇" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="http://gitzhangzhao.github.io/posts/bios/bds/" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2023-08-29T16:37:13+08:00" />
-<meta property="article:modified_time" content="2023-08-29T16:37:13+08:00" />
+<meta property="article:modified_time" content="2023-08-29T16:45:16+08:00" />
 <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="UEFI BDS 阶段代码梳理"/>
-<meta name="twitter:description" content="DXE Install BDS Protocol 在 DXE 阶段的 Main 中，调用CoreDispatcher() -&gt; CoreStartImage()，进入各 DXE driver 的入口函数: 1 2 3 // MdeModulePkg/Core/Dxe/DxeMain/DxeMain.c Image-&gt;Status = Image-&gt;EntryPoint (ImageHandle, Image-&gt;Info.SystemTable); 此"/>
+<meta name="twitter:description" content="UEFI 系列第二篇"/>
 <meta name="application-name" content="张昭的Blog">
 <meta name="apple-mobile-web-app-title" content="张昭的Blog"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -25,8 +25,8 @@
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "http:\/\/gitzhangzhao.github.io\/posts\/bios\/bds\/"
-        },"genre": "posts","keywords": "BIOS, EDK2, UEFI, AMI, X86","wordcount":  988 ,
-        "url": "http:\/\/gitzhangzhao.github.io\/posts\/bios\/bds\/","datePublished": "2023-08-29T16:37:13+08:00","dateModified": "2023-08-29T16:37:13+08:00","publisher": {
+        },"genre": "posts","keywords": "BIOS, EDK2, UEFI, AMI, X86","wordcount":  1740 ,
+        "url": "http:\/\/gitzhangzhao.github.io\/posts\/bios\/bds\/","datePublished": "2023-08-29T16:37:13+08:00","dateModified": "2023-08-29T16:45:16+08:00","publisher": {
             "@type": "Organization",
             "name": "张昭"},"author": {
                 "@type": "Person",
@@ -100,8 +100,8 @@
             <div class="toc-content" id="toc-content-auto"></div>
         </div><article class="page single" data-toc="enable"><div class="single-card" ><h2 class="single-title animated flipInX">UEFI BDS 阶段代码梳理</h2><div class="post-meta">
                 <div class="post-meta-line"><span class="post-author"><a href="https://github.com/gitzhangzhao" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle fa-fw"></i>张昭</a></span>&nbsp;<span class="post-category">出版于  <a href="/categories/bios/"><i class="far fa-folder fa-fw"></i>BIOS</a></span></div>
-                <div class="post-meta-line"><span><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2023-08-29">2023-08-29</time></span>&nbsp;<span><i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 988 字</span>&nbsp;
-                    <span><i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 2 分钟</span>&nbsp;</div>
+                <div class="post-meta-line"><span><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2023-08-29">2023-08-29</time></span>&nbsp;<span><i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 1740 字</span>&nbsp;
+                    <span><i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 4 分钟</span>&nbsp;</div>
             </div>
             
             <hr><div class="details toc" id="toc-static"  data-kept="">
@@ -124,7 +124,7 @@
 </nav></div>
                 </div><div class="content" id="content"><h3 id="dxe-install-bds-protocol">DXE Install BDS Protocol</h3>
 <ol>
-<li>在 DXE 阶段的 Main 中，调用<code>CoreDispatcher() -&gt; CoreStartImage()</code>，进入各 DXE driver 的入口函数:</li>
+<li>在DXE阶段的Main中，调用<code>CoreDispatcher() -&gt; CoreStartImage()</code>，进入各DXE driver的入口函数:</li>
 </ol>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -138,7 +138,7 @@
 </span></span><span class="line"><span class="cl"><span class="n">Image</span><span class="o">-&gt;</span><span class="n">Status</span> <span class="o">=</span> <span class="n">Image</span><span class="o">-&gt;</span><span class="nf">EntryPoint</span> <span class="p">(</span><span class="n">ImageHandle</span><span class="p">,</span> <span class="n">Image</span><span class="o">-&gt;</span><span class="n">Info</span><span class="p">.</span><span class="n">SystemTable</span><span class="p">);</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><p>此阶段会 load 并执行各 DXE 的驱动程序，而 BDS 就属于 DXE 的一个驱动，所以<code>BdsInitialize()</code>这个函数会在此时被执行：</p>
+</div><p>此阶段会load并执行各DXE的驱动程序，而BDS就属于DXE的一个驱动，所以<code>BdsInitialize()</code>这个函数会在此时被执行：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -165,7 +165,7 @@
 </span></span><span class="line"><span class="cl"><span class="n">ENTRY_POINT</span>                    <span class="o">=</span> <span class="n">BdsInitialize</span>                         <span class="c1">// 驱动入口函数
 </span></span></span></code></pre></td></tr></table>
 </div>
-</div><p>入口函数<code>BdsInitialize()</code>调用<code>InstallMultipleProtocolInterfaces()</code>注册 BdsArchProtocol 到 DXE Core，该 Protocol 的 Guid 为<code>gEfiBdsArchProtocolGuid</code>，<code>*gBds</code>是一个指向 BdsArchProtocol 的指针，在<code>MdeModulePkg/Core/Dxe/DxeMain/DxeMain.c</code>开始时定义：</p>
+</div><p>入口函数<code>BdsInitialize()</code>调用<code>InstallMultipleProtocolInterfaces()</code>注册BdsArchProtocol到DXE Core，该Protocol的Guid为<code>gEfiBdsArchProtocolGuid</code>，<code>*gBds</code>是一个指向BdsArchProtocol的指针，在<code>MdeModulePkg/Core/Dxe/DxeMain/DxeMain.c</code>开始时定义：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -178,8 +178,22 @@
 </span></span><span class="line"><span class="cl"><span class="n">EFI_BDS_ARCH_PROTOCOL</span>             <span class="o">*</span><span class="n">gBds</span>           <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><p>在 BDS 初始化阶段<code>BdsInitialize</code>，将该指针作为<code>InstallMultipleProtocolInterfaces()</code>的参数，目的是通过<code>gEfiBdsArchProtocolGuid</code>可以查询到<code>*gBds</code>：</p>
+</div><p>在<code>BdsEntry.c</code>中BDS初始化阶段<code>BdsInitialize</code>，<code>*gBds</code>指针作为<code>InstallMultipleProtocolInterfaces()</code>的参数，来将入口函数<code>BdsEntry</code>注册到<code>PROTOCOL_INTERFACE</code>中：</p>
 <div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="c1">// MdeModulePkg/Universal/BdsDxe/BdsEntry.c
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">EFI_BDS_ARCH_PROTOCOL</span>  <span class="n">gBds</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="n">BdsEntry</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -205,22 +219,157 @@
 </span></span><span class="line"><span class="cl">                <span class="p">);</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><p>在<code>InstallMultipleProtocolInterfaces()</code>之前，<code>*gBds</code>就已经指向 BDS 的入口函数<code>BdsEtry</code>：</p>
+</div><p>需要注意的是：在<code>BdsEntry.c</code>中的<code>gBds</code>只是为了注册，而在<code>DxeMain()</code>最后进入Bds阶段使用的指针是在别的地方赋值的。Dxe中有如下结构体：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="c1">// MdeModulePkg/Universal/BdsDxe/BdsEntry.c
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">EFI_BDS_ARCH_PROTOCOL</span>  <span class="n">gBds</span> <span class="o">=</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl"><span class="n">BdsEntry</span>
-</span></span><span class="line"><span class="cl"><span class="p">};</span>
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="n">EFI_CORE_PROTOCOL_NOTIFY_ENTRY</span>  <span class="n">mArchProtocols</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="p">{</span> <span class="o">&amp;</span><span class="n">gEfiSecurityArchProtocolGuid</span><span class="p">,</span>         <span class="p">(</span><span class="n">VOID</span> <span class="o">**</span><span class="p">)</span><span class="o">&amp;</span><span class="n">gSecurity</span><span class="p">,</span>      <span class="nb">NULL</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="n">FALSE</span> <span class="p">},</span>
+</span></span><span class="line"><span class="cl">  <span class="p">{</span> <span class="o">&amp;</span><span class="n">gEfiCpuArchProtocolGuid</span><span class="p">,</span>              <span class="p">(</span><span class="n">VOID</span> <span class="o">**</span><span class="p">)</span><span class="o">&amp;</span><span class="n">gCpu</span><span class="p">,</span>           <span class="nb">NULL</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="n">FALSE</span> <span class="p">},</span>
+</span></span><span class="line"><span class="cl">  <span class="p">{</span> <span class="o">&amp;</span><span class="n">gEfiMetronomeArchProtocolGuid</span><span class="p">,</span>        <span class="p">(</span><span class="n">VOID</span> <span class="o">**</span><span class="p">)</span><span class="o">&amp;</span><span class="n">gMetronome</span><span class="p">,</span>     <span class="nb">NULL</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="n">FALSE</span> <span class="p">},</span>
+</span></span><span class="line"><span class="cl">  <span class="p">{</span> <span class="o">&amp;</span><span class="n">gEfiTimerArchProtocolGuid</span><span class="p">,</span>            <span class="p">(</span><span class="n">VOID</span> <span class="o">**</span><span class="p">)</span><span class="o">&amp;</span><span class="n">gTimer</span><span class="p">,</span>         <span class="nb">NULL</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="n">FALSE</span> <span class="p">},</span>
+</span></span><span class="line"><span class="cl">  <span class="p">{</span> <span class="o">&amp;</span><span class="n">gEfiBdsArchProtocolGuid</span><span class="p">,</span>              <span class="p">(</span><span class="n">VOID</span> <span class="o">**</span><span class="p">)</span><span class="o">&amp;</span><span class="n">gBds</span><span class="p">,</span>           <span class="nb">NULL</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="n">FALSE</span> <span class="p">},</span>
+</span></span><span class="line"><span class="cl">  <span class="p">...</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><p>再讨论一下 BDS 的 Protocol，<code>EFI_BDS_ARCH_PROTOCOL</code>是在<code>Bds.h</code>中定义的：</p>
+</div><p>首先通过这个数组将<code>*gBds</code>和<code>gEfiBdsArchProtocolGuid</code>建立起联系，然后在Dxe阶段的Main函数中，通过<code>CoreNotifyOnProtocolInstallation()-&gt;CoreNotifyOnProtocolEntryTable()</code>创建事件(Event)，这里传入的Entry为<code>mArchProtocols</code>，最终由<code>GenericProtocolNotify()</code>函数给<code>mArchProtocols</code>的每一个成员赋值。这里，<code>CoreCreatEvent()</code>和<code>CoreRegisterProtocolNotify</code>成对出现，一旦Protocol安装则执行回调函数<code>GenericProtocolNotify()</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm">Creates an event for each entry in a table that is fired everytime a Protocol
+</span></span></span><span class="line"><span class="cl"><span class="cm">of a specific type is installed.
+</span></span></span><span class="line"><span class="cl"><span class="cm">
+</span></span></span><span class="line"><span class="cl"><span class="cm">@param Entry  Pointer to EFI_CORE_PROTOCOL_NOTIFY_ENTRY.
+</span></span></span><span class="line"><span class="cl"><span class="cm">
+</span></span></span><span class="line"><span class="cl"><span class="cm">**/</span>
+</span></span><span class="line"><span class="cl"><span class="n">VOID</span>
+</span></span><span class="line"><span class="cl"><span class="nf">CoreNotifyOnProtocolEntryTable</span> <span class="p">(</span>
+</span></span><span class="line"><span class="cl">  <span class="n">EFI_CORE_PROTOCOL_NOTIFY_ENTRY</span>  <span class="o">*</span><span class="n">Entry</span>
+</span></span><span class="line"><span class="cl">  <span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">EFI_STATUS</span>  <span class="n">Status</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="k">for</span> <span class="p">(</span> <span class="p">;</span> <span class="n">Entry</span><span class="o">-&gt;</span><span class="n">ProtocolGuid</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">;</span> <span class="n">Entry</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">//
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1">// Create the event
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1">//
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">Status</span> <span class="o">=</span> <span class="nf">CoreCreateEvent</span> <span class="p">(</span>
+</span></span><span class="line"><span class="cl">             <span class="n">EVT_NOTIFY_SIGNAL</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">             <span class="n">TPL_CALLBACK</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">             <span class="n">GenericProtocolNotify</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">             <span class="n">Entry</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">             <span class="o">&amp;</span><span class="n">Entry</span><span class="o">-&gt;</span><span class="n">Event</span>
+</span></span><span class="line"><span class="cl">             <span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">ASSERT_EFI_ERROR</span> <span class="p">(</span><span class="n">Status</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">//
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1">// Register for protocol notifactions on this event
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1">//
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">Status</span> <span class="o">=</span> <span class="nf">CoreRegisterProtocolNotify</span> <span class="p">(</span>
+</span></span><span class="line"><span class="cl">             <span class="n">Entry</span><span class="o">-&gt;</span><span class="n">ProtocolGuid</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">             <span class="n">Entry</span><span class="o">-&gt;</span><span class="n">Event</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">             <span class="o">&amp;</span><span class="n">Entry</span><span class="o">-&gt;</span><span class="n">Registration</span>
+</span></span><span class="line"><span class="cl">             <span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">ASSERT_EFI_ERROR</span> <span class="p">(</span><span class="n">Status</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>在回调函数<code>GenericProtocolNotify</code>中，Bds入口函数<code>BdsEntry()</code>被locate，然后被赋值给<code>*gBds</code>：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="c1">//
+</span></span></span><span class="line"><span class="cl"><span class="c1">// See if the expected protocol is present in the handle database
+</span></span></span><span class="line"><span class="cl"><span class="c1">//
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">Status</span> <span class="o">=</span> <span class="nf">CoreLocateProtocol</span> <span class="p">(</span><span class="n">Entry</span><span class="o">-&gt;</span><span class="n">ProtocolGuid</span><span class="p">,</span> <span class="n">Entry</span><span class="o">-&gt;</span><span class="n">Registration</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">Protocol</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="p">(</span><span class="nf">EFI_ERROR</span> <span class="p">(</span><span class="n">Status</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// Mark the protocol as present
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">Entry</span><span class="o">-&gt;</span><span class="n">Present</span> <span class="o">=</span> <span class="n">TRUE</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// Update protocol global variable if one exists. Entry-&gt;Protocol points to a global variable
+</span></span></span><span class="line"><span class="cl"><span class="c1">// if one exists in the DXE core for this Architectural Protocol
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">if</span> <span class="p">(</span><span class="n">Entry</span><span class="o">-&gt;</span><span class="n">Protocol</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="o">*</span><span class="p">(</span><span class="n">Entry</span><span class="o">-&gt;</span><span class="n">Protocol</span><span class="p">)</span> <span class="o">=</span> <span class="n">Protocol</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>最后，在Bds的入口函数已经被安装后，<code>DxeMain()</code>的最后通过<code>*gBds</code>指针进入Bds的入口<code>BdsEntry()</code>：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="n">gBds</span><span class="o">-&gt;</span><span class="nf">Entry</span> <span class="p">(</span><span class="n">gBds</span><span class="p">);</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>再讨论一下BDS的Protocol，<code>EFI_BDS_ARCH_PROTOCOL</code>是在<code>Bds.h</code>中定义的：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -251,32 +400,7 @@
 </span></span><span class="line"><span class="cl"><span class="p">};</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><p>其中，<code>EFI_BDS_ENTRY </code>就是这个 protocol 的一个服务，对应了一个<code>PROTOCOL_INTERFACE</code>。在之前的<code>InstallMultipleProtocolInterfaces()</code>函数中，<code>Entry</code>函数被指向<code>EFI_BDS_ARCH_PROTOCOL</code>这个 Protocol 的例化<code>PROTOCOL_INTERFACE</code>中的<code>*Interface</code>指针。所以根据 Bds 的 Guid <code>EFI_BDS_ARCH_PROTOCOL_GUID</code>可以找到<code>EFI_BDS_ARCH_PROTOCOL</code>这个 Protocol，再根据这个 Protocol 找到<code>PROTOCOL_INTERFACE</code>实现，就可以找到具体的被注册的<code>BdsEntry()</code>函数了</p>
-<p>另外，<code>*gBds</code>属于全局变量：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="c1">// MdeModulePkg/Core/Dxe/DxeMain.h
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">extern</span> <span class="n">EFI_BDS_ARCH_PROTOCOL</span>             <span class="o">*</span><span class="n">gBds</span><span class="p">;</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>最后，在 Bds 的入口函数已经被安装后，可以直接通过<code>*gBds</code>指针访问<code>Entry()</code>函数了：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="n">gBds</span><span class="o">-&gt;</span><span class="nf">Entry</span> <span class="p">(</span><span class="n">gBds</span><span class="p">);</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><ol start="4">
-<li></li>
-</ol>
-<hr>
-<p>待续</p>
+</div><p>其中，<code>EFI_BDS_ENTRY </code>就是这个protocol的一个服务，对应了一个<code>PROTOCOL_INTERFACE</code>。在之前的<code>InstallMultipleProtocolInterfaces()</code>函数中，<code>Entry</code>函数被指向<code>EFI_BDS_ARCH_PROTOCOL</code>这个Protocol的例化<code>PROTOCOL_INTERFACE</code>中的<code>*Interface</code>指针。所以根据Bds的Guid <code>EFI_BDS_ARCH_PROTOCOL_GUID</code>可以找到<code>EFI_BDS_ARCH_PROTOCOL</code>这个Protocol，再根据这个Protocol找到<code>PROTOCOL_INTERFACE</code>实现，就可以找到具体的被注册的<code>BdsEntry()</code>函数了</p>
 </div><div class="post-footer" id="post-footer">
     <div class="post-info"><div class="post-info-tag"><span><a href="/tags/bios/">BIOS</a>
                 </span><span><a href="/tags/edk2/">EDK2</a>

@@ -86,7 +86,7 @@ struct _LIST_ENTRY {
 
 首先，上面的**LIST_ENTRY 这个结构体用于实现双向链表**。但是与一般的链表实现方式不一样，它纯粹是 LIST*ENTRY 这个成员的链接，而不用在乎这个成员所在的结构体。一般的链表要求结点之间的类型一致，而这种链表只要求结构体存在 EFI_LIST_ENTRY 这个成员就够了。比如说 `IHANDLE *handle1,_handle2`;初始化后，`handle1->AllHandles->ForwardLink=handle2->AllHandles`; `handle2->AllHandles->BackLink=handle1->AllHandles`。这样 handle1 与 handle2 的 AllHandles 就链接到了一起。但是这样就只能进行 AllHandles 的遍历了，怎么样遍历 IHANLE 实例呢？。这时候就要用到\_CR 宏，\_CR 宏的定义如下：`#define \_CR(Record, TYPE, Field) ((TYPE _) ((CHAR8 _) (Record) - (CHAR8 _) &(((TYPE \_) 0)->Field)))`，这个宏可以通过结构体实例的成员访问到实例本身
 
-**IHANDLE 中的 AllHandles 成员用来链接 IHANDLE 实例**。这个链表的头部是一个空结点，定义为：`EFI_LIST_ENTRY gHandleList`。一开始 `gHandleList->ForwardLink=gHandleList`; `gHandleList->BackLink=gHandleList`。每次 IHANDLE 都从 `gHandleList->BackLink` 插入进来，这个链表是一个环形双向链表。每当 Driver 建立一个新的 EFI_HANDLE 的时候就会插入到这条链表中来，被称之为 handle database
+**IHANDLE 中的 AllHandles 成员用来链接 IHANDLE 实例**。这个链表的头部是一个空结点，定义为：`EFI_LIST_ENTRY gHandleList`。一开始 `gHandleList->ForwardLink=gHandleList`; `gHandleList->BackLink=gHandleList`。每次 IHANDLE 都从 `gHandleList->BackLink` 插入进来，这个链表是一个环形双向链表。每当 Driver 建立一个新的 EFI_HANDLE 的时候就会插入到这条链表中来，被称之为 Handle Database
 
 **Driver 会为 handle 添加多个 protocol**，这些实例也是链表的形式存在。PROTOCOL_INTERFACE 的 link 用于连接以 IHANDLE 为空头结点以 PPOTOCOL_INTERFACE 为后续结点的链表
 
@@ -94,7 +94,7 @@ struct _LIST_ENTRY {
 
 此外，PROTOCOL_ENTRY 结构体是用来管理和跟踪已注册的协议的。每个协议都有一个对应的 PROTOCOL_ENTRY 实例，这个实例包含了协议的标识符和一个链表，这个链表链接了所有安装了这个协议的协议接口。例如，假设我们有一个协议 EFI_SIMPLE_TEXT_INPUT_PROTOCOL，它的标识符是{0x387477c1, 0x69c7, 0x11d2, {0x8e, 0x39, 0x00, 0xa0, 0xc9, 0x69, 0x72, 0x3b}}。当这个协议被注册时，会创建一个 PROTOCOL_ENTRY 实例，这个实例的 ProtocolID 成员被设置为这个标识符，Protocols 链表被初始化为一个空链表。然后，当一个驱动程序安装了一个 EFI_SIMPLE_TEXT_INPUT_PROTOCOL 协议接口到一个句柄上时，这个协议接口的 PROTOCOL_INTERFACE 实例就会被添加到 Protocols 链表中。这样，通过遍历 Protocols 链表，就可以找到所有安装了 EFI_SIMPLE_TEXT_INPUT_PROTOCOL 的协议接口
 
-还有一个概念，就是 GUID，**每个协议接口都由一个全局唯一标识符（GUID）来标识**。当一个驱动程序或应用程序想要使用一个特定的协议接口时，它需要通过 GUID 来查找这个协议接口。这个过程通常是通过调用 LocateProtocol 或 OpenProtocol 这样的 UEFI 服务来完成的。例如，如果一个驱动程序想要使用 EFI_SIMPLE_TEXT_INPUT_PROTOCOL（这是一个用于从键盘读取输入的协议），它需要先获取这个协议的 GUID，然后调用 LocateProtocol 函数，传入这个 GUID 作为参数。如果成功，LocateProtocol 函数会返回一个指向 EFI_SIMPLE_TEXT_INPUT_PROTOCOL 接口的指针，然后驱动程序就可以通过这个指针来调用协议的函数。这种通过 GUID 来访问协议接口的机制使得 UEFI 可以在运行时动态地添加、删除和查找协议接口，这是一种非常灵活和强大的设计
+上述的标识符就是 GUID，**每个协议接口都由一个全局唯一标识符（GUID）来标识**。当一个驱动程序或应用程序想要使用一个特定的协议接口时，它需要通过 GUID 来查找这个协议接口。这个过程通常是通过调用 LocateProtocol 或 OpenProtocol 这样的 UEFI 服务来完成的。例如，如果一个驱动程序想要使用 EFI_SIMPLE_TEXT_INPUT_PROTOCOL（这是一个用于从键盘读取输入的协议），它需要先获取这个协议的 GUID，然后调用 LocateProtocol 函数，传入这个 GUID 作为参数。如果成功，LocateProtocol 函数会返回一个指向 EFI_SIMPLE_TEXT_INPUT_PROTOCOL 接口的指针，然后驱动程序就可以通过这个指针来调用协议的函数。这种通过 GUID 来访问协议接口的机制使得 UEFI 可以在运行时动态地添加、删除和查找协议接口，这是一种非常灵活和强大的设计
 
 根据此前的分析：在 UEFI 中，一个句柄（Handle）可以关联多个协议接口（Protocol Interface），这些协议接口被组织成一个链表，这个链表可以通过句柄的 Protocols 成员来访问。然而，在实际的使用中，通常不会直接操作这个链表。相反，UEFI 提供了一组服务，如 LocateProtocol 和 OpenProtocol，这些服务可以根据 GUID 来查找协议接口，这使得查找协议接口变得更加简单和安全。总的来说，虽然可以直接通过句柄的 Protocols 成员来访问所有的协议接口，但在实际的使用中，通常会通过 UEFI 提供的服务来查找和访问协议接口
 
