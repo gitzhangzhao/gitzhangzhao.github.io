@@ -5,7 +5,7 @@ draft: false
 math: true
 tags: ["BIOS","UEFI","X86","Boot","EDK2"]
 categories: ["BIOS"]
-summary: "BIOS has now evolved into UEFI"
+summary: "UEFI 系列第一篇"
 ---
 本篇文章详细完整的讨论现代处理器 boot 的过程，主要面向对象为 Intel、AMD 的 X86 架构和大部分 ARM 处理器架构
 

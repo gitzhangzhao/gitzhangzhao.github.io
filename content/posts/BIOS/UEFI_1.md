@@ -5,7 +5,7 @@ draft: false
 math: true
 tags: ["BIOS","UEFI","EDK2"]
 categories: ["BIOS"]
-summary: "UEFI 系列第一篇"
+summary: "UEFI 系列第二篇"
 ---
 > UEFI 并不是一个面向对象的系统，它是基于 C 语言的，C 语言是一种过程式语言。然而，UEFI 使用了一些设计模式和技术来模拟面向对象编程的某些特性，如封装、抽象和多态
 

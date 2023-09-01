@@ -1,11 +1,5 @@
----
-title: "Gentoo 安装小记"
-date: 2023-06-18T23:54:08+08:00
-draft: false
-tags: ["Linux", "Gentoo"]
-categories: ["Linux"]
-summary: "Gentoo Linux，KISS and Suckless"
----
+# Gentoo 安装小记
+
 ### 前言
 
 > 安装 Gentoo 并不复杂，很多人混淆了复杂和耗时。在安装的过程中，大部分的时间都在做别的事情。同时，Gentoo 的安装步骤是清晰的，Handbook 和各路神仙的总结实际上已经很全面了。因此，没有必要再做重复的劳动，一些个性化的关键点记录就足够了。
@@ -202,3 +196,4 @@ USE="pulseaudio" emerge -1 media-sound/mpg123
 ---
 
 **由于日常维护和debug太耗时，目前已放弃 Gentoo，此文章结束**
+

@@ -5,7 +5,7 @@ draft: false
 math: true
 tags: ["C", "Lang"]
 categories: ["C"]
-summary: '"error: redefinition of ‘a’"'
+summary: 'C 语言系列第一篇'
 ---
 
 **extern 告诉编译器，变量 i 是在程序中的其他位置定义的（很可能是在不同的源文件中），因此不需要为 i 分配空间**

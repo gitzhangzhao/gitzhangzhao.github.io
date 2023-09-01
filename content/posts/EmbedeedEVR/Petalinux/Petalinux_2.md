@@ -5,7 +5,7 @@ draft: false
 math: true
 tags: ["Petalinux", "ZYNQ", "NFS"]
 categories: ["Embedded EVR"]
-summary: "With Petalinux, remote booting of embedded Linux systems on ZYNQ becomes a breeze"
+summary: "Petalinux 系列第二篇"
 ---
 > 对于 Linux 远程启动是很普遍的，在 Petalinux 上配置远程启动很简单，并且 Petalinux 会自动配置 U-Boot 变量并增加内核启动参数
 

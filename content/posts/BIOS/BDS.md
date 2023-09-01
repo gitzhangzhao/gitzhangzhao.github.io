@@ -5,7 +5,7 @@ draft: false
 math: true
 tags: ["BIOS", "EDK2", "UEFI", "AMI", "X86"]
 categories: ["BIOS"]
-summary: "UEFI 系列第二篇"
+summary: "UEFI 系列第三篇"
 ---
 ### DXE Install BDS Protocol
 

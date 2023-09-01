@@ -6,8 +6,8 @@
         <generator>Hugo -- gohugo.io</generator><language>zh-cn</language><managingEditor>gitzhangzhao@gmail.com (张昭)</managingEditor>
             <webMaster>gitzhangzhao@gmail.com (张昭)</webMaster><lastBuildDate>Sun, 18 Jun 2023 23:54:08 &#43;0800</lastBuildDate><atom:link href="http://gitzhangzhao.github.io/tags/linux/" rel="self" type="application/rss+xml" /><item>
     <title>Gentoo 安装小记</title>
-    <link>http://gitzhangzhao.github.io/posts/linux/gentoo/gentoo%E5%AE%89%E8%A3%85%E5%B0%8F%E8%AE%B0/</link>
-    <pubDate>Sun, 18 Jun 2023 23:54:08 &#43;0800</pubDate><author>gitzhangzhao@gmail.com (张昭)</author><guid>http://gitzhangzhao.github.io/posts/linux/gentoo/gentoo%E5%AE%89%E8%A3%85%E5%B0%8F%E8%AE%B0/</guid>
+    <link>http://gitzhangzhao.github.io/posts/linux/gentoo/gentoo/</link>
+    <pubDate>Sun, 18 Jun 2023 23:54:08 &#43;0800</pubDate><author>gitzhangzhao@gmail.com (张昭)</author><guid>http://gitzhangzhao.github.io/posts/linux/gentoo/gentoo/</guid>
     <description><![CDATA[<h3 id="前言">前言</h3>
 <blockquote>
 <p>安装 Gentoo 并不复杂，很多人混淆了复杂和耗时。在安装的过程中，大部分的时间都在做别的事情。同时，Gentoo 的安装步骤是清晰的，Handbook 和各路神仙的总结实际上已经很全面了。因此，没有必要再做重复的劳动，一些个性化的关键点记录就足够了。</p>
