@@ -4,7 +4,13 @@
         <link>http://gitzhangzhao.github.io/categories/</link>
         <description>Categories - 分类 - 张昭的Blog</description>
         <generator>Hugo -- gohugo.io</generator><language>zh-cn</language><managingEditor>gitzhangzhao@gmail.com (张昭)</managingEditor>
-            <webMaster>gitzhangzhao@gmail.com (张昭)</webMaster><lastBuildDate>Tue, 29 Aug 2023 16:37:13 &#43;0800</lastBuildDate><atom:link href="http://gitzhangzhao.github.io/categories/" rel="self" type="application/rss+xml" /><item>
+            <webMaster>gitzhangzhao@gmail.com (张昭)</webMaster><lastBuildDate>Fri, 01 Sep 2023 14:38:28 &#43;0800</lastBuildDate><atom:link href="http://gitzhangzhao.github.io/categories/" rel="self" type="application/rss+xml" /><item>
+    <title>C</title>
+    <link>http://gitzhangzhao.github.io/categories/c/</link>
+    <pubDate>Fri, 01 Sep 2023 14:38:28 &#43;0800</pubDate><author>gitzhangzhao@gmail.com (张昭)</author><guid>http://gitzhangzhao.github.io/categories/c/</guid>
+    <description><![CDATA[]]></description>
+</item>
+<item>
     <title>BIOS</title>
     <link>http://gitzhangzhao.github.io/categories/bios/</link>
     <pubDate>Tue, 29 Aug 2023 16:37:13 &#43;0800</pubDate><author>gitzhangzhao@gmail.com (张昭)</author><guid>http://gitzhangzhao.github.io/categories/bios/</guid>
