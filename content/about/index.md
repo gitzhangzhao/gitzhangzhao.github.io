@@ -11,9 +11,9 @@ lightgallery: true
 - ZYNQ
 - Kernel 
 - EPICS
-- RISC V
 - BIOS
 - UEFI
 - BMC
 - RTOS
+- LLM
 
