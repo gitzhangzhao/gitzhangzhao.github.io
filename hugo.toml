@@ -10,7 +10,8 @@ enableEmoji = true
 enableGitInfo = true
 
 # Change the default theme to be use when building the site with Hugo
-theme = "FeelIt"
+# theme = "FeelIt"
+theme = "Github Style"
 
 [params]
   # FeelIt theme version
