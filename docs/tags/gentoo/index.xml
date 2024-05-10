@@ -112,53 +112,53 @@
 </span><span class="lnt">47
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"> # These settings were set by the catalyst build script that automatically
-</span></span><span class="line"><span class="cl"> # built this stage.
-</span></span><span class="line"><span class="cl"> # Please consult /usr/share/portage/config/make.conf.example for a more
-</span></span><span class="line"><span class="cl"> # detailed example.
-</span></span><span class="line"><span class="cl"> COMMON_FLAGS=&#34;-march=native -O2 -pipe&#34;
-</span></span><span class="line"><span class="cl"> CFLAGS=&#34;${COMMON_FLAGS}&#34;
-</span></span><span class="line"><span class="cl"> CXXFLAGS=&#34;${COMMON_FLAGS}&#34;
-</span></span><span class="line"><span class="cl"> FCFLAGS=&#34;${COMMON_FLAGS}&#34;
-</span></span><span class="line"><span class="cl"> FFLAGS=&#34;${COMMON_FLAGS}&#34;
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"> <span class="c1"># These settings were set by the catalyst build script that automatically</span>
+</span></span><span class="line"><span class="cl"> <span class="c1"># built this stage.</span>
+</span></span><span class="line"><span class="cl"> <span class="c1"># Please consult /usr/share/portage/config/make.conf.example for a more</span>
+</span></span><span class="line"><span class="cl"> <span class="c1"># detailed example.</span>
+</span></span><span class="line"><span class="cl"> <span class="n">COMMON_FLAGS</span><span class="o">=</span><span class="s2">&#34;-march=native -O2 -pipe&#34;</span>
+</span></span><span class="line"><span class="cl"> <span class="n">CFLAGS</span><span class="o">=</span><span class="s2">&#34;${COMMON_FLAGS}&#34;</span>
+</span></span><span class="line"><span class="cl"> <span class="n">CXXFLAGS</span><span class="o">=</span><span class="s2">&#34;${COMMON_FLAGS}&#34;</span>
+</span></span><span class="line"><span class="cl"> <span class="n">FCFLAGS</span><span class="o">=</span><span class="s2">&#34;${COMMON_FLAGS}&#34;</span>
+</span></span><span class="line"><span class="cl"> <span class="n">FFLAGS</span><span class="o">=</span><span class="s2">&#34;${COMMON_FLAGS}&#34;</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"> USE=&#34;X elogind mount cjk i3wm mpd network pulseaudio ipc opengl dbus -gnome -kde&#34;
+</span></span><span class="line"><span class="cl"> <span class="n">USE</span><span class="o">=</span><span class="s2">&#34;X elogind mount cjk i3wm mpd network pulseaudio ipc opengl dbus -gnome -kde&#34;</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"> MAKEOPTS=&#34;-j6&#34;
-</span></span><span class="line"><span class="cl"> LC_MESSAGES=C
-</span></span><span class="line"><span class="cl"> EMERGE_DEFAULT_OPTS=&#34;--ask --verbose --load-average --newuse --with-bdeps=y --keep-going --deep&#34;
-</span></span><span class="line"><span class="cl"> CPU_FLAGS_X86=&#34;aes avx avx2 f16c fma3 mmx mmxext pclmul popcnt rdrand sse sse2 sse3 sse4_1 sse4_2 ssse3&#34;
-</span></span><span class="line"><span class="cl"> AUTO_CLEAN=&#34;yes&#34;
+</span></span><span class="line"><span class="cl"> <span class="n">MAKEOPTS</span><span class="o">=</span><span class="s2">&#34;-j6&#34;</span>
+</span></span><span class="line"><span class="cl"> <span class="n">LC_MESSAGES</span><span class="o">=</span><span class="n">C</span>
+</span></span><span class="line"><span class="cl"> <span class="n">EMERGE_DEFAULT_OPTS</span><span class="o">=</span><span class="s2">&#34;--ask --verbose --load-average --newuse --with-bdeps=y --keep-going --deep&#34;</span>
+</span></span><span class="line"><span class="cl"> <span class="n">CPU_FLAGS_X86</span><span class="o">=</span><span class="s2">&#34;aes avx avx2 f16c fma3 mmx mmxext pclmul popcnt rdrand sse sse2 sse3 sse4_1 sse4_2 ssse3&#34;</span>
+</span></span><span class="line"><span class="cl"> <span class="n">AUTO_CLEAN</span><span class="o">=</span><span class="s2">&#34;yes&#34;</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"> PORTDIR=&#34;/var/db/repos/gentoo&#34;
-</span></span><span class="line"><span class="cl"> DISTDIR=&#34;/var/cache/distfiles&#34;
-</span></span><span class="line"><span class="cl"> PKGDIR=&#34;/var/chache/binpkgs&#34;
-</span></span><span class="line"><span class="cl"> PORTAGE_TMPDIR=&#34;/tmp&#34;
+</span></span><span class="line"><span class="cl"> <span class="n">PORTDIR</span><span class="o">=</span><span class="s2">&#34;/var/db/repos/gentoo&#34;</span>
+</span></span><span class="line"><span class="cl"> <span class="n">DISTDIR</span><span class="o">=</span><span class="s2">&#34;/var/cache/distfiles&#34;</span>
+</span></span><span class="line"><span class="cl"> <span class="n">PKGDIR</span><span class="o">=</span><span class="s2">&#34;/var/chache/binpkgs&#34;</span>
+</span></span><span class="line"><span class="cl"> <span class="n">PORTAGE_TMPDIR</span><span class="o">=</span><span class="s2">&#34;/tmp&#34;</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"> PORTAGE_COMPRESS=&#34;zstd&#34;
-</span></span><span class="line"><span class="cl"> BINPKG_COMPRESS=&#34;zstd&#34;
+</span></span><span class="line"><span class="cl"> <span class="n">PORTAGE_COMPRESS</span><span class="o">=</span><span class="s2">&#34;zstd&#34;</span>
+</span></span><span class="line"><span class="cl"> <span class="n">BINPKG_COMPRESS</span><span class="o">=</span><span class="s2">&#34;zstd&#34;</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"> ACCEPT_LICENSE=&#34;*&#34;
-</span></span><span class="line"><span class="cl"> ACCEPT_KEYWORDS=&#34;~amd64&#34;
-</span></span><span class="line"><span class="cl"> GRUB_PLATFORMS=&#34;efi-64&#34;
-</span></span><span class="line"><span class="cl"> VIDEO_CARDS=&#34;nouveau&#34;
+</span></span><span class="line"><span class="cl"> <span class="n">ACCEPT_LICENSE</span><span class="o">=</span><span class="s2">&#34;*&#34;</span>
+</span></span><span class="line"><span class="cl"> <span class="n">ACCEPT_KEYWORDS</span><span class="o">=</span><span class="s2">&#34;~amd64&#34;</span>
+</span></span><span class="line"><span class="cl"> <span class="n">GRUB_PLATFORMS</span><span class="o">=</span><span class="s2">&#34;efi-64&#34;</span>
+</span></span><span class="line"><span class="cl"> <span class="n">VIDEO_CARDS</span><span class="o">=</span><span class="s2">&#34;nouveau&#34;</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"> GENTOO_MIRRORS=&#34;https://mirrors.tuna.tsinghua.edu.cn/gentoo&#34;
-</span></span><span class="line"><span class="cl"> MICROCODE_SIGNATURES=&#34;-S&#34;
+</span></span><span class="line"><span class="cl"> <span class="n">GENTOO_MIRRORS</span><span class="o">=</span><span class="s2">&#34;https://mirrors.tuna.tsinghua.edu.cn/gentoo&#34;</span>
+</span></span><span class="line"><span class="cl"> <span class="n">MICROCODE_SIGNATURES</span><span class="o">=</span><span class="s2">&#34;-S&#34;</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"> # NOTE: This stage was built with the bindist Use flag enabled
+</span></span><span class="line"><span class="cl"> <span class="c1"># NOTE: This stage was built with the bindist Use flag enabled</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"> # This sets the language of build output to English.
-</span></span><span class="line"><span class="cl"> # Please keep this setting intact when reporting bugs.
-</span></span><span class="line"><span class="cl"> LC_MESSAGES=C.utf8
+</span></span><span class="line"><span class="cl"> <span class="c1"># This sets the language of build output to English.</span>
+</span></span><span class="line"><span class="cl"> <span class="c1"># Please keep this setting intact when reporting bugs.</span>
+</span></span><span class="line"><span class="cl"> <span class="n">LC_MESSAGES</span><span class="o">=</span><span class="n">C</span><span class="o">.</span><span class="n">utf8</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"> # ccache
-</span></span><span class="line"><span class="cl"> FEATURES=&#34;ccache -test&#34;
-</span></span><span class="line"><span class="cl"> CCACHE_DIR=&#34;/var/cache/ccache&#34;
+</span></span><span class="line"><span class="cl"> <span class="c1"># ccache</span>
+</span></span><span class="line"><span class="cl"> <span class="n">FEATURES</span><span class="o">=</span><span class="s2">&#34;ccache -test&#34;</span>
+</span></span><span class="line"><span class="cl"> <span class="n">CCACHE_DIR</span><span class="o">=</span><span class="s2">&#34;/var/cache/ccache&#34;</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"> # aria2
-</span></span><span class="line"><span class="cl"> FETCHCOMMAND=&#34;/usr/bin/aria2c -d \${DISTDIR} -o \${FILE} --allow-overwrite=true --max-tries=5 --max-file-not-found=2 --max-concurrent-downloads=5 --connect-timeout=5 --timeout=5 --split=5 --min-split-size=2M --lowest-speed-limit=20K --max-connection-per-server=9 --uri-selector=feedback \${URI}&#34;
-</span></span><span class="line"><span class="cl"> RESUMECOMMAND=&#34;${FETCHCOMMAND}&#34;
+</span></span><span class="line"><span class="cl"> <span class="c1"># aria2</span>
+</span></span><span class="line"><span class="cl"> <span class="n">FETCHCOMMAND</span><span class="o">=</span><span class="s2">&#34;/usr/bin/aria2c -d \${DISTDIR} -o \${FILE} --allow-overwrite=true --max-tries=5 --max-file-not-found=2 --max-concurrent-downloads=5 --connect-timeout=5 --timeout=5 --split=5 --min-split-size=2M --lowest-speed-limit=20K --max-connection-per-server=9 --uri-selector=feedback \${URI}&#34;</span>
+</span></span><span class="line"><span class="cl"> <span class="n">RESUMECOMMAND</span><span class="o">=</span><span class="s2">&#34;${FETCHCOMMAND}&#34;</span>
 </span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="问题列举">问题列举</h3>

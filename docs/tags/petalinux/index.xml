@@ -729,43 +729,43 @@ image.ub: linux 的内核镜像，并且打包了设备树文件 plnx_arm-system
 </span><span class="lnt">37
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># image.ub
-</span></span><span class="line"><span class="cl">images {
-</span></span><span class="line"><span class="cl">                kernel@0 {
-</span></span><span class="line"><span class="cl">                        description = &#34;Linux Kernel&#34;;
-</span></span><span class="line"><span class="cl">                        data = /incbin/(&#34;zImage&#34;);
-</span></span><span class="line"><span class="cl">                        type = &#34;kernel&#34;;
-</span></span><span class="line"><span class="cl">                        arch = &#34;arm&#34;;
-</span></span><span class="line"><span class="cl">                        os = &#34;linux&#34;;
-</span></span><span class="line"><span class="cl">                        compression = &#34;none&#34;;
-</span></span><span class="line"><span class="cl">                        load = &lt;0x8000&gt;;
-</span></span><span class="line"><span class="cl">                        entry = &lt;0x8000&gt;;
-</span></span><span class="line"><span class="cl">                        hash@1 {
-</span></span><span class="line"><span class="cl">                                algo = &#34;sha1&#34;;
-</span></span><span class="line"><span class="cl">                        };
-</span></span><span class="line"><span class="cl">                };
-</span></span><span class="line"><span class="cl">                fdt@0 {
-</span></span><span class="line"><span class="cl">                        description = &#34;Flattened Device Tree blob&#34;;
-</span></span><span class="line"><span class="cl">                        data = /incbin/(&#34;plnx_arm-system.dtb&#34;);
-</span></span><span class="line"><span class="cl">                        type = &#34;flat_dt&#34;;
-</span></span><span class="line"><span class="cl">                        arch = &#34;arm&#34;;
-</span></span><span class="line"><span class="cl">                        compression = &#34;none&#34;;
-</span></span><span class="line"><span class="cl">                        hash@1 {
-</span></span><span class="line"><span class="cl">                                algo = &#34;sha1&#34;;
-</span></span><span class="line"><span class="cl">                        };
-</span></span><span class="line"><span class="cl">                };
-</span></span><span class="line"><span class="cl">                ramdisk@0 {
-</span></span><span class="line"><span class="cl">                        description = &#34;ramdisk&#34;;
-</span></span><span class="line"><span class="cl">                        data = /incbin/(&#34;petalinux-user-image-plnx_arm.cpio.gz&#34;);
-</span></span><span class="line"><span class="cl">                        type = &#34;ramdisk&#34;;
-</span></span><span class="line"><span class="cl">                        arch = &#34;arm&#34;;
-</span></span><span class="line"><span class="cl">                        os = &#34;linux&#34;;
-</span></span><span class="line"><span class="cl">                        compression = &#34;none&#34;;
-</span></span><span class="line"><span class="cl">                        hash@1 {
-</span></span><span class="line"><span class="cl">                                algo = &#34;sha1&#34;;
-</span></span><span class="line"><span class="cl">                        };
-</span></span><span class="line"><span class="cl">                };
-</span></span><span class="line"><span class="cl">        };
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="c1"># image.ub</span>
+</span></span><span class="line"><span class="cl"><span class="n">images</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">kernel</span><span class="err">@</span><span class="mi">0</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                        <span class="n">description</span> <span class="o">=</span> <span class="s2">&#34;Linux Kernel&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                        <span class="n">data</span> <span class="o">=</span> <span class="o">/</span><span class="n">incbin</span><span class="o">/</span><span class="p">(</span><span class="s2">&#34;zImage&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                        <span class="n">type</span> <span class="o">=</span> <span class="s2">&#34;kernel&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                        <span class="n">arch</span> <span class="o">=</span> <span class="s2">&#34;arm&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                        <span class="n">os</span> <span class="o">=</span> <span class="s2">&#34;linux&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                        <span class="n">compression</span> <span class="o">=</span> <span class="s2">&#34;none&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                        <span class="nb">load</span> <span class="o">=</span> <span class="o">&lt;</span><span class="mh">0x8000</span><span class="o">&gt;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                        <span class="n">entry</span> <span class="o">=</span> <span class="o">&lt;</span><span class="mh">0x8000</span><span class="o">&gt;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                        <span class="nb">hash</span><span class="err">@</span><span class="mi">1</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                                <span class="n">algo</span> <span class="o">=</span> <span class="s2">&#34;sha1&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                        <span class="p">};</span>
+</span></span><span class="line"><span class="cl">                <span class="p">};</span>
+</span></span><span class="line"><span class="cl">                <span class="n">fdt</span><span class="err">@</span><span class="mi">0</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                        <span class="n">description</span> <span class="o">=</span> <span class="s2">&#34;Flattened Device Tree blob&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                        <span class="n">data</span> <span class="o">=</span> <span class="o">/</span><span class="n">incbin</span><span class="o">/</span><span class="p">(</span><span class="s2">&#34;plnx_arm-system.dtb&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                        <span class="n">type</span> <span class="o">=</span> <span class="s2">&#34;flat_dt&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                        <span class="n">arch</span> <span class="o">=</span> <span class="s2">&#34;arm&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                        <span class="n">compression</span> <span class="o">=</span> <span class="s2">&#34;none&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                        <span class="nb">hash</span><span class="err">@</span><span class="mi">1</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                                <span class="n">algo</span> <span class="o">=</span> <span class="s2">&#34;sha1&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                        <span class="p">};</span>
+</span></span><span class="line"><span class="cl">                <span class="p">};</span>
+</span></span><span class="line"><span class="cl">                <span class="n">ramdisk</span><span class="err">@</span><span class="mi">0</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                        <span class="n">description</span> <span class="o">=</span> <span class="s2">&#34;ramdisk&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                        <span class="n">data</span> <span class="o">=</span> <span class="o">/</span><span class="n">incbin</span><span class="o">/</span><span class="p">(</span><span class="s2">&#34;petalinux-user-image-plnx_arm.cpio.gz&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                        <span class="n">type</span> <span class="o">=</span> <span class="s2">&#34;ramdisk&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                        <span class="n">arch</span> <span class="o">=</span> <span class="s2">&#34;arm&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                        <span class="n">os</span> <span class="o">=</span> <span class="s2">&#34;linux&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                        <span class="n">compression</span> <span class="o">=</span> <span class="s2">&#34;none&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                        <span class="nb">hash</span><span class="err">@</span><span class="mi">1</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                                <span class="n">algo</span> <span class="o">=</span> <span class="s2">&#34;sha1&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                        <span class="p">};</span>
+</span></span><span class="line"><span class="cl">                <span class="p">};</span>
+</span></span><span class="line"><span class="cl">        <span class="p">};</span>
 </span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="petalinux-产生设备树的分析">petalinux 产生设备树的分析</h3>
