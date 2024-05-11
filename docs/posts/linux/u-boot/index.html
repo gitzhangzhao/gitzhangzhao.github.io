@@ -12,7 +12,7 @@
   <meta property="og:type" content="article">
     <meta property="article:section" content="posts">
     <meta property="article:published_time" content="2024-05-11T10:53:01+08:00">
-    <meta property="article:modified_time" content="2024-05-11T10:53:01+08:00">
+    <meta property="article:modified_time" content="2024-05-11T11:00:17+08:00">
     <meta property="article:tag" content="Linux">
     <meta property="article:tag" content="U-Boot">
     <meta property="article:tag" content="RTOS">
@@ -31,7 +31,7 @@
             "@type": "WebPage",
             "@id": "http:\/\/gitzhangzhao.github.io\/posts\/linux\/u-boot\/"
         },"genre": "posts","keywords": "Linux, U-Boot, RTOS","wordcount":  1605 ,
-        "url": "http:\/\/gitzhangzhao.github.io\/posts\/linux\/u-boot\/","datePublished": "2024-05-11T10:53:01+08:00","dateModified": "2024-05-11T10:53:01+08:00","publisher": {
+        "url": "http:\/\/gitzhangzhao.github.io\/posts\/linux\/u-boot\/","datePublished": "2024-05-11T10:53:01+08:00","dateModified": "2024-05-11T11:00:17+08:00","publisher": {
             "@type": "Organization",
             "name": "张昭"},"author": {
                 "@type": "Person",
@@ -150,10 +150,10 @@
 <img
         class="lazyload"
         src="/svg/loading.min.svg"
-        data-src="/docs/U-Boot/structure.gif"
-        data-srcset="/docs/U-Boot/structure.gif, /docs/U-Boot/structure.gif 1.5x, /docs/U-Boot/structure.gif 2x"
+        data-src="/U-Boot/structure.gif"
+        data-srcset="/U-Boot/structure.gif, /U-Boot/structure.gif 1.5x, /U-Boot/structure.gif 2x"
         data-sizes="auto"
-        alt="/docs/U-Boot/structure.gif"
+        alt="/U-Boot/structure.gif"
         title="alt text" /></p>
 <ol>
 <li>u-boot 启动后，会先执行 CPU 初始化代码</li>
@@ -175,10 +175,10 @@
 <p><img
         class="lazyload"
         src="/svg/loading.min.svg"
-        data-src="/docs/U-Boot/uboot.jpg"
-        data-srcset="/docs/U-Boot/uboot.jpg, /docs/U-Boot/uboot.jpg 1.5x, /docs/U-Boot/uboot.jpg 2x"
+        data-src="/U-Boot/uboot.jpg"
+        data-srcset="/U-Boot/uboot.jpg, /U-Boot/uboot.jpg 1.5x, /U-Boot/uboot.jpg 2x"
         data-sizes="auto"
-        alt="/docs/U-Boot/uboot.jpg"
+        alt="/U-Boot/uboot.jpg"
         title="alt text" /></p>
 <p>uboot 和 uboot-spl 代码是共用的，在 spl 的实现中，<code>board_init_f</code> 函数完成之后，流程才会继续执行 u-boot 映像。因此，SPL 需要完成的所有工作都应该放在 <code>board_init_f</code> 函数中执行。这包括启动 RTOS，它也应当在 <code>board_init_f</code> 中进行初始化，以确保顺利过渡到引导流程的后续阶段。</p>
 <h2 id="uboot-spl-双系统启动流程">uboot-spl 双系统启动流程</h2>

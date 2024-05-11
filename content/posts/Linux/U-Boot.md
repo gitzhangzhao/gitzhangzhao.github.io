@@ -15,7 +15,7 @@ summary: "在SPL阶段启动RTOS"
 ## 前置知识
 
 u-boot 的启动流程大体可以分为两个部分：**平台无关部分**和**平台相关部分**。平台无关部分主要包括 u-boot 的主初始化流程，如初始化 BSS 段，设置栈，初始化硬件（如 DDR，时钟，串口等）等。这一部分的流程对于所有平台都是相同的，是 u-boot 的通用启动流程。而平台相关部分则涉及到特定硬件平台的初始化细节，如特定的内存布局，特定的外设初始化等，如下图所示：
-![alt text](/docs/U-Boot/structure.gif)
+![alt text](/U-Boot/structure.gif)
 
 1. u-boot 启动后，会先执行 CPU 初始化代码
 2. CPU 相关的代码，会调用 ARCH 的公共代码（如 arch/arm）
@@ -34,7 +34,7 @@ uboot 的启动流程从`arch/arm/cpu/armv7/start.S`中的 reset vector 开始�
 6. board_init_f 函数，完成一些前期的初始化工作，包括点灯、init DDR 等
 7. 跳转到`board_init_r`，进入更高级别的初始化，包括设备树的处理，驱动的初始化，命令行的处理等（spl 调用不同的 board_init_r 实现）
 
-![alt text](/docs/U-Boot/uboot.jpg)
+![alt text](/U-Boot/uboot.jpg)
 
 uboot 和 uboot-spl 代码是共用的，在 spl 的实现中，`board_init_f` 函数完成之后，流程才会继续执行 u-boot 映像。因此，SPL 需要完成的所有工作都应该放在 `board_init_f` 函数中执行。这包括启动 RTOS，它也应当在 `board_init_f` 中进行初始化，以确保顺利过渡到引导流程的后续阶段。
 
