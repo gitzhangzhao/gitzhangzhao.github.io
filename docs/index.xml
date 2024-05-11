@@ -4,9 +4,206 @@
         <link>http://gitzhangzhao.github.io/</link>
         <description>Welcome to Zhangzhao&#39;s blog.</description>
         <generator>Hugo -- gohugo.io</generator><language>zh-cn</language><managingEditor>gitzhangzhao@gmail.com (张昭)</managingEditor>
-            <webMaster>gitzhangzhao@gmail.com (张昭)</webMaster><lastBuildDate>Fri, 01 Sep 2023 14:38:28 &#43;0800</lastBuildDate>
+            <webMaster>gitzhangzhao@gmail.com (张昭)</webMaster><lastBuildDate>Sat, 11 May 2024 10:53:01 &#43;0800</lastBuildDate>
             <atom:link href="http://gitzhangzhao.github.io/index.xml" rel="self" type="application/rss+xml" />
         <item>
+    <title>U-Boot启动流程分析</title>
+    <link>http://gitzhangzhao.github.io/posts/linux/u-boot/</link>
+    <pubDate>Sat, 11 May 2024 10:53:01 &#43;0800</pubDate><author>gitzhangzhao@gmail.com (张昭)</author><guid>http://gitzhangzhao.github.io/posts/linux/u-boot/</guid>
+    <description><![CDATA[<p><strong>前言</strong></p>
+<p>本文将以 arm 为例结合 u-boot 的<code>board—&gt;machine—&gt;arch—&gt;cpu</code>框架，介绍在 aspeed 平台下， uboot-spl 启动双系统的流程</p>
+<h2 id="前置知识">前置知识</h2>
+<p>u-boot 的启动流程大体可以分为两个部分：<strong>平台无关部分</strong>和<strong>平台相关部分</strong>。平台无关部分主要包括 u-boot 的主初始化流程，如初始化 BSS 段，设置栈，初始化硬件（如 DDR，时钟，串口等）等。这一部分的流程对于所有平台都是相同的，是 u-boot 的通用启动流程。而平台相关部分则涉及到特定硬件平台的初始化细节，如特定的内存布局，特定的外设初始化等，如下图所示：
+</p>
+<ol>
+<li>u-boot 启动后，会先执行 CPU 初始化代码</li>
+<li>CPU 相关的代码，会调用 ARCH 的公共代码（如 arch/arm）</li>
+<li>ARCH 的公共代码，在适当的时候，调用 board 有关的接口。u-boot 的功能逻辑，大多是由 common 代码实现，部分和平台有关的部分，则由公共代码声明，由 board 代码实现</li>
+<li>board 代码在需要的时候，会调用 machine（arch/arm/mach-xxx）提供的接口，实现特定的功能。因此 machine 的定位是提供一些基础的代码支持，不会直接参与到 u-boot 的功能逻辑中</li>
+</ol>
+<h2 id="一般平台启动流程">一般平台启动流程</h2>
+<p>uboot 的启动流程从<code>arch/arm/cpu/armv7/start.S</code>中的 reset vector 开始，这是所有 ARM 程序的入口点，完成下面工作：</p>
+<ol>
+<li>save board registers</li>
+<li>disable interrupts</li>
+<li>setup CP15 寄存器（cache、MMU）</li>
+<li>跳转到<code>cpu_init_crit</code>进行关键初始化，如 memory</li>
+<li>跳转到<code>_main</code>，设置 C 运行环境，准备调用<code>board_init_f</code></li>
+<li>board_init_f 函数，完成一些前期的初始化工作，包括点灯、init DDR 等</li>
+<li>跳转到<code>board_init_r</code>，进入更高级别的初始化，包括设备树的处理，驱动的初始化，命令行的处理等（spl 调用不同的 board_init_r 实现）</li>
+</ol>
+<p></p>
+<p>uboot 和 uboot-spl 代码是共用的，在 spl 的实现中，<code>board_init_f</code> 函数完成之后，流程才会继续执行 u-boot 映像。因此，SPL 需要完成的所有工作都应该放在 <code>board_init_f</code> 函数中执行。这包括启动 RTOS，它也应当在 <code>board_init_f</code> 中进行初始化，以确保顺利过渡到引导流程的后续阶段。</p>
+<h2 id="uboot-spl-双系统启动流程">uboot-spl 双系统启动流程</h2>
+<h3 id="1-_startarcharmlibvectors">1. _start(arch/arm/lib/vector.S)</h3>
+<p>_start 是整个 spl 的入口，首先执行 <code>u-boot/arch/arm/lib/vector.S</code>的<code>_start</code>，然后跳转到<code>start.S</code>的<code>reset</code>，然后的流程和 uboot 一致
+uboot-spl 在链接脚本<code>u-boot-spl.lds</code>中定义了 spl 的入口函数：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-armasm" data-lang="armasm"><span class="line"><span class="cl">ENTRY<span class="err">(_start)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nl">_start</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span>ifdef <span class="err">CONFIG_ARCH_K3</span>
+</span></span><span class="line"><span class="cl">    ldr    <span class="err">pc</span>, <span class="err">_reset</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span>end
+</span></span><span class="line"><span class="cl">    b      <span class="err">reset</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>spl 的流程在 reset 中就应该被结束，reset 最后应该转到 BL2，也就是 uboot 中了</p>
+<h3 id="2-resetarcharmcpuarmv7starts">2. reset(arch/arm/cpu/armv7/start.S)</h3>
+<h4 id="21-关闭中断">2.1 关闭中断</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-armasm" data-lang="armasm"><span class="line"><span class="cl"><span class="nl">reset</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl"><span class="err">...</span>
+</span></span><span class="line"><span class="cl"><span class="err">/*</span>
+</span></span><span class="line"><span class="cl">     <span class="err">*</span> disable <span class="err">interrupts</span> <span class="err">(FIQ</span> <span class="err">and</span> <span class="err">IRQ)</span>, <span class="err">also</span> <span class="err">set</span> <span class="err">the</span> <span class="err">cpu</span> <span class="err">to</span> <span class="err">SVC32</span> <span class="err">mode</span>,
+</span></span><span class="line"><span class="cl">     <span class="err">*</span> except <span class="err">if</span> <span class="err">in</span> <span class="err">HYP</span> <span class="err">mode</span> <span class="err">already</span>
+</span></span><span class="line"><span class="cl">     <span class="err">*/</span>
+</span></span><span class="line"><span class="cl">    mrs <span class="nc">r0</span>, <span class="err">cpsr</span>
+</span></span><span class="line"><span class="cl">    and <span class="nc">r1</span>, <span class="nc">r0</span>, #<span class="mh">0x1f</span>       <span class="c1">@ mask mode bits
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    teq <span class="nc">r1</span>, #<span class="mh">0x1a</span>       <span class="c1">@ test for HYP mode
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    bicne   <span class="nc">r0</span>, <span class="nc">r0</span>, #<span class="mh">0x1f</span>       <span class="c1">@ clear all mode bits
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    orrne   <span class="nc">r0</span>, <span class="nc">r0</span>, #<span class="mh">0x13</span>       <span class="c1">@ set SVC mode
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    orr <span class="nc">r0</span>, <span class="nc">r0</span>, #<span class="mh">0xc0</span>       <span class="c1">@ disable FIQ and IRQ
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    msr <span class="err">cpsr</span>,<span class="nc">r0</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="22-cpu_init_cp15">2.2 cpu_init_cp15</h4>
+<p>关闭中断后，跳转到<code>cpu_init_cp15</code>，关闭 MMU，关闭 caches，关闭 MMU 权限检查，关闭 MMU 异常处理</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-armasm" data-lang="armasm"><span class="line"><span class="cl"><span class="nl">reset</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl"><span class="err">...</span>
+</span></span><span class="line"><span class="cl">bl <span class="err">cpu_init_c</span><span class="nc">p15</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="23-cpu_init_crit">2.3 cpu_init_crit</h4>
+<p>跳转到<code>cpu_init_crit</code>函数，进行重要寄存器和内存时序的配置</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-armasm" data-lang="armasm"><span class="line"><span class="cl"><span class="nl">reset</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl"><span class="err">...</span>
+</span></span><span class="line"><span class="cl">bl <span class="err">cpu_init_crit</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>在<code>cpu_init_crit</code>中，跳转到<code>lowlevel_init</code>函数，配置 pll、mux 和 memory</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-armasm" data-lang="armasm"><span class="line"><span class="cl">ENTRY<span class="err">(cpu_init_crit)</span>
+</span></span><span class="line"><span class="cl">    bl <span class="err">lowlevel_init</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="3-lowlevel_initarcharmmach-aspeedast2600platforms">3. lowlevel_init(arch/arm/mach-aspeed/ast2600/platform.S)</h3>
+<p>u-boot 默认的 lowlevel_init 函数是在<code>arch/arm/cpu/armv7/lowlevel_init.S</code>中定义的，但是定义为弱符号链接（.weak），该实现由板级代码<code>arch/arm/mach-aspeed/ast2600/platform.S</code>中定义的<code>lowlevel_init</code>函数替代</p>
+<p>完成<code>lowlevel_init</code>函数后，return <code>reset</code>(arch/arm/cpu/armv7/start.S)并跳转到<code>_main</code>函数</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-armasm" data-lang="armasm"><span class="line"><span class="cl"><span class="c1">@ arch/arm/cpu/armv7/start.S
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nl">reset</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl"><span class="err">...</span>
+</span></span><span class="line"><span class="cl">bl <span class="err">_main</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="4-mainarchlibcrt0s">4. main(arch/lib/crt0.S)</h3>
+<h4 id="41-c-运行时初始化">4.1 C 运行时初始化</h4>
+<p>堆栈、GD、early malloc 空间的分配</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-armasm" data-lang="armasm"><span class="line"><span class="cl"><span class="nl">_main</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="err">...</span>
+</span></span><span class="line"><span class="cl">    bl <span class="err">board_init_f_alloc_reserve</span>
+</span></span><span class="line"><span class="cl">    <span class="err">...</span>
+</span></span><span class="line"><span class="cl">    bl <span class="err">board_init_f_init_reserve</span>
+</span></span><span class="line"><span class="cl">    <span class="err">...</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="42-board_init_f">4.2 board_init_f</h4>
+<p>relocate 前的初始化，以弱符号链接定义在<code>arch/arm/lib/spl.c</code>中,实现在不同的板级代码中。在 ast2600 上，<code>board_init_f</code>实现在<code>arch/arm/mach-aspeed/ast2600/spl.c</code>中</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">board_init_f</span><span class="p">(</span><span class="n">ulong</span> <span class="n">dummy</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">spl_early_init</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">timer_init</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">preloader_console_init</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">dram_init</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">aspeed_mmc_init</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="cp">#ifdef CONFIG_SPX_FEATURE_FREERTOS_SUPPORT
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>    <span class="nf">rtos_init</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="cp">#endif
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>rtos 在<code>board_init_f</code>中进行初始化</p>
+]]></description>
+</item>
+<item>
     <title>对 C 语言中 extern 的理解</title>
     <link>http://gitzhangzhao.github.io/posts/c/extern/</link>
     <pubDate>Fri, 01 Sep 2023 14:38:28 &#43;0800</pubDate><author>gitzhangzhao@gmail.com (张昭)</author><guid>http://gitzhangzhao.github.io/posts/c/extern/</guid>
@@ -1905,8 +2102,8 @@ image.ub: linux 的内核镜像，并且打包了设备树文件 plnx_arm-system
 </item>
 <item>
     <title>Gentoo 安装小记</title>
-    <link>http://gitzhangzhao.github.io/posts/linux/gentoo/gentoo/</link>
-    <pubDate>Sun, 18 Jun 2023 23:54:08 &#43;0800</pubDate><author>gitzhangzhao@gmail.com (张昭)</author><guid>http://gitzhangzhao.github.io/posts/linux/gentoo/gentoo/</guid>
+    <link>http://gitzhangzhao.github.io/posts/linux/gentoo/</link>
+    <pubDate>Sun, 18 Jun 2023 23:54:08 &#43;0800</pubDate><author>gitzhangzhao@gmail.com (张昭)</author><guid>http://gitzhangzhao.github.io/posts/linux/gentoo/</guid>
     <description><![CDATA[<h3 id="前言">前言</h3>
 <blockquote>
 <p>安装 Gentoo 并不复杂，很多人混淆了复杂和耗时。在安装的过程中，大部分的时间都在做别的事情。同时，Gentoo 的安装步骤是清晰的，Handbook 和各路神仙的总结实际上已经很全面了。因此，没有必要再做重复的劳动，一些个性化的关键点记录就足够了。</p>
