@@ -13,8 +13,8 @@
     <description><![CDATA[<p><strong>前言</strong></p>
 <p>本文将以 arm 为例结合 u-boot 的<code>board—&gt;machine—&gt;arch—&gt;cpu</code>框架，介绍在 aspeed 平台下， uboot-spl 启动双系统的流程</p>
 <h2 id="前置知识">前置知识</h2>
-<p>u-boot 的启动流程大体可以分为两个部分：<strong>平台无关部分</strong>和<strong>平台相关部分</strong>。平台无关部分主要包括 u-boot 的主初始化流程，如初始化 BSS 段，设置栈，初始化硬件（如 DDR，时钟，串口等）等。这一部分的流程对于所有平台都是相同的，是 u-boot 的通用启动流程。而平台相关部分则涉及到特定硬件平台的初始化细节，如特定的内存布局，特定的外设初始化等，如下图所示：
-</p>
+<p>u-boot 的启动流程大体可以分为两个部分：<strong>平台无关部分</strong>和<strong>平台相关部分</strong>。平台无关部分主要包括 u-boot 的主初始化流程，如初始化 BSS 段，设置栈，初始化硬件（如 DDR，时钟，串口等）等。这一部分的流程对于所有平台都是相同的，是 u-boot 的通用启动流程。而平台相关部分则涉及到特定硬件平台的初始化细节，如特定的内存布局，特定的外设初始化等，如下图所示：</p>
+<p></p>
 <ol>
 <li>u-boot 启动后，会先执行 CPU 初始化代码</li>
 <li>CPU 相关的代码，会调用 ARCH 的公共代码（如 arch/arm）</li>
